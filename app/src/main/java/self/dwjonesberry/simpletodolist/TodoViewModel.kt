@@ -4,12 +4,17 @@ import androidx.lifecycle.ViewModel
 
 class TodoViewModel : ViewModel() {
 
-    val todoItems: MutableList<String> = mutableListOf()
+    //TODO: try to save items without using companion object
+    companion object {
+        val _todoItems: MutableList<String> = mutableListOf()
+    }
+
+    val todoItems = _todoItems
 
     var text: String = ""
 
     val addToList: () -> Unit = {
-        todoItems.add(text)
+        _todoItems.add(text)
         text = ""
     }
 

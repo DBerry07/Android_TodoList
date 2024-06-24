@@ -20,42 +20,45 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun AddTodoScreen() {
+fun AddTodoScreen(navigateToMainScreen: () -> Unit) {
     val viewModel: TodoViewModel = viewModel()
     AddTodoScreen(
         holdingText = viewModel.text,
         addToList = viewModel.addToList,
         setText = viewModel.setText,
+        navigateToMainScreen = navigateToMainScreen
     )
 }
 
 @Composable
-fun AddTodoScreen(holdingText: String, addToList: () -> Unit, setText: (String) -> Unit) {
+fun AddTodoScreen(holdingText: String, addToList: () -> Unit, setText: (String) -> Unit, navigateToMainScreen: () -> Unit) {
     Column {
-        AddActionBar(addToList)
+        AddActionBar(addToList, navigateToMainScreen)
         AddTodoText(holdingText, setText)
     }
 }
 
 @Composable
-fun AddActionBar(addToList: () -> Unit) {
+fun AddActionBar(addToList: () -> Unit, navigateToMainScreen: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        Button(onClick = { addToList.invoke() }) {
-            Text("Hello")
+        Button(onClick = {
+            addToList.invoke()
+        navigateToMainScreen.invoke()}) {
+            Text("Add to List")
         }
-        Button(onClick = { /*TODO*/ }) {
-            Text("Goodbye")
-        }
+//        Button(onClick = { /*TODO*/ }) {
+//            Text("Goodbye")
+//        }
     }
 }
 
 @Composable
 fun AddTodoText(holdingText: String, setText: (String) -> Unit) {
-    var text by remember { mutableStateOf("Hello") }
+    var text by remember { mutableStateOf("") }
     if (holdingText.isNotBlank()) {
         text = holdingText
     }
@@ -74,6 +77,6 @@ fun AddTodoText(holdingText: String, setText: (String) -> Unit) {
 @Composable
 fun ATSPreview() {
     Surface(modifier = Modifier.fillMaxSize()) {
-        AddTodoScreen()
+        AddTodoScreen({})
     }
 }

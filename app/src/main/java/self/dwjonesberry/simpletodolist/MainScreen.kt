@@ -27,22 +27,22 @@ import self.dwjonesberry.simpletodolist.ui.theme.SimpleToDoListTheme
 @Composable
 fun MainScreen(navigateToAdd: () -> Unit) {
     val viewModel: TodoViewModel = viewModel()
-    MainScreen(list = viewModel.todoItems)
+    MainScreen(list = viewModel.todoItems, navigateToAdd = navigateToAdd)
 }
 
 @Composable
-fun MainScreen(list: MutableList<String>) {
+fun MainScreen(list: MutableList<String>, navigateToAdd: () -> Unit) {
     Column {
-        MainActionBar()
+        MainActionBar(navigateToAdd = navigateToAdd)
         MainLazyList(list = list)
     }
 }
 
 @Composable
-fun MainActionBar() {
+fun MainActionBar(navigateToAdd: () -> Unit) {
     Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-      Button(onClick = { /*TODO*/ }) {
-          Text("Button 1")
+      Button(onClick = { navigateToAdd.invoke() }) {
+          Text("Add Item")
       }
         Button(onClick = { /*TODO*/ }) {
             Text("Button 2")
@@ -75,7 +75,7 @@ fun MainPreview() {
     val list = mutableListOf("Hello", "Goodbye")
     SimpleToDoListTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-           MainScreen(list)
+           MainScreen(list, {})
         }
     }
 }

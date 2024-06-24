@@ -11,6 +11,6 @@ fun MyApp() {
 
     NavHost(navController = navController, startDestination = Screens.MAIN.name) {
         composable(Screens.MAIN.name) { MainScreen() { navController.navigate(Screens.ADD.name)} }
-        composable(Screens.ADD.name) { AddTodoScreen() }
+        composable(Screens.ADD.name) { AddTodoScreen() { navController.popBackStack() } }
     }
 }

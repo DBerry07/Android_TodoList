@@ -25,7 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import self.dwjonesberry.simpletodolist.ui.theme.SimpleToDoListTheme
 
 @Composable
-fun MainScreen() {
+fun MainScreen(navigateToAdd: () -> Unit) {
     val viewModel: TodoViewModel = viewModel()
     MainScreen(list = viewModel.todoItems)
 }

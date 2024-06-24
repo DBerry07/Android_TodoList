@@ -53,7 +53,7 @@ dependencies {
 
     //My dependencies
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-
+    implementation(libs.androidx.navigation.compose)
 
     //Included dependencies
     implementation(libs.androidx.core.ktx)

@@ -17,23 +17,34 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun AddTodoScreen() {
+    val viewModel: TodoViewModel = viewModel()
+    AddTodoScreen(
+        holdingText = viewModel.text,
+        addToList = viewModel.addToList,
+        setText = viewModel.setText,
+    )
+}
+
+@Composable
+fun AddTodoScreen(holdingText: String, addToList: () -> Unit, setText: (String) -> Unit) {
     Column {
-        AddActionBar()
-        AddTodoText()
+        AddActionBar(addToList)
+        AddTodoText(holdingText, setText)
     }
 }
 
 @Composable
-fun AddActionBar() {
+fun AddActionBar(addToList: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        Button(onClick = { /*TODO*/ }) {
+        Button(onClick = { addToList.invoke() }) {
             Text("Hello")
         }
         Button(onClick = { /*TODO*/ }) {
@@ -43,13 +54,19 @@ fun AddActionBar() {
 }
 
 @Composable
-fun AddTodoText() {
+fun AddTodoText(holdingText: String, setText: (String) -> Unit) {
     var text by remember { mutableStateOf("Hello") }
+    if (holdingText.isNotBlank()) {
+        text = holdingText
+    }
 
     TextField(
         modifier = Modifier.fillMaxWidth(),
         value = text,
-        onValueChange = { text = it }
+        onValueChange = {
+            setText.invoke(it)
+            text = it
+        }
     )
 }
 

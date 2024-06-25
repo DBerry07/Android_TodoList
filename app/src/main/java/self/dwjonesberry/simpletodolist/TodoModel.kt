@@ -3,15 +3,15 @@ package self.dwjonesberry.simpletodolist
 class TodoModel {
 
     companion object {
-        val todoItems: MutableList<String> = getFromDatabase()
+        val todoItems: MutableList<TodoItem> = getFromDatabase()
 
-        fun getFromDatabase(): MutableList<String> {
+        fun getFromDatabase(): MutableList<TodoItem> {
             return mutableListOf()
         }
     }
 
     fun addToList(item: String) {
-        todoItems.add(item)
+        todoItems.add(TodoItem(text = item))
     }
 
 }

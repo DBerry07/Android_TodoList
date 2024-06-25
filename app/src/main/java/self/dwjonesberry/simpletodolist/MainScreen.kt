@@ -37,7 +37,7 @@ fun MainScreen(navigateToAdd: () -> Unit) {
 }
 
 @Composable
-fun MainScreen(list: MutableList<String>, navigateToAdd: () -> Unit) {
+fun MainScreen(list: MutableList<TodoItem>, navigateToAdd: () -> Unit) {
     Column {
         MainActionBar(navigateToAdd = navigateToAdd)
         MainLazyList(list = list)
@@ -61,7 +61,7 @@ fun MainActionBar(navigateToAdd: () -> Unit) {
 }
 
 @Composable
-fun MainLazyList(list: MutableList<String>) {
+fun MainLazyList(list: MutableList<TodoItem>) {
     val context = LocalContext.current
     LazyColumn {
         items(
@@ -93,7 +93,7 @@ fun MainLazyList(list: MutableList<String>) {
                         text = str
                     )
                     Text(
-                        text = list[it]
+                        text = list[it].text
                     )
                 }
             }
@@ -104,7 +104,7 @@ fun MainLazyList(list: MutableList<String>) {
 @Preview
 @Composable
 fun MainPreview() {
-    val list = mutableListOf("Hello", "Goodbye")
+    val list = mutableListOf(TodoItem("Hello"), TodoItem("Goodbye"))
     SimpleToDoListTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             MainScreen(list, {})

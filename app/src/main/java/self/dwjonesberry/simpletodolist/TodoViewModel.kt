@@ -17,7 +17,7 @@ class TodoViewModel : ViewModel() {
         text = it
     }
 
-    val getItems: () -> MutableList<String> = {
+    val getItems: () -> MutableList<TodoItem> = {
         TodoModel.todoItems
     }
 

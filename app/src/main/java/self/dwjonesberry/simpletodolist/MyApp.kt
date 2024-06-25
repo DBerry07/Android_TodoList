@@ -13,12 +13,12 @@ fun MyApp() {
     val navController = rememberNavController()
 
     Scaffold { padding ->
-         NavHost(
-             modifier = Modifier.padding(padding),
-             navController = navController,
-             startDestination = Screens.MAIN.name
-         ) {
-            composable(Screens.MAIN.name) { MainScreen() { navController.navigate(Screens.ADD.name)} }
+        NavHost(
+            modifier = Modifier.padding(padding),
+            navController = navController,
+            startDestination = Screens.MAIN.name
+        ) {
+            composable(Screens.MAIN.name) { MainScreen() { navController.navigate(Screens.ADD.name) } }
             composable(Screens.ADD.name) { AddTodoScreen() { navController.popBackStack() } }
         }
     }

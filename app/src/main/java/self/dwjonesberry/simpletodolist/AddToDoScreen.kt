@@ -31,7 +31,12 @@ fun AddTodoScreen(navigateToMainScreen: () -> Unit) {
 }
 
 @Composable
-fun AddTodoScreen(holdingText: String, addToList: () -> Unit, setText: (String) -> Unit, navigateToMainScreen: () -> Unit) {
+fun AddTodoScreen(
+    holdingText: String,
+    addToList: () -> Unit,
+    setText: (String) -> Unit,
+    navigateToMainScreen: () -> Unit
+) {
     Column {
         AddActionBar(addToList, navigateToMainScreen)
         AddTodoText(holdingText, setText)
@@ -47,7 +52,8 @@ fun AddActionBar(addToList: () -> Unit, navigateToMainScreen: () -> Unit) {
     ) {
         Button(onClick = {
             addToList.invoke()
-        navigateToMainScreen.invoke()}) {
+            navigateToMainScreen.invoke()
+        }) {
             Text("Add to List")
         }
 //        Button(onClick = { /*TODO*/ }) {

@@ -40,13 +40,17 @@ fun MainScreen(list: MutableList<String>, navigateToAdd: () -> Unit) {
 
 @Composable
 fun MainActionBar(navigateToAdd: () -> Unit) {
-    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-      Button(onClick = { navigateToAdd.invoke() }) {
-          Text("Add Item")
-      }
-        Button(onClick = { /*TODO*/ }) {
-            Text("Button 2")
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Button(onClick = { navigateToAdd.invoke() }) {
+            Text("Add Item")
         }
+//        Button(onClick = { /*TODO*/ }) {
+//            Text("Button 2")
+//        }
     }
 }
 
@@ -61,9 +65,12 @@ fun MainLazyList(list: MutableList<String>) {
                 Modifier
                     .padding(horizontal = 10.dp, vertical = 5.dp)
                     .border(width = 1.dp, color = Color.Black)
-                    .fillMaxWidth()) {
-              Text(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
-                  text = list[it])
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+                    text = list[it]
+                )
             }
         }
     }
@@ -75,7 +82,7 @@ fun MainPreview() {
     val list = mutableListOf("Hello", "Goodbye")
     SimpleToDoListTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-           MainScreen(list, {})
+            MainScreen(list, {})
         }
     }
 }

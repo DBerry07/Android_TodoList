@@ -1,6 +1,7 @@
 package self.dwjonesberry.simpletodolist
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
@@ -65,6 +67,7 @@ fun MainLazyList(list: MutableList<String>) {
         items(
             count = list.size
         ) {
+
             Box(
                 modifier =
                 Modifier
@@ -75,10 +78,24 @@ fun MainLazyList(list: MutableList<String>) {
                         Toast.makeText(context, "Hello, world!", Toast.LENGTH_LONG).show()
                     }
             ) {
-                Text(
+                Row(
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
-                    text = list[it]
-                )
+                ) {
+
+                    var str: String = (it + 1).toString()
+                    if ((it + 1) < 10) {
+                        str = "0$str"
+                    }
+                    str = "$str:"
+
+                    Text(
+                        modifier = Modifier.width(30.dp),
+                        text = str
+                    )
+                    Text(
+                        text = list[it]
+                    )
+                }
             }
         }
     }

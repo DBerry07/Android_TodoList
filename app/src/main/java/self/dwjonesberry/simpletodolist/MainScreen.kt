@@ -1,6 +1,8 @@
 package self.dwjonesberry.simpletodolist
 
+import android.widget.Toast
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,10 +21,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import self.dwjonesberry.simpletodolist.ui.theme.SimpleToDoListTheme
+import kotlin.coroutines.coroutineContext
 
 @Composable
 fun MainScreen(navigateToAdd: () -> Unit) {
@@ -56,6 +60,7 @@ fun MainActionBar(navigateToAdd: () -> Unit) {
 
 @Composable
 fun MainLazyList(list: MutableList<String>) {
+    val context = LocalContext.current
     LazyColumn {
         items(
             count = list.size
@@ -66,6 +71,9 @@ fun MainLazyList(list: MutableList<String>) {
                     .padding(horizontal = 10.dp, vertical = 5.dp)
                     .border(width = 1.dp, color = Color.Black)
                     .fillMaxWidth()
+                    .clickable {
+                        Toast.makeText(context, "Hello, world!", Toast.LENGTH_LONG).show()
+                    }
             ) {
                 Text(
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),

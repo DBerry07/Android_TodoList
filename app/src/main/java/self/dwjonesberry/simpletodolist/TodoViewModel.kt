@@ -4,22 +4,21 @@ import androidx.lifecycle.ViewModel
 
 class TodoViewModel : ViewModel() {
 
-    //TODO: try to save items without using companion object
-    companion object {
-        val _todoItems: MutableList<String> = mutableListOf()
-    }
-
-    val todoItems = _todoItems
-
     var text: String = ""
+        private set
+    private val model: TodoModel = TodoModel()
 
     val addToList: () -> Unit = {
-        _todoItems.add(text)
+        model.addToList(text)
         text = ""
     }
 
     val setText: (String) -> Unit = {
         text = it
+    }
+
+    val getItems: () -> MutableList<String> = {
+        TodoModel.todoItems
     }
 
 }

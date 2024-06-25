@@ -27,7 +27,7 @@ import self.dwjonesberry.simpletodolist.ui.theme.SimpleToDoListTheme
 @Composable
 fun MainScreen(navigateToAdd: () -> Unit) {
     val viewModel: TodoViewModel = viewModel()
-    MainScreen(list = viewModel.todoItems, navigateToAdd = navigateToAdd)
+    MainScreen(list = viewModel.getItems.invoke(), navigateToAdd = navigateToAdd)
 }
 
 @Composable

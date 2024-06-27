@@ -92,8 +92,11 @@ class TodoModel {
         }
     }
 
-    fun deleteFromList() {
-        //TODO
+    fun deleteFromList(todoId: Int) {
+        val item = todoItems.find {
+            it.id == todoId
+        }
+        todoItems.remove(item)
     }
 
     fun updateList(todoItem: TodoItem) {

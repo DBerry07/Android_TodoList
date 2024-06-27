@@ -49,7 +49,7 @@ fun MainScreen(navigateToAdd: () -> Unit) {
 }
 
 @Composable
-fun MainScreen(list: MutableList<TodoItem>, navigateToAdd: () -> Unit, deleteFromList: () -> Unit) {
+fun MainScreen(list: MutableList<TodoItem>, navigateToAdd: () -> Unit, deleteFromList: (Int) -> Unit) {
 
     var filter by remember { mutableStateOf(0) }
     val setFilter: (Int) -> Unit = {
@@ -109,7 +109,7 @@ fun MainActionBar(navigateToAdd: () -> Unit, filter: (Int) -> Unit) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MainLazyList(list: List<TodoItem>, deleteFromList: () -> Unit) {
+fun MainLazyList(list: List<TodoItem>, deleteFromList: (Int) -> Unit) {
     val context = LocalContext.current
     LazyColumn {
         items(
@@ -125,7 +125,7 @@ fun changeBackground(checked: Boolean): Color {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ListItem(item: TodoItem, index: Int, deleteFromList: () -> Unit) {
+fun ListItem(item: TodoItem, index: Int, deleteFromList: (Int) -> Unit) {
     var background by remember { mutableStateOf(Color.White) }
     var expanded by remember { mutableStateOf(false) }
     background = changeBackground(item.checked)
@@ -189,9 +189,7 @@ fun ListItem(item: TodoItem, index: Int, deleteFromList: () -> Unit) {
                         Text("DWN")
                     }
                     Button(onClick = {
-                        deleteFromList.invoke(
-                            //TODO: put id
-                        )
+                        deleteFromList.invoke(item.id)
                     }) {
                         Text("DEL")
                     }

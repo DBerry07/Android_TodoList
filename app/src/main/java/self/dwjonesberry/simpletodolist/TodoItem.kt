@@ -21,7 +21,7 @@ class TodoItem(
 
 enum class Priority {
     NORMAL,
-    HIGH,
-    MEDIUM,
     LOW,
+    MEDIUM,
+    HIGH,
 }

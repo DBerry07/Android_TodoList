@@ -204,7 +204,7 @@ fun ListItem(item: TodoItem, index: Int, deleteFromList: () -> Unit) {
 @Preview
 @Composable
 fun MainPreview() {
-    val list = mutableListOf(TodoItem("Hello"), TodoItem("Goodbye"))
+    val list = mutableListOf(TodoItem(0, "Hello"), TodoItem(1, "Goodbye"))
     SimpleToDoListTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             MainScreen(list, {}, {})

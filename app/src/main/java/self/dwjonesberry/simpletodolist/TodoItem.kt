@@ -1,6 +1,7 @@
 package self.dwjonesberry.simpletodolist
 
 class TodoItem(
+    val id: Int,
     var text: String = "",
     var checked: Boolean = false,
     var priority: Priority = Priority.NORMAL

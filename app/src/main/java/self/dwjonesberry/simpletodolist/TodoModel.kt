@@ -3,17 +3,19 @@ package self.dwjonesberry.simpletodolist
 import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlin.math.max
 
 class TodoModel {
 
     companion object {
         val todoItems: MutableList<TodoItem> =
             mutableListOf(
-                TodoItem("Hello"),
-                TodoItem("World"),
-                TodoItem("Filler"),
-                TodoItem("Content"),
+                TodoItem(0, "Hello"),
+                TodoItem(1, "World"),
+                TodoItem(2, "Filler"),
+                TodoItem(3, "Content"),
             )
+        var maxId = todoItems.last().id + 1
 
 //        val todoItems: MutableList<TodoItem> = getFromDatabase()
 
@@ -24,7 +26,8 @@ class TodoModel {
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
-                        val item = TodoItem(document["text"].toString())
+                        val item = TodoItem(id = document["id"].toString().toInt())
+                        item.text = document["text"].toString()
                         try {
                             item.priority = Priority.valueOf(document["priority"].toString())
                         } catch(e: Exception) {
@@ -44,7 +47,8 @@ class TodoModel {
     }
 
     fun addToList(item: String) {
-        todoItems.add(TodoItem(text = item))
+        todoItems.add(TodoItem(maxId, text = item))
+        maxId++
 //
 //        val db = Firebase.firestore
 //        val hashMap = hashMapOf(

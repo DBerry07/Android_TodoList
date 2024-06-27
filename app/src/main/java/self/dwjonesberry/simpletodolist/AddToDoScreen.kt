@@ -24,8 +24,10 @@ fun AddTodoScreen(navigateToMainScreen: () -> Unit) {
     val viewModel: TodoViewModel = viewModel()
     AddTodoScreen(
         holdingText = viewModel.text,
+        holdingNotes = viewModel.notes,
         addToList = viewModel.addToList,
         setText = viewModel.setText,
+        setNotes = viewModel.setNotes,
         navigateToMainScreen = navigateToMainScreen
     )
 }
@@ -33,13 +35,16 @@ fun AddTodoScreen(navigateToMainScreen: () -> Unit) {
 @Composable
 fun AddTodoScreen(
     holdingText: String,
+    holdingNotes: String,
     addToList: () -> Unit,
     setText: (String) -> Unit,
+    setNotes: (String) -> Unit,
     navigateToMainScreen: () -> Unit
 ) {
     Column {
         AddActionBar(addToList, navigateToMainScreen)
         AddTodoText(holdingText, setText)
+        AddTodoNotes(holdingNotes, setNotes)
     }
 }
 
@@ -77,6 +82,18 @@ fun AddTodoText(holdingText: String, setText: (String) -> Unit) {
             text = it
         }
     )
+}
+
+@Composable
+fun AddTodoNotes(holdingNotes: String, setNotes: (String) -> Unit) {
+    var notes by remember { mutableStateOf("") }
+    if (holdingNotes.isNotBlank()) {
+        notes = holdingNotes
+    }
+    TextField(value = notes, onValueChange = {
+        setNotes.invoke(it)
+        notes = it
+    })
 }
 
 @Preview

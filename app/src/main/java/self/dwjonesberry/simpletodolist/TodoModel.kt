@@ -10,10 +10,10 @@ class TodoModel {
     companion object {
         val todoItems: MutableList<TodoItem> =
             mutableListOf(
-                TodoItem(0, "Hello"),
-                TodoItem(1, "World"),
-                TodoItem(2, "Filler"),
-                TodoItem(3, "Content"),
+                TodoItem(0, "Hello", notes = "Welcome to morning!"),
+                TodoItem(1, "World", notes = "Na nana NA na na na"),
+                TodoItem(2, "Filler", notes = "Link to the past and future"),
+                TodoItem(3, "Content", notes = "Glory be!"),
             )
         var maxId = todoItems.last().id + 1
 
@@ -46,8 +46,8 @@ class TodoModel {
         }
     }
 
-    fun addToList(item: String) {
-        todoItems.add(TodoItem(maxId, text = item))
+    fun addToList(item: String, notes: String) {
+        todoItems.add(TodoItem(maxId, text = item, notes = notes))
         maxId++
 //
 //        val db = Firebase.firestore

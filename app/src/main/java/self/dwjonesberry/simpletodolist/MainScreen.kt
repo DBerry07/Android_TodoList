@@ -162,36 +162,47 @@ fun ListItem(item: TodoItem, index: Int, deleteFromList: (Int) -> Unit) {
                 )
             }
             if (expanded) {
-                Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
-                    Button(
-                        onClick = {
-                            Log.d("MyProject", "edit button clicked")
-                        }) {
-                        Text("Edit")
+                Column {
+                    Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
+                        Text(item.notes)
                     }
-                    Button(
-                        onClick = {
-                            Log.d("MyProject", "item #${index}: increase priority button pressed")
-                            Log.d("MyProject", "current priority: ${item.priority.name}")
-                            item.increasePriority()
-                            Log.d("MyProject", "new priority: ${item.priority.name}")
-                        }) {
-                        Text("UP")
-                    }
-                    Button(
-                        onClick = {
-                            Log.d("MyProject", "item #${index}: decrease priority button pressed")
-                            Log.d("MyProject", "current priority: ${item.priority.name}")
-                            item.decreasePriority()
-                            Log.d("MyProject", "new priority: ${item.priority.name}")
+                    Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
+                        Button(
+                            onClick = {
+                                Log.d("MyProject", "edit button clicked")
+                            }) {
+                            Text("Edit")
                         }
-                    ) {
-                        Text("DWN")
-                    }
-                    Button(onClick = {
-                        deleteFromList.invoke(item.id)
-                    }) {
-                        Text("DEL")
+                        Button(
+                            onClick = {
+                                Log.d(
+                                    "MyProject",
+                                    "item #${index}: increase priority button pressed"
+                                )
+                                Log.d("MyProject", "current priority: ${item.priority.name}")
+                                item.increasePriority()
+                                Log.d("MyProject", "new priority: ${item.priority.name}")
+                            }) {
+                            Text("UP")
+                        }
+                        Button(
+                            onClick = {
+                                Log.d(
+                                    "MyProject",
+                                    "item #${index}: decrease priority button pressed"
+                                )
+                                Log.d("MyProject", "current priority: ${item.priority.name}")
+                                item.decreasePriority()
+                                Log.d("MyProject", "new priority: ${item.priority.name}")
+                            }
+                        ) {
+                            Text("DWN")
+                        }
+                        Button(onClick = {
+                            deleteFromList.invoke(item.id)
+                        }) {
+                            Text("DEL")
+                        }
                     }
                 }
             }

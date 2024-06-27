@@ -6,15 +6,22 @@ class TodoViewModel : ViewModel() {
 
     var text: String = ""
         private set
+    var notes: String = ""
+        private set
     private val model: TodoModel = TodoModel()
 
     val addToList: () -> Unit = {
-        model.addToList(text)
+        model.addToList(text, notes)
         text = ""
+        notes = ""
     }
 
     val setText: (String) -> Unit = {
         text = it
+    }
+
+    val setNotes: (String) -> Unit = {
+        notes = it
     }
 
     val getItems: () -> MutableList<TodoItem> = {

@@ -7,7 +7,8 @@ data class TodoItem(
 )
 
 enum class Priority {
-    HIGH,
     NORMAL,
+    HIGH,
+    MEDIUM,
     LOW
 }

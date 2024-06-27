@@ -1,5 +1,6 @@
 package self.dwjonesberry.simpletodolist
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import self.dwjonesberry.simpletodolist.ui.theme.SimpleToDoListTheme
 import kotlin.coroutines.coroutineContext
+import kotlin.math.exp
 
 @Composable
 fun MainScreen(navigateToAdd: () -> Unit) {
@@ -76,6 +78,7 @@ fun MainLazyList(list: MutableList<TodoItem>) {
         ) {
             val item = list[it]
             var background by remember { mutableStateOf(Color.White) }
+            var expanded by remember { mutableStateOf(false) }
             background = changeBackground(item.checked)
             Box(
                 modifier =
@@ -85,30 +88,40 @@ fun MainLazyList(list: MutableList<TodoItem>) {
                     .fillMaxWidth()
                     .background(background)
                     .combinedClickable (onDoubleClick = {
-                        Toast.makeText(context, "doubled clicked!", Toast.LENGTH_SHORT).show()
+                        expanded = !expanded
+                        Log.d("MyProject", "item $it double clicked")
                     }){
                         list[it].checked = !(list[it].checked)
                         background = changeBackground(item.checked)
-                        Toast.makeText(context, "checked: ${list[it].checked}", Toast.LENGTH_SHORT).show()
+                        Log.d("MyProject", "checked = ${item.checked}")
                     }
             ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
-                ) {
+                Column() {
+                    Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),) {
+                        var str: String = (it + 1).toString()
+                        if ((it + 1) < 10) {
+                            str = "0$str"
+                        }
+                        str = "$str:"
 
-                    var str: String = (it + 1).toString()
-                    if ((it + 1) < 10) {
-                        str = "0$str"
+                        Text(
+                            modifier = Modifier.width(30.dp),
+                            text = str
+                        )
+                        Text(
+                            text = list[it].text
+                        )
                     }
-                    str = "$str:"
-
-                    Text(
-                        modifier = Modifier.width(30.dp),
-                        text = str
-                    )
-                    Text(
-                        text = list[it].text
-                    )
+                    if (expanded) {
+                        Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
+                            Button(
+                                onClick = {
+                                Log.d("MyProject", "edit button clicked")
+                            }) {
+                                Text("Edit")
+                            }
+                        }
+                    }
                 }
             }
         }

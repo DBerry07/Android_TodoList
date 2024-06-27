@@ -1,9 +1,11 @@
 package self.dwjonesberry.simpletodolist
 
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -64,6 +66,7 @@ fun MainActionBar(navigateToAdd: () -> Unit) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainLazyList(list: MutableList<TodoItem>) {
     val context = LocalContext.current
@@ -81,10 +84,12 @@ fun MainLazyList(list: MutableList<TodoItem>) {
                     .border(width = 1.dp, color = Color.Black)
                     .fillMaxWidth()
                     .background(background)
-                    .clickable {
+                    .combinedClickable (onDoubleClick = {
+                        Toast.makeText(context, "doubled clicked!", Toast.LENGTH_SHORT).show()
+                    }){
                         list[it].checked = !(list[it].checked)
                         background = changeBackground(item.checked)
-                        Toast.makeText(context, "checked: ${list[it].checked}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "checked: ${list[it].checked}", Toast.LENGTH_SHORT).show()
                     }
             ) {
                 Row(

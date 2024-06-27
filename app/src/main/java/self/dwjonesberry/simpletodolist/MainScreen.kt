@@ -46,14 +46,29 @@ fun MainScreen(navigateToAdd: () -> Unit) {
 
 @Composable
 fun MainScreen(list: MutableList<TodoItem>, navigateToAdd: () -> Unit) {
+
+    var filter by remember { mutableStateOf(0)}
+    val setFilter: (Int) -> Unit = {
+        filter = it
+    }
+    var filteredList = listOf<TodoItem>()
+    if (filter > 0) {
+        filteredList = list.filter { item ->
+            item.priority.ordinal == filter
+        }
+    } else {
+        filteredList = list
+    }
+
     Column {
-        MainActionBar(navigateToAdd = navigateToAdd)
-        MainLazyList(list = list)
+        MainActionBar(navigateToAdd = navigateToAdd, filter = setFilter)
+        MainLazyList(list = filteredList)
     }
 }
 
 @Composable
-fun MainActionBar(navigateToAdd: () -> Unit) {
+fun MainActionBar(navigateToAdd: () -> Unit, filter: (Int) -> Unit) {
+    Column() {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -62,15 +77,35 @@ fun MainActionBar(navigateToAdd: () -> Unit) {
         Button(onClick = { navigateToAdd.invoke() }) {
             Text("Add Item")
         }
-//        Button(onClick = { /*TODO*/ }) {
-//            Text("Button 2")
-//        }
+    }
+        Row() {
+            Button(onClick = {
+                filter.invoke(3)
+            }) {
+                Text("H")
+            }
+            Button(onClick = {
+                filter.invoke(2)
+            }) {
+                Text("M")
+            }
+            Button(onClick = {
+                filter.invoke(1)
+            }) {
+                Text("L")
+            }
+            Button(onClick = {
+                filter.invoke(0)
+            }) {
+                Text("N")
+            }
+        }
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MainLazyList(list: MutableList<TodoItem>) {
+fun MainLazyList(list: List<TodoItem>) {
     val context = LocalContext.current
     LazyColumn {
         items(

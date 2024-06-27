@@ -116,9 +116,28 @@ fun MainLazyList(list: MutableList<TodoItem>) {
                         Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
                             Button(
                                 onClick = {
-                                Log.d("MyProject", "edit button clicked")
+                                    Log.d("MyProject", "edit button clicked")
                             }) {
                                 Text("Edit")
+                            }
+                            Button(
+                                onClick = {
+                                    Log.d("MyProject", "item #${it}: increase priority button pressed")
+                                    Log.d("MyProject", "current priority: ${item.priority.name}")
+                                    item.increasePriority()
+                                    Log.d("MyProject", "new priority: ${item.priority.name}")
+                                }) {
+                                Text("Increase Priority")
+                            }
+                            Button(
+                                onClick = {
+                                    Log.d("MyProject", "item #${it}: decrease priority button pressed")
+                                    Log.d("MyProject", "current priority: ${item.priority.name}")
+                                    item.decreasePriority()
+                                    Log.d("MyProject", "new priority: ${item.priority.name}")
+                                }
+                            ) {
+                                Text("Decrease Priority")
                             }
                         }
                     }

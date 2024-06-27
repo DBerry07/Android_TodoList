@@ -1,4 +1,4 @@
-package self.dwjonesberry.simpletodolist
+package self.dwjonesberry.simpletodolist.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import self.dwjonesberry.simpletodolist.TodoViewModel
 
 @Composable
 fun AddTodoScreen(navigateToMainScreen: () -> Unit) {

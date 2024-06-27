@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onPause() {
         super.onPause()
-        val model = TodoModel()
-        model.updateDatabase()
+//        val model = TodoModel()
+//        model.updateDatabase()
     }
 }

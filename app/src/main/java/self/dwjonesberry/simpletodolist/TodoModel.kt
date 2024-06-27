@@ -7,15 +7,15 @@ import com.google.firebase.ktx.Firebase
 class TodoModel {
 
     companion object {
-//        val todoItems: MutableList<TodoItem> =
-//            mutableListOf(
-//                TodoItem("Hello"),
-//                TodoItem("World"),
-//                TodoItem("Filler"),
-//                TodoItem("Content"),
-//            )
+        val todoItems: MutableList<TodoItem> =
+            mutableListOf(
+                TodoItem("Hello"),
+                TodoItem("World"),
+                TodoItem("Filler"),
+                TodoItem("Content"),
+            )
 
-        val todoItems: MutableList<TodoItem> = getFromDatabase()
+//        val todoItems: MutableList<TodoItem> = getFromDatabase()
 
         fun getFromDatabase(): MutableList<TodoItem> {
             val db = Firebase.firestore

@@ -21,4 +21,8 @@ class TodoViewModel : ViewModel() {
         TodoModel.todoItems
     }
 
+    val deleteEntry: () -> Unit = {
+        model.deleteFromList()
+    }
+
 }

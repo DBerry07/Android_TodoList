@@ -41,13 +41,17 @@ import kotlin.math.exp
 @Composable
 fun MainScreen(navigateToAdd: () -> Unit) {
     val viewModel: TodoViewModel = viewModel()
-    MainScreen(list = viewModel.getItems.invoke(), navigateToAdd = navigateToAdd)
+    MainScreen(
+        list = viewModel.getItems.invoke(),
+        navigateToAdd = navigateToAdd,
+        deleteFromList = viewModel.deleteEntry
+    )
 }
 
 @Composable
-fun MainScreen(list: MutableList<TodoItem>, navigateToAdd: () -> Unit) {
+fun MainScreen(list: MutableList<TodoItem>, navigateToAdd: () -> Unit, deleteFromList: () -> Unit) {
 
-    var filter by remember { mutableStateOf(0)}
+    var filter by remember { mutableStateOf(0) }
     val setFilter: (Int) -> Unit = {
         filter = it
     }
@@ -62,22 +66,22 @@ fun MainScreen(list: MutableList<TodoItem>, navigateToAdd: () -> Unit) {
 
     Column {
         MainActionBar(navigateToAdd = navigateToAdd, filter = setFilter)
-        MainLazyList(list = filteredList)
+        MainLazyList(list = filteredList, deleteFromList = deleteFromList)
     }
 }
 
 @Composable
 fun MainActionBar(navigateToAdd: () -> Unit, filter: (Int) -> Unit) {
     Column() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Button(onClick = { navigateToAdd.invoke() }) {
-            Text("Add Item")
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Button(onClick = { navigateToAdd.invoke() }) {
+                Text("Add Item")
+            }
         }
-    }
         Row() {
             Button(onClick = {
                 filter.invoke(3)
@@ -105,13 +109,13 @@ fun MainActionBar(navigateToAdd: () -> Unit, filter: (Int) -> Unit) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MainLazyList(list: List<TodoItem>) {
+fun MainLazyList(list: List<TodoItem>, deleteFromList: () -> Unit) {
     val context = LocalContext.current
     LazyColumn {
         items(
             count = list.size
-        ) { ListItem(item = list[it], index = it) }
-        }
+        ) { ListItem(item = list[it], index = it, deleteFromList = deleteFromList) }
+    }
 }
 
 fun changeBackground(checked: Boolean): Color {
@@ -121,7 +125,7 @@ fun changeBackground(checked: Boolean): Color {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ListItem(item: TodoItem, index: Int) {
+fun ListItem(item: TodoItem, index: Int, deleteFromList: () -> Unit) {
     var background by remember { mutableStateOf(Color.White) }
     var expanded by remember { mutableStateOf(false) }
     background = changeBackground(item.checked)
@@ -142,7 +146,7 @@ fun ListItem(item: TodoItem, index: Int) {
             }
     ) {
         Column() {
-            Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),) {
+            Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
                 var str: String = (index + 1).toString()
                 if ((index + 1) < 10) {
                     str = "0$str"
@@ -172,7 +176,7 @@ fun ListItem(item: TodoItem, index: Int) {
                             item.increasePriority()
                             Log.d("MyProject", "new priority: ${item.priority.name}")
                         }) {
-                        Text("Increase Priority")
+                        Text("UP")
                     }
                     Button(
                         onClick = {
@@ -182,7 +186,14 @@ fun ListItem(item: TodoItem, index: Int) {
                             Log.d("MyProject", "new priority: ${item.priority.name}")
                         }
                     ) {
-                        Text("Decrease Priority")
+                        Text("DWN")
+                    }
+                    Button(onClick = {
+                        deleteFromList.invoke(
+                            //TODO: put id
+                        )
+                    }) {
+                        Text("DEL")
                     }
                 }
             }
@@ -196,7 +207,7 @@ fun MainPreview() {
     val list = mutableListOf(TodoItem("Hello"), TodoItem("Goodbye"))
     SimpleToDoListTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            MainScreen(list, {})
+            MainScreen(list, {}, {})
         }
     }
 }

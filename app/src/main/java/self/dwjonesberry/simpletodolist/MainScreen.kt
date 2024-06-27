@@ -75,81 +75,84 @@ fun MainLazyList(list: MutableList<TodoItem>) {
     LazyColumn {
         items(
             count = list.size
-        ) {
-            val item = list[it]
-            var background by remember { mutableStateOf(Color.White) }
-            var expanded by remember { mutableStateOf(false) }
-            background = changeBackground(item.checked)
-            Box(
-                modifier =
-                Modifier
-                    .padding(horizontal = 10.dp, vertical = 5.dp)
-                    .border(width = 1.dp, color = Color.Black)
-                    .fillMaxWidth()
-                    .background(background)
-                    .combinedClickable (onDoubleClick = {
-                        expanded = !expanded
-                        Log.d("MyProject", "item $it double clicked")
-                    }){
-                        list[it].checked = !(list[it].checked)
-                        background = changeBackground(item.checked)
-                        Log.d("MyProject", "checked = ${item.checked}")
-                    }
-            ) {
-                Column() {
-                    Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),) {
-                        var str: String = (it + 1).toString()
-                        if ((it + 1) < 10) {
-                            str = "0$str"
-                        }
-                        str = "$str:"
-
-                        Text(
-                            modifier = Modifier.width(30.dp),
-                            text = str
-                        )
-                        Text(
-                            text = list[it].text
-                        )
-                    }
-                    if (expanded) {
-                        Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
-                            Button(
-                                onClick = {
-                                    Log.d("MyProject", "edit button clicked")
-                            }) {
-                                Text("Edit")
-                            }
-                            Button(
-                                onClick = {
-                                    Log.d("MyProject", "item #${it}: increase priority button pressed")
-                                    Log.d("MyProject", "current priority: ${item.priority.name}")
-                                    item.increasePriority()
-                                    Log.d("MyProject", "new priority: ${item.priority.name}")
-                                }) {
-                                Text("Increase Priority")
-                            }
-                            Button(
-                                onClick = {
-                                    Log.d("MyProject", "item #${it}: decrease priority button pressed")
-                                    Log.d("MyProject", "current priority: ${item.priority.name}")
-                                    item.decreasePriority()
-                                    Log.d("MyProject", "new priority: ${item.priority.name}")
-                                }
-                            ) {
-                                Text("Decrease Priority")
-                            }
-                        }
-                    }
-                }
-            }
+        ) { ListItem(item = list[it], index = it) }
         }
-    }
 }
 
 fun changeBackground(checked: Boolean): Color {
     if (checked) return Color.LightGray
     else return Color.White
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun ListItem(item: TodoItem, index: Int) {
+    var background by remember { mutableStateOf(Color.White) }
+    var expanded by remember { mutableStateOf(false) }
+    background = changeBackground(item.checked)
+    Box(
+        modifier =
+        Modifier
+            .padding(horizontal = 10.dp, vertical = 5.dp)
+            .border(width = 1.dp, color = Color.Black)
+            .fillMaxWidth()
+            .background(background)
+            .combinedClickable(onDoubleClick = {
+                expanded = !expanded
+                Log.d("MyProject", "item $index double clicked")
+            }) {
+                item.checked = !(item.checked)
+                background = changeBackground(item.checked)
+                Log.d("MyProject", "checked = ${item.checked}")
+            }
+    ) {
+        Column() {
+            Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),) {
+                var str: String = (index + 1).toString()
+                if ((index + 1) < 10) {
+                    str = "0$str"
+                }
+                str = "$str:"
+
+                Text(
+                    modifier = Modifier.width(30.dp),
+                    text = str
+                )
+                Text(
+                    text = item.text
+                )
+            }
+            if (expanded) {
+                Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
+                    Button(
+                        onClick = {
+                            Log.d("MyProject", "edit button clicked")
+                        }) {
+                        Text("Edit")
+                    }
+                    Button(
+                        onClick = {
+                            Log.d("MyProject", "item #${index}: increase priority button pressed")
+                            Log.d("MyProject", "current priority: ${item.priority.name}")
+                            item.increasePriority()
+                            Log.d("MyProject", "new priority: ${item.priority.name}")
+                        }) {
+                        Text("Increase Priority")
+                    }
+                    Button(
+                        onClick = {
+                            Log.d("MyProject", "item #${index}: decrease priority button pressed")
+                            Log.d("MyProject", "current priority: ${item.priority.name}")
+                            item.decreasePriority()
+                            Log.d("MyProject", "new priority: ${item.priority.name}")
+                        }
+                    ) {
+                        Text("Decrease Priority")
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Preview

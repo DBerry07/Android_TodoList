@@ -20,6 +20,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -67,15 +71,20 @@ fun MainLazyList(list: MutableList<TodoItem>) {
         items(
             count = list.size
         ) {
-
+            val item = list[it]
+            var background by remember { mutableStateOf(Color.White) }
+            background = changeBackground(item.checked)
             Box(
                 modifier =
                 Modifier
                     .padding(horizontal = 10.dp, vertical = 5.dp)
                     .border(width = 1.dp, color = Color.Black)
                     .fillMaxWidth()
+                    .background(background)
                     .clickable {
-                        Toast.makeText(context, "Hello, world!", Toast.LENGTH_LONG).show()
+                        list[it].checked = !(list[it].checked)
+                        background = changeBackground(item.checked)
+                        Toast.makeText(context, "checked: ${list[it].checked}", Toast.LENGTH_LONG).show()
                     }
             ) {
                 Row(
@@ -99,6 +108,11 @@ fun MainLazyList(list: MutableList<TodoItem>) {
             }
         }
     }
+}
+
+fun changeBackground(checked: Boolean): Color {
+    if (checked) return Color.LightGray
+    else return Color.White
 }
 
 @Preview

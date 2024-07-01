@@ -149,7 +149,10 @@ fun ListItem(item: TodoItem, index: Int, deleteFromList: (Int) -> Unit) {
             }
     ) {
         Column() {
-            Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
+            Row(modifier =
+            Modifier
+                .padding(horizontal = 10.dp, vertical = 10.dp))
+            {
                 var str: String = (index + 1).toString()
                 if ((index + 1) < 10) {
                     str = "0$str"
@@ -157,11 +160,13 @@ fun ListItem(item: TodoItem, index: Int, deleteFromList: (Int) -> Unit) {
                 str = "$str:"
 
                 Text(
-                    modifier = Modifier.width(30.dp),
-                    text = str
+                    modifier = Modifier.width(40.dp),
+                    text = str,
+                    style = MaterialTheme.typography.displaySmall
                 )
                 Text(
-                    text = item.text
+                    text = item.text,
+                    style = MaterialTheme.typography.displayMedium
                 )
             }
             if (expanded) {

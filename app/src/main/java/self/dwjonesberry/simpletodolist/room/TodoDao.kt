@@ -15,12 +15,12 @@ interface TodoDao {
     fun getItem(pid: Int): Todo
 
     @Insert
-    fun insert(vararg todos: Todo)
+    suspend fun insert(vararg todos: Todo)
 
     @Update
-    fun update(vararg todo: Todo)
+    suspend fun update(vararg todo: Todo)
 
     @Delete
-    fun delete(vararg todos: Todo)
+    suspend fun delete(vararg todos: Todo)
 
 }

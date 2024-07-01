@@ -88,6 +88,11 @@ fun MainActionBar(navigateToAdd: () -> Unit, filter: (Int) -> Unit) {
             horizontalArrangement = Arrangement.Center
         ) {
             Button(onClick = {
+                filter.invoke(0)
+            }) {
+                Text("N")
+            }
+            Button(onClick = {
                 filter.invoke(3)
             }) {
                 Text("H")
@@ -101,11 +106,6 @@ fun MainActionBar(navigateToAdd: () -> Unit, filter: (Int) -> Unit) {
                 filter.invoke(1)
             }) {
                 Text("L")
-            }
-            Button(onClick = {
-                filter.invoke(0)
-            }) {
-                Text("N")
             }
         }
     }

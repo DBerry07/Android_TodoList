@@ -140,12 +140,12 @@ fun ListItem(item: TodoItem, index: Int, deleteFromList: (Int) -> Unit) {
             .border(1.dp, Color.Black, shape = MaterialTheme.shapes.medium)
             .fillMaxWidth()
             .combinedClickable(onDoubleClick = {
-                expanded = !expanded
-                Log.d("MyProject", "item $index double clicked")
-            }) {
                 item.checked = !(item.checked)
                 background = changeBackground(item.checked)
                 Log.d("MyProject", "checked = ${item.checked}")
+            }) {
+                expanded = !expanded
+                Log.d("MyProject", "item $index double clicked")
             }
     ) {
         Column() {

@@ -82,7 +82,11 @@ fun MainActionBar(navigateToAdd: () -> Unit, filter: (Int) -> Unit) {
                 Text("Add Item")
             }
         }
-        Row() {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
             Button(onClick = {
                 filter.invoke(3)
             }) {

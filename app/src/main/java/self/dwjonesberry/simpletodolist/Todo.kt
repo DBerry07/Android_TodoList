@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-class Todo(
+data class Todo(
     @PrimaryKey val id: Int,
     @ColumnInfo(name = "title") var text: String = "",
     @ColumnInfo(name = "notes") var notes: String = "",

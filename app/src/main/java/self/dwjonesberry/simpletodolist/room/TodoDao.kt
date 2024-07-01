@@ -1,4 +1,4 @@
-package self.dwjonesberry.simpletodolist
+package self.dwjonesberry.simpletodolist.room
 
 import androidx.room.Dao
 import androidx.room.Delete

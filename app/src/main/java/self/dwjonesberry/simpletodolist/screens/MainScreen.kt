@@ -34,6 +34,7 @@ import self.dwjonesberry.simpletodolist.TodoItem
 import self.dwjonesberry.simpletodolist.TodoViewModel
 import self.dwjonesberry.simpletodolist.ui.theme.SimpleToDoListTheme
 
+// TODO: The list from viewModel still requires the user to reload the screen. Need to fix!
 @Composable
 fun MainScreen(navigateToAdd: () -> Unit) {
     val viewModel: TodoViewModel = viewModel()

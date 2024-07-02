@@ -38,6 +38,7 @@ class TodoModel {
             return item
         }
 
+        // TODO: The list from viewModel still requires the user to reload the screen. Need to fix!
         private fun getFromDatabase() {
             val db: FirebaseFirestore = Firebase.firestore
 

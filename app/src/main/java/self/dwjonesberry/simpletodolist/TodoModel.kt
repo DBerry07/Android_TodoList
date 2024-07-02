@@ -92,7 +92,7 @@ class TodoModel {
 
     fun delete(todoItem: TodoItem) {
 //        deleteFromList(todoItem)
-//        deleteFromDatabase(todoItem)
+        deleteFromDatabase(todoItem)
     }
 
     private fun deleteFromDatabase(todo: TodoItem) {

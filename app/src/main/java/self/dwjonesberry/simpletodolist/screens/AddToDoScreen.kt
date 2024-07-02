@@ -1,6 +1,5 @@
 package self.dwjonesberry.simpletodolist.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,7 +10,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,7 +30,7 @@ fun AddTodoScreen(navigateToMainScreen: () -> Unit) {
     AddTodoScreen(
         holdingText = viewModel.text,
         holdingNotes = viewModel.notes,
-        addToList = viewModel.addToList,
+        addToList = viewModel.add,
         setText = viewModel.setText,
         setNotes = viewModel.setNotes,
         navigateToMainScreen = navigateToMainScreen

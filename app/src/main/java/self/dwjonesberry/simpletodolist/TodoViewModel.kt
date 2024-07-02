@@ -10,7 +10,7 @@ class TodoViewModel : ViewModel() {
         private set
     private val model: TodoModel = TodoModel()
 
-    val addToList: () -> Unit = {
+    val add: () -> Unit = {
         model.add(text, notes)
         text = ""
         notes = ""
@@ -24,12 +24,12 @@ class TodoViewModel : ViewModel() {
         notes = it
     }
 
-    val getItems: () -> MutableList<TodoItem> = {
+    val getAll: () -> MutableList<TodoItem> = {
         TodoModel.todoItems
     }
 
-    val deleteEntry: (Int) -> Unit = {
-        model.deleteFromList(todoId = it)
+    val delete: (TodoItem) -> Unit = { todo ->
+        model.delete(todo)
     }
 
 }

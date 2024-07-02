@@ -19,6 +19,10 @@ class TodoItem(
             this.priority = Priority.entries[current - 1]
         }
     }
+
+    override fun toString(): String {
+        return "TODO:: id:${id.toString()}, text:${text}, notes:${notes}, priority:${priority.name.toString()}"
+    }
 }
 
 enum class Priority {

@@ -39,7 +39,6 @@ import self.dwjonesberry.simpletodolist.ui.theme.SimpleToDoListTheme
 @Composable
 fun MainScreen(navigateToAdd: () -> Unit) {
     val viewModel: TodoViewModel = viewModel()
-    Log.v("MyProject:MainScreen", viewModel.getAll.invoke().toString())
     val data by viewModel.getAll.invoke().collectAsState()
     MainScreen(
         list = data,

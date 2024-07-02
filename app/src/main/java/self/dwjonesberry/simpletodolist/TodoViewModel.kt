@@ -11,7 +11,7 @@ class TodoViewModel : ViewModel() {
     private val model: TodoModel = TodoModel()
 
     val addToList: () -> Unit = {
-        model.addToList(text, notes)
+        model.add(text, notes)
         text = ""
         notes = ""
     }

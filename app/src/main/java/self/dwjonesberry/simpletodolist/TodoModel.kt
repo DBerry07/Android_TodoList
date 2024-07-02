@@ -2,6 +2,7 @@ package self.dwjonesberry.simpletodolist
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -13,13 +14,14 @@ class TodoModel {
 
         private val TAG = "MyProject:TodoModel"
 
-        val todoItems: MutableList<TodoItem> =
-            mutableListOf(
-                TodoItem(0, "Hello", notes = "Welcome to morning!"),
-                TodoItem(1, "World", notes = "Na nana NA na na na"),
-                TodoItem(2, "Filler", notes = "Link to the past and future"),
-                TodoItem(3, "Content", notes = "Glory be!"),
-            )
+//        val todoItems: MutableList<TodoItem> =
+//            mutableListOf(
+//                TodoItem(0, "Hello", notes = "Welcome to morning!"),
+//                TodoItem(1, "World", notes = "Na nana NA na na na"),
+//                TodoItem(2, "Filler", notes = "Link to the past and future"),
+//                TodoItem(3, "Content", notes = "Glory be!"),
+//            )
+        val todoItems: MutableList<TodoItem> = getFromDatabase()
         var maxId: Int =
             try {
                 todoItems.last().id + 1
@@ -29,6 +31,12 @@ class TodoModel {
             }
 
 //        val todoItems: MutableList<TodoItem> = getFromDatabase()
+
+        fun makeTodoItem(text: String, notes: String): TodoItem {
+            val item = TodoItem(text = text, notes = notes, id = maxId)
+            maxId++
+            return item
+        }
 
         fun getFromDatabase(): MutableList<TodoItem> {
             val db: FirebaseFirestore =
@@ -71,28 +79,36 @@ class TodoModel {
         }
     }
 
-    fun addToList(item: String, notes: String) {
+    fun add(text: String, notes: String) {
+        var item = makeTodoItem(text, notes)
+        addToList(item)
+        addToDatabase(item)
+    }
+
+    fun addToList(item: TodoItem) {
         try {
             Log.d(TAG, "Attempting to add new item to list...")
-            todoItems.add(TodoItem(maxId, text = item, notes = notes))
-            maxId++
+            todoItems.add(item)
         } catch (e: Exception) {
             Log.w(TAG, "---FAILED to add item to todo list", e)
         }
-//
-//        val db = Firebase.firestore
-//        val hashMap = hashMapOf(
-//            "text" to item,
-//            "priority" to Priority.NORMAL,
-//            "checked" to false,
-//        )
-//        db.collection("todos").add(hashMap)
-//            .addOnSuccessListener {
-//                Log.d("MyProject", "added item to database")
-//            }
-//            .addOnFailureListener {
-//                Log.d("MyProject", "failed to add to database", it)
-//            }
+    }
+
+    fun addToDatabase(item: TodoItem) {
+        val db = Firebase.firestore
+        val hashMap = makeHashMap(item)
+        db.collection("todos").document(item.id.toString()).set(hashMap)
+            .addOnSuccessListener {
+                Log.d("MyProject", "added item to database")
+            }
+            .addOnFailureListener {
+                Log.d("MyProject", "failed to add to database", it)
+            }
+    }
+
+    fun deleteFromDatabase(todo: TodoItem) {
+        val db = Firebase.firestore
+        db.collection("todos").document(todo.id.toString()).delete()
     }
 
     fun makeHashMap(todoItem: TodoItem): HashMap<String, String> {

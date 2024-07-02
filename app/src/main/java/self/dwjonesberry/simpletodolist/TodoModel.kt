@@ -28,20 +28,18 @@ class TodoModel {
         private val _todoItems = MutableStateFlow<MutableList<TodoItem>>(mutableListOf<TodoItem>())
         val todoItems: StateFlow<MutableList<TodoItem>> get() = _todoItems
 
+        var maxId: Int = 0
+
         init {
             getFromDatabase()
         }
-
-        var maxId: Int = 0
-
-//        val todoItems: MutableList<TodoItem> = getFromDatabase()
 
         private fun makeTodoItem(text: String, notes: String): TodoItem {
             val item = TodoItem(text = text, notes = notes, id = maxId)
             maxId++
             return item
         }
-        
+
         private fun getFromDatabase() {
             val db: FirebaseFirestore = Firebase.firestore
 
@@ -50,7 +48,7 @@ class TodoModel {
                 .addSnapshotListener { snapshot, e ->
                     if (e != null) {
                         Log.e(TAG, "Failure: could not get snapshot of database collection", e)
-                        //handle the error
+                        //todo: handle the error
                     }
                     else if (snapshot != null && !snapshot.isEmpty) {
                         val list = mutableListOf<TodoItem>()
@@ -64,35 +62,31 @@ class TodoModel {
                             list.add(todo)
                         }
                         _todoItems.value = list
+                        maxId = _todoItems.value.last().id + 1
                     }
                 }
         }
     }
 
     fun add(text: String, notes: String) {
-        var item = makeTodoItem(text, notes)
-        addToList(item)
+        val item = makeTodoItem(text, notes)
+//        addToList(item)
         addToDatabase(item)
     }
 
     private fun addToList(item: TodoItem) {
-        try {
-            Log.d(TAG, "Attempting to add new item to list...")
-            _todoItems.value.add(item)
-        } catch (e: Exception) {
-            Log.w(TAG, "---FAILED to add item to todo list", e)
-        }
+//        _todoItems.value.add(item)
     }
 
     private fun addToDatabase(item: TodoItem) {
         val db = Firebase.firestore
         val hashMap = makeHashMap(item)
         db.collection("todos").document(item.id.toString()).set(hashMap)
-            .addOnSuccessListener {
-                Log.d("MyProject", "added item to database")
+            .addOnSuccessListener { result ->
+                Log.d(TAG, "Success: added item to database w/refID: ${result}")
             }
-            .addOnFailureListener {
-                Log.d("MyProject", "failed to add to database", it)
+            .addOnFailureListener { e ->
+                Log.d(TAG, "Failure: did not add item to database", e)
             }
     }
 

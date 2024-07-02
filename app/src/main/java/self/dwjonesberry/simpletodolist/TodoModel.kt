@@ -126,16 +126,18 @@ class TodoModel {
         )
     }
 
+    fun update(todoItem: TodoItem) {
+        updateDatabase(todoItem)
+    }
 
-    //todo: does not update existing entries, only adds them
-//    private fun updateDatabase() {
-//        val db = Firebase.firestore
-//
-//        for (item in _todoItems.value) {
-//            val hashMap = makeHashMap(item)
-//            db.collection("todos").add(hashMap)
-//        }
-//    }
+
+//    todo: does not update existing entries, only adds them
+    private fun updateDatabase(todoItem: TodoItem) {
+        val db = Firebase.firestore
+        val hashMap: Map<String, String> = makeHashMap(todoItem)
+
+        db.collection("todos").document(todoItem.id.toString()).update(hashMap)
+    }
 
 //    private fun deleteFromList(todoItem: TodoItem) {
 //        try {

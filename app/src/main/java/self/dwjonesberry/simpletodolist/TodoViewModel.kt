@@ -33,4 +33,8 @@ class TodoViewModel : ViewModel() {
         model.delete(todo)
     }
 
+    val update: (TodoItem) -> Unit = { todo ->
+        model.update(todo)
+    }
+
 }

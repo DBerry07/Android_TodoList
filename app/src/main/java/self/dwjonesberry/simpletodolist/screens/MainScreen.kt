@@ -43,12 +43,13 @@ fun MainScreen(navigateToAdd: () -> Unit) {
     MainScreen(
         list = data,
         navigateToAdd = navigateToAdd,
+        update = viewModel.update,
         deleteFromList = viewModel.delete
     )
 }
 
 @Composable
-fun MainScreen(list: MutableList<TodoItem>, navigateToAdd: () -> Unit, deleteFromList: (TodoItem) -> Unit) {
+fun MainScreen(list: MutableList<TodoItem>, navigateToAdd: () -> Unit, update: (TodoItem) -> Unit, deleteFromList: (TodoItem) -> Unit) {
 
     var filter by remember { mutableStateOf(0) }
     val setFilter: (Int) -> Unit = {
@@ -65,7 +66,7 @@ fun MainScreen(list: MutableList<TodoItem>, navigateToAdd: () -> Unit, deleteFro
 
     Column {
         MainActionBar(navigateToAdd = navigateToAdd, filter = setFilter)
-        MainLazyList(list = filteredList, deleteFromList = deleteFromList)
+        MainLazyList(list = filteredList, update = update, deleteFromList = deleteFromList)
     }
 }
 
@@ -112,12 +113,12 @@ fun MainActionBar(navigateToAdd: () -> Unit, filter: (Int) -> Unit) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MainLazyList(list: List<TodoItem>, deleteFromList: (TodoItem) -> Unit) {
+fun MainLazyList(list: List<TodoItem>, update: (TodoItem) -> Unit, deleteFromList: (TodoItem) -> Unit) {
     val context = LocalContext.current
     LazyColumn {
         items(
             count = list.size
-        ) { ListItem(item = list[it], index = it, deleteFromList = deleteFromList) }
+        ) { ListItem(item = list[it], index = it, update = update, deleteFromList = deleteFromList) }
     }
 }
 
@@ -128,7 +129,7 @@ fun changeBackground(checked: Boolean): Color {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ListItem(item: TodoItem, index: Int, deleteFromList: (TodoItem) -> Unit) {
+fun ListItem(item: TodoItem, index: Int, update: (TodoItem) -> Unit, deleteFromList: (TodoItem) -> Unit) {
     var background by remember { mutableStateOf(Color.White) }
     var expanded by remember { mutableStateOf(false) }
     background = changeBackground(item.checked)
@@ -192,6 +193,7 @@ fun ListItem(item: TodoItem, index: Int, deleteFromList: (TodoItem) -> Unit) {
                                 )
                                 Log.d("MyProject", "current priority: ${item.priority.name}")
                                 item.increasePriority()
+                                update(item)
                                 Log.d("MyProject", "new priority: ${item.priority.name}")
                             }) {
                             Text("UP")
@@ -204,6 +206,7 @@ fun ListItem(item: TodoItem, index: Int, deleteFromList: (TodoItem) -> Unit) {
                                 )
                                 Log.d("MyProject", "current priority: ${item.priority.name}")
                                 item.decreasePriority()
+                                update(item)
                                 Log.d("MyProject", "new priority: ${item.priority.name}")
                             }
                         ) {
@@ -227,7 +230,7 @@ fun MainPreview() {
     val list = mutableListOf(TodoItem(0, "Hello"), TodoItem(1, "Goodbye"))
     SimpleToDoListTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            MainScreen(list, {}, {})
+            MainScreen(list, {}, {}, {})
         }
     }
 }

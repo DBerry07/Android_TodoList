@@ -6,6 +6,8 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import self.dwjonesberry.simpletodolist.room.Todo
 import kotlin.math.max
 
@@ -22,7 +24,9 @@ class TodoModel {
 //                TodoItem(2, "Filler", notes = "Link to the past and future"),
 //                TodoItem(3, "Content", notes = "Glory be!"),
 //            )
-        val todoItems: MutableList<TodoItem> = mutableListOf()
+        //TODO: get more detailed knowledge of how state flows work
+        private val _todoItems = MutableStateFlow<MutableList<TodoItem>>(mutableListOf<TodoItem>())
+        val todoItems: StateFlow<MutableList<TodoItem>> get() = _todoItems
 
         init {
             getFromDatabase()
@@ -37,45 +41,29 @@ class TodoModel {
             maxId++
             return item
         }
-
-        // TODO: The list from viewModel still requires the user to reload the screen. Need to fix!
+        
         private fun getFromDatabase() {
             val db: FirebaseFirestore = Firebase.firestore
 
             Log.d(TAG, "Attempting to get collection from database...")
             db.collection("todos")
-                .get()
-                .addOnSuccessListener { result ->
-                    Log.d(TAG, "Attempting to convert results to todo items...")
-                    try {
-                        for (document in result) {
-                            Log.d(TAG, document.toString())
-                            val item = TodoItem(id = document.get("id").toString().toInt())
-                            Log.d(TAG, "...item id#${item.id}...")
-                            item.text = document["text"].toString()
-                            item.notes = document.get("notes").toString()
-                            try {
-                                item.priority = Priority.valueOf(document.get("priority").toString())
-                            } catch (e: Exception) {
-                                item.priority = Priority.NORMAL
-                            }
-
-                            when (document["checked"].toString()) {
-                                "true" -> item.checked = true
-                                else -> item.checked = false
-                            }
-                            Log.v(TAG, item.toString())
-                            todoItems.add(item)
-                        }
-                    } catch (e: Exception) {
-                        Log.w(TAG, "---FAILED to convert to todo items", e)
+                .addSnapshotListener { snapshot, e ->
+                    if (e != null) {
+                        Log.e(TAG, "Failure: could not get snapshot of database collection", e)
+                        //handle the error
                     }
-
-                    try {
-                        maxId = todoItems.last().id + 1
-                    } catch (e: Exception) {
-                        Log.d(TAG, "---FAILED to retrieve maxId. maxId set to 0")
-                        maxId = 0
+                    else if (snapshot != null && !snapshot.isEmpty) {
+                        val list = mutableListOf<TodoItem>()
+                        for (item in snapshot.documents) {
+                            val todo = TodoItem(
+                                id = item.get("id").toString().toInt(),
+                                text = item.get("text").toString(),
+                                notes = item.get("notes").toString(),
+                                priority = Priority.valueOf(item.get("priority").toString())
+                                )
+                            list.add(todo)
+                        }
+                        _todoItems.value = list
                     }
                 }
         }
@@ -90,7 +78,7 @@ class TodoModel {
     private fun addToList(item: TodoItem) {
         try {
             Log.d(TAG, "Attempting to add new item to list...")
-            todoItems.add(item)
+            _todoItems.value.add(item)
         } catch (e: Exception) {
             Log.w(TAG, "---FAILED to add item to todo list", e)
         }
@@ -109,8 +97,8 @@ class TodoModel {
     }
 
     fun delete(todoItem: TodoItem) {
-        deleteFromList(todoItem)
-        deleteFromDatabase(todoItem)
+//        deleteFromList(todoItem)
+//        deleteFromDatabase(todoItem)
     }
 
     private fun deleteFromDatabase(todo: TodoItem) {
@@ -146,26 +134,26 @@ class TodoModel {
 
 
     //todo: does not update existing entries, only adds them
-    private fun updateDatabase() {
-        val db = Firebase.firestore
+//    private fun updateDatabase() {
+//        val db = Firebase.firestore
+//
+//        for (item in _todoItems.value) {
+//            val hashMap = makeHashMap(item)
+//            db.collection("todos").add(hashMap)
+//        }
+//    }
 
-        for (item in todoItems) {
-            val hashMap = makeHashMap(item)
-            db.collection("todos").add(hashMap)
-        }
-    }
-
-    private fun deleteFromList(todoItem: TodoItem) {
-        try {
-            Log.d(TAG, "ATTEMPTING to delete id#${todoItem.id} from list...")
-            val item = todoItems.find {
-                it.id == todoItem.id
-            }
-            todoItems.remove(item)
-        } catch (e: Exception) {
-            Log.d(TAG, "---FAILED to delete id#${todoItem.id} from list")
-        }
-    }
+//    private fun deleteFromList(todoItem: TodoItem) {
+//        try {
+//            Log.d(TAG, "ATTEMPTING to delete id#${todoItem.id} from list...")
+//            val item = todoItems.find {
+//                it.id == todoItem.id
+//            }
+//            todoItems.remove(item)
+//        } catch (e: Exception) {
+//            Log.d(TAG, "---FAILED to delete id#${todoItem.id} from list")
+//        }
+//    }
 
     private fun updateList(todoItem: TodoItem) {
         val db = Firebase.firestore

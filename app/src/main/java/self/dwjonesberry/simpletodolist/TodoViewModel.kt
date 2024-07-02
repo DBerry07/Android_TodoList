@@ -1,6 +1,7 @@
 package self.dwjonesberry.simpletodolist
 
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.StateFlow
 
 class TodoViewModel : ViewModel() {
 
@@ -24,7 +25,7 @@ class TodoViewModel : ViewModel() {
         notes = it
     }
 
-    val getAll: () -> MutableList<TodoItem> = {
+    val getAll: () -> StateFlow<MutableList<TodoItem>> = {
         TodoModel.todoItems
     }
 

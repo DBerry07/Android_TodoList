@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,8 +40,9 @@ import self.dwjonesberry.simpletodolist.ui.theme.SimpleToDoListTheme
 fun MainScreen(navigateToAdd: () -> Unit) {
     val viewModel: TodoViewModel = viewModel()
     Log.v("MyProject:MainScreen", viewModel.getAll.invoke().toString())
+    val data by viewModel.getAll.invoke().collectAsState()
     MainScreen(
-        list = viewModel.getAll.invoke(),
+        list = data,
         navigateToAdd = navigateToAdd,
         deleteFromList = viewModel.delete
     )

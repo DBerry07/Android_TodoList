@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import self.dwjonesberry.simpletodolist.FirebaseRepository
+import self.dwjonesberry.simpletodolist.Priority
 import self.dwjonesberry.simpletodolist.Screens
 import self.dwjonesberry.simpletodolist.TodoItem
 import self.dwjonesberry.simpletodolist.TodoViewModel
@@ -158,6 +159,15 @@ class MainScreen(val navigate: () -> Unit) {
         else return Color.White
     }
 
+    fun determineBorder(todoItem: TodoItem): Color {
+        return when (todoItem.priority) {
+            Priority.NORMAL -> { Color.Black }
+            Priority.LOW -> { Color.Green }
+            Priority.MEDIUM -> { Color.Blue }
+            Priority.HIGH -> { Color.Red }
+        }
+    }
+
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     private fun ListItem(
@@ -168,7 +178,9 @@ class MainScreen(val navigate: () -> Unit) {
     ) {
         var background by remember { mutableStateOf(Color.White) }
         var expanded by remember { mutableStateOf(false) }
+        var border: Color by remember { mutableStateOf(Color.Black) }
         background = changeBackground(item.checked)
+        border = determineBorder(item)
         Card(
             shape = MaterialTheme.shapes.medium,
             colors = CardDefaults.cardColors().copy(
@@ -177,7 +189,7 @@ class MainScreen(val navigate: () -> Unit) {
             modifier =
             Modifier
                 .padding(horizontal = 10.dp, vertical = 5.dp)
-                .border(1.dp, Color.Black, shape = MaterialTheme.shapes.medium)
+                .border(2.dp, border, shape = MaterialTheme.shapes.medium)
                 .fillMaxWidth()
                 .combinedClickable(onDoubleClick = {
                     item.checked = !(item.checked)
@@ -204,6 +216,7 @@ class MainScreen(val navigate: () -> Unit) {
                     Text(
                         modifier = Modifier.width(40.dp),
                         text = str,
+                        color = border,
                         style = MaterialTheme.typography.displaySmall
                     )
                     Text(

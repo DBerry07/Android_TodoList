@@ -56,15 +56,7 @@ class MainScreen(val navigate: () -> Unit) {
         navigateToAdd: () -> Unit
     ) {
         val data by viewModel.todoList.collectAsState()
-        var sortedBy: Int = 0
-        var remembered = remember(data) { data }
-
-
-        val sort: () -> Unit = {
-            Log.d(TAG, "sort button pressed")
-            sortedBy += 1
-            if (sortedBy > 3) sortedBy = 0
-        }
+        val remembered = remember(data) { data }
 
         MainLayout(
             list = remembered,
@@ -72,6 +64,7 @@ class MainScreen(val navigate: () -> Unit) {
             update = viewModel.update,
             deleteFromList = viewModel.delete,
             sort = viewModel.sort,
+            sortedBy = viewModel.sortedBy,
         )
     }
 
@@ -82,6 +75,7 @@ class MainScreen(val navigate: () -> Unit) {
         update: (TodoItem) -> Unit,
         deleteFromList: (TodoItem) -> Unit,
         sort: () -> Unit,
+        sortedBy: Int,
     ) {
 
         var filter by remember { mutableStateOf(0) }
@@ -98,13 +92,22 @@ class MainScreen(val navigate: () -> Unit) {
         }
 
         Column {
-            MainActionBar(navigateToAdd = navigateToAdd, filter = setFilter, sort = sort)
+            MainActionBar(navigateToAdd = navigateToAdd, filter = setFilter, sort = sort, sortedBy = sortedBy)
             MainLazyList(list = filteredList, update = update, deleteFromList = deleteFromList)
         }
     }
 
     @Composable
-    private fun MainActionBar(navigateToAdd: () -> Unit, filter: (Int) -> Unit, sort: () -> Unit) {
+    private fun MainActionBar(navigateToAdd: () -> Unit, filter: (Int) -> Unit, sort: () -> Unit, sortedBy: Int) {
+        var sortedByText = "Sorted:"
+
+        when(sortedBy) {
+            0 -> sortedByText = "${sortedByText} IDup"
+            1 -> sortedByText = "${sortedByText} IDdn"
+            2 -> sortedByText = "${sortedByText} PRup"
+            3 -> sortedByText = "${sortedByText} PRdn"
+        }
+
         Column() {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -115,7 +118,7 @@ class MainScreen(val navigate: () -> Unit) {
                     Text("Add Item")
                 }
                 Button(onClick = { sort.invoke() }) {
-                    Text("Sort")
+                    Text(sortedByText)
                 }
             }
             Row(

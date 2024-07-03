@@ -22,11 +22,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import self.dwjonesberry.simpletodolist.FirebaseRepository
 import self.dwjonesberry.simpletodolist.TodoViewModel
+import self.dwjonesberry.simpletodolist.TodoViewModelFactory
 
 @Composable
-fun AddTodoScreen(navigateToMainScreen: () -> Unit) {
-    val viewModel: TodoViewModel = viewModel()
+fun AddTodoScreen(repo: FirebaseRepository, viewModel: TodoViewModel = viewModel( factory = TodoViewModelFactory(repo)), navigateToMainScreen: () -> Unit) {
     AddTodoScreen(
         holdingText = viewModel.text,
         holdingNotes = viewModel.notes,
@@ -120,6 +121,6 @@ fun AddTodoNotes(holdingNotes: String, setNotes: (String) -> Unit) {
 @Composable
 fun ATSPreview() {
     Surface(modifier = Modifier.fillMaxSize()) {
-        AddTodoScreen({})
+        AddTodoScreen("", "", {}, {}, {}, {})
     }
 }

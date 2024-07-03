@@ -31,17 +31,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import self.dwjonesberry.simpletodolist.FirebaseRepository
 import self.dwjonesberry.simpletodolist.TodoItem
 import self.dwjonesberry.simpletodolist.TodoViewModel
+import self.dwjonesberry.simpletodolist.TodoViewModelFactory
 import self.dwjonesberry.simpletodolist.ui.theme.SimpleToDoListTheme
 
 // TODO: The list from viewModel still requires the user to reload the screen. Need to fix!
 @Composable
-fun MainScreen(navigateToAdd: () -> Unit) {
-    val viewModel: TodoViewModel = viewModel()
-    val data by viewModel.getAll.invoke().collectAsState()
+fun MainScreen(repo: FirebaseRepository, viewModel: TodoViewModel = viewModel( factory = TodoViewModelFactory(repo)), navigateToAdd: () -> Unit) {
+    val data by viewModel.todoList.collectAsState()
+    val remembered = remember(data) { data }
+
     MainScreen(
-        list = data,
+        list = remembered,
         navigateToAdd = navigateToAdd,
         update = viewModel.update,
         deleteFromList = viewModel.delete
@@ -49,7 +52,7 @@ fun MainScreen(navigateToAdd: () -> Unit) {
 }
 
 @Composable
-fun MainScreen(list: MutableList<TodoItem>, navigateToAdd: () -> Unit, update: (TodoItem) -> Unit, deleteFromList: (TodoItem) -> Unit) {
+fun MainScreen(list: List<TodoItem>, navigateToAdd: () -> Unit, update: (TodoItem) -> Unit, deleteFromList: (TodoItem) -> Unit) {
 
     var filter by remember { mutableStateOf(0) }
     val setFilter: (Int) -> Unit = {

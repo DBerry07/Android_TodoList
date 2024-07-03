@@ -20,8 +20,8 @@ fun MyApp() {
             navController = navController,
             startDestination = Screens.MAIN.name
         ) {
-            composable(Screens.MAIN.name) { MainScreen() { navController.navigate(Screens.ADD.name) } }
-            composable(Screens.ADD.name) { AddTodoScreen() { navController.popBackStack() } }
+            composable(Screens.MAIN.name) { MainScreen(FirebaseRepository()) { navController.navigate(Screens.ADD.name) } }
+            composable(Screens.ADD.name) { AddTodoScreen(FirebaseRepository()) { navController.popBackStack() } }
         }
     }
 }

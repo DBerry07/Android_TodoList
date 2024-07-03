@@ -26,101 +26,108 @@ import self.dwjonesberry.simpletodolist.FirebaseRepository
 import self.dwjonesberry.simpletodolist.TodoViewModel
 import self.dwjonesberry.simpletodolist.TodoViewModelFactory
 
-@Composable
-fun AddTodoScreen(repo: FirebaseRepository, viewModel: TodoViewModel = viewModel( factory = TodoViewModelFactory(repo)), navigateToMainScreen: () -> Unit) {
-    AddTodoScreen(
-        holdingText = viewModel.text,
-        holdingNotes = viewModel.notes,
-        addToList = viewModel.add,
-        setText = viewModel.setText,
-        setNotes = viewModel.setNotes,
-        navigateToMainScreen = navigateToMainScreen
-    )
-}
+class AddToDoScreen(val navigate: () -> Unit) {
 
-@Composable
-fun AddTodoScreen(
-    holdingText: String,
-    holdingNotes: String,
-    addToList: () -> Unit,
-    setText: (String) -> Unit,
-    setNotes: (String) -> Unit,
-    navigateToMainScreen: () -> Unit
-) {
-    Column {
-        AddActionBar(addToList, navigateToMainScreen)
-        AddTodoText(holdingText, setText)
-        AddTodoNotes(holdingNotes, setNotes)
-    }
-}
-
-@Composable
-fun AddActionBar(addToList: () -> Unit, navigateToMainScreen: () -> Unit) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Button(onClick = {
-            addToList.invoke()
-            navigateToMainScreen.invoke()
-        }) {
-            Text("Add to List")
+    val Screen: Unit
+        @Composable
+        get() {
+            return AddTodoLayout(repo = FirebaseRepository(), navigateToMainScreen = navigate)
         }
+
+    @Composable
+    private fun AddTodoLayout(
+        repo: FirebaseRepository,
+        viewModel: TodoViewModel = viewModel(factory = TodoViewModelFactory(repo)),
+        navigateToMainScreen: () -> Unit
+    ) {
+        AddTodoScreen(
+            holdingText = viewModel.text,
+            holdingNotes = viewModel.notes,
+            addToList = viewModel.add,
+            setText = viewModel.setText,
+            setNotes = viewModel.setNotes,
+            navigateToMainScreen = navigateToMainScreen
+        )
+    }
+
+    @Composable
+    private fun AddTodoScreen(
+        holdingText: String,
+        holdingNotes: String,
+        addToList: () -> Unit,
+        setText: (String) -> Unit,
+        setNotes: (String) -> Unit,
+        navigateToMainScreen: () -> Unit
+    ) {
+        Column {
+            AddActionBar(addToList, navigateToMainScreen)
+            AddTodoText(holdingText, setText)
+            AddTodoNotes(holdingNotes, setNotes)
+        }
+    }
+
+    @Composable
+    private fun AddActionBar(addToList: () -> Unit, navigateToMainScreen: () -> Unit) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Button(onClick = {
+                addToList.invoke()
+                navigateToMainScreen.invoke()
+            }) {
+                Text("Add to List")
+            }
 //        Button(onClick = { /*TODO*/ }) {
 //            Text("Goodbye")
 //        }
-    }
-}
-
-@Composable
-fun AddTodoText(holdingText: String, setText: (String) -> Unit) {
-    var text by remember { mutableStateOf("") }
-    if (holdingText.isNotBlank()) {
-        text = holdingText
-    }
-
-    OutlinedTextField(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp, vertical = 5.dp),
-        label = {Text("Title")},
-        colors = TextFieldDefaults.colors().copy(
-            unfocusedContainerColor = Color.Transparent,
-            focusedContainerColor = Color.Transparent,
-        ),
-        minLines = 2,
-        maxLines = 2,
-        value = text,
-        onValueChange = {
-            setText.invoke(it)
-            text = it
         }
-    )
+    }
+
+    @Composable
+    private fun AddTodoText(holdingText: String, setText: (String) -> Unit) {
+        var text by remember { mutableStateOf("") }
+        if (holdingText.isNotBlank()) {
+            text = holdingText
+        }
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp, vertical = 5.dp),
+            label = { Text("Title") },
+            colors = TextFieldDefaults.colors().copy(
+                unfocusedContainerColor = Color.Transparent,
+                focusedContainerColor = Color.Transparent,
+            ),
+            minLines = 2,
+            maxLines = 2,
+            value = text,
+            onValueChange = {
+                setText.invoke(it)
+                text = it
+            }
+        )
+    }
+
+    @Composable
+    private fun AddTodoNotes(holdingNotes: String, setNotes: (String) -> Unit) {
+        var notes by remember { mutableStateOf("") }
+        if (holdingNotes.isNotBlank()) {
+            notes = holdingNotes
+        }
+        OutlinedTextField(value = notes,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp, vertical = 5.dp),
+            label = { Text("Notes") },
+            minLines = 8,
+            maxLines = 8,
+            colors = TextFieldDefaults.colors().copy(
+                unfocusedContainerColor = Color.Transparent,
+                focusedContainerColor = Color.Transparent,
+            ),
+            onValueChange = {
+                setNotes.invoke(it)
+                notes = it
+            })
+    }
 }
 
-@Composable
-fun AddTodoNotes(holdingNotes: String, setNotes: (String) -> Unit) {
-    var notes by remember { mutableStateOf("") }
-    if (holdingNotes.isNotBlank()) {
-        notes = holdingNotes
-    }
-    OutlinedTextField(value = notes, modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp, vertical = 5.dp),
-        label = {Text("Notes")},
-        minLines = 8,
-        maxLines = 8,
-        colors = TextFieldDefaults.colors().copy(
-            unfocusedContainerColor = Color.Transparent,
-            focusedContainerColor = Color.Transparent,
-        ),
-        onValueChange = {
-        setNotes.invoke(it)
-        notes = it
-    })
-}
-
-@Preview
-@Composable
-fun ATSPreview() {
-    Surface(modifier = Modifier.fillMaxSize()) {
-        AddTodoScreen("", "", {}, {}, {}, {})
-    }
-}

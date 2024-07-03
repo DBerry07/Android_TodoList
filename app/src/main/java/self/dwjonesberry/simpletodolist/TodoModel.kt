@@ -28,7 +28,8 @@ class TodoModel {
         private val _todoItems = MutableStateFlow<MutableList<TodoItem>>(mutableListOf<TodoItem>())
         val todoItems: StateFlow<MutableList<TodoItem>> get() = _todoItems
 
-        var maxId: Int = 0
+        val maxId: Int
+            get() = _todoItems.value.last().id + 1
 
         init {
             getFromDatabase()
@@ -36,7 +37,6 @@ class TodoModel {
 
         private fun makeTodoItem(text: String, notes: String): TodoItem {
             val item = TodoItem(text = text, notes = notes, id = maxId)
-            maxId++
             return item
         }
 
@@ -62,7 +62,6 @@ class TodoModel {
                             list.add(todo)
                         }
                         _todoItems.value = list
-                        maxId = _todoItems.value.last().id + 1
                     }
                 }
         }

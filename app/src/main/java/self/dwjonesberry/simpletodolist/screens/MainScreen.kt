@@ -41,6 +41,8 @@ import self.dwjonesberry.simpletodolist.ui.theme.SimpleToDoListTheme
 
 class MainScreen(val navigate: () -> Unit) {
 
+    val TAG = "MyProject:MainScreen"
+
     val Screen: Unit
         @Composable
         get() {
@@ -54,13 +56,22 @@ class MainScreen(val navigate: () -> Unit) {
         navigateToAdd: () -> Unit
     ) {
         val data by viewModel.todoList.collectAsState()
-        val remembered = remember(data) { data }
+        var sortedBy: Int = 0
+        var remembered = remember(data) { data }
+
+
+        val sort: () -> Unit = {
+            Log.d(TAG, "sort button pressed")
+            sortedBy += 1
+            if (sortedBy > 3) sortedBy = 0
+        }
 
         MainLayout(
             list = remembered,
             navigateToAdd = navigateToAdd,
             update = viewModel.update,
-            deleteFromList = viewModel.delete
+            deleteFromList = viewModel.delete,
+            sort = viewModel.sort,
         )
     }
 
@@ -69,7 +80,8 @@ class MainScreen(val navigate: () -> Unit) {
         list: List<TodoItem>,
         navigateToAdd: () -> Unit,
         update: (TodoItem) -> Unit,
-        deleteFromList: (TodoItem) -> Unit
+        deleteFromList: (TodoItem) -> Unit,
+        sort: () -> Unit,
     ) {
 
         var filter by remember { mutableStateOf(0) }
@@ -86,13 +98,13 @@ class MainScreen(val navigate: () -> Unit) {
         }
 
         Column {
-            MainActionBar(navigateToAdd = navigateToAdd, filter = setFilter)
+            MainActionBar(navigateToAdd = navigateToAdd, filter = setFilter, sort = sort)
             MainLazyList(list = filteredList, update = update, deleteFromList = deleteFromList)
         }
     }
 
     @Composable
-    private fun MainActionBar(navigateToAdd: () -> Unit, filter: (Int) -> Unit) {
+    private fun MainActionBar(navigateToAdd: () -> Unit, filter: (Int) -> Unit, sort: () -> Unit) {
         Column() {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -101,6 +113,9 @@ class MainScreen(val navigate: () -> Unit) {
             ) {
                 Button(onClick = { navigateToAdd.invoke() }) {
                     Text("Add Item")
+                }
+                Button(onClick = { sort.invoke() }) {
+                    Text("Sort")
                 }
             }
             Row(

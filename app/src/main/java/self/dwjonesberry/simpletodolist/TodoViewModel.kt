@@ -17,6 +17,7 @@ class TodoViewModel(private val repo: FirebaseRepository) : ViewModel() {
         private set
     private val _todoList = MutableStateFlow<List<TodoItem>>(emptyList())
     val todoList: StateFlow<List<TodoItem>> = _todoList.asStateFlow()
+    var sortedBy = 0
 
     init {
         viewModelScope.launch {
@@ -28,6 +29,18 @@ class TodoViewModel(private val repo: FirebaseRepository) : ViewModel() {
 
     val maxId: Int
         get() = _todoList.value.last().id + 1
+
+    val sort: () -> Unit = {
+        sortedBy += 1
+        when(sortedBy) {
+            0 -> _todoList.value = _todoList.value.sortedBy { it.id }
+            1 -> _todoList.value = _todoList.value.sortedByDescending { it.id }
+            2 -> _todoList.value = _todoList.value.sortedBy { it.priority.ordinal }
+            3 -> _todoList.value = _todoList.value.sortedByDescending { it.priority.ordinal }
+            else -> _todoList.value = _todoList.value.sortedBy{ it.id }
+        }
+        if (sortedBy > 3) sortedBy = 0
+    }
 
     val add: () -> Unit = {
         val item = TodoItem(id = maxId, text = text, notes = notes)

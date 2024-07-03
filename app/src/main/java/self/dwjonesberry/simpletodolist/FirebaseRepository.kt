@@ -13,39 +13,38 @@ import kotlinx.coroutines.flow.callbackFlow
 
 class FirebaseRepository {
 
-        private val TAG: String = "MyProject: FirebaseRepo"
-        private val util = FirebaseRepoUtil()
+    private val TAG: String = "MyProject: FirebaseRepo"
+    private val util = FirebaseRepoUtil()
 
-        fun getAllFromDatabase(): Flow<List<TodoItem>> = callbackFlow {
-            val db: FirebaseFirestore = Firebase.firestore
-            Log.d(TAG, "Attempting to get collection from database...")
+    fun getAllFromDatabase(): Flow<List<TodoItem>> = callbackFlow {
+        val db: FirebaseFirestore = Firebase.firestore
+        Log.d(TAG, "Attempting to get collection from database...")
 
-            val listenerRegistration = db.collection("todos")
-                .addSnapshotListener { snapshot, e ->
-                    if (e != null) {
-                        // Block executes if error in retrieving from database
-                        Log.e(TAG, "Failure: could not get snapshot of database collection", e)
-                        close(e)
-                    }
-                        Log.d(TAG, "Success: got documents from database")
-                        val list = mutableListOf<TodoItem>()
-                        for (result in snapshot!!.documents) {
-                            list.add(util.decodeResult(result))
-                        }
+        val listenerRegistration = db.collection("todos")
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    // Block executes if error in retrieving from database
+                    Log.e(TAG, "Failure: could not get snapshot of database collection", e)
+                    close(e)
+                }
+                Log.d(TAG, "Success: got documents from database")
+                val list = mutableListOf<TodoItem>()
+                for (result in snapshot!!.documents) {
+                    list.add(util.decodeResult(result))
+                }
 
-                    //Sort is necessary as the largest id is not always in the last position
-                    list.sortBy { it.id }
+                //Sort is necessary as the largest id is not always in the last position
+                list.sortBy { it.id }
 
-                    //trySend MUST be inside addSnapshotListener, else doubles list on UI
-                    trySend(list)
-                    }
-            awaitClose {  listenerRegistration.remove() }
-        }
+                //trySend MUST be inside addSnapshotListener, else doubles list on UI
+                trySend(list)
+            }
+        awaitClose { listenerRegistration.remove() }
+    }
 
     /**
      * Retrieve a list of TodoItems from the Firebase Firestore database.
      */
-
 
 
     fun addToDatabase(item: TodoItem) {

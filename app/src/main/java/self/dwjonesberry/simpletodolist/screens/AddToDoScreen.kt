@@ -93,7 +93,9 @@ class AddToDoScreen(val navigate: () -> Unit) {
         }
 
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp, vertical = 5.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 5.dp, vertical = 5.dp),
             label = { Text("Title") },
             colors = TextFieldDefaults.colors().copy(
                 unfocusedContainerColor = Color.Transparent,
@@ -116,7 +118,9 @@ class AddToDoScreen(val navigate: () -> Unit) {
             notes = holdingNotes
         }
         OutlinedTextField(value = notes,
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp, vertical = 5.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 5.dp, vertical = 5.dp),
             label = { Text("Notes") },
             minLines = 8,
             maxLines = 8,

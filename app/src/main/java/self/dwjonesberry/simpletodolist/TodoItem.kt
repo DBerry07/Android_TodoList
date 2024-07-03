@@ -13,6 +13,7 @@ class TodoItem(
             this.priority = Priority.entries[current + 1]
         }
     }
+
     fun decreasePriority() {
         val current = this.priority.ordinal
         if (current > 0) {

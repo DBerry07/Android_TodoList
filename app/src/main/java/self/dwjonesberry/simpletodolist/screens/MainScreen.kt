@@ -161,10 +161,21 @@ class MainScreen(val navigate: () -> Unit) {
 
     fun determineBorder(todoItem: TodoItem): Color {
         return when (todoItem.priority) {
-            Priority.NORMAL -> { Color.Black }
-            Priority.LOW -> { Color.Green }
-            Priority.MEDIUM -> { Color.Blue }
-            Priority.HIGH -> { Color.Red }
+            Priority.NORMAL -> {
+                Color.Black
+            }
+
+            Priority.LOW -> {
+                Color.Green
+            }
+
+            Priority.MEDIUM -> {
+                Color.Blue
+            }
+
+            Priority.HIGH -> {
+                Color.Red
+            }
         }
     }
 

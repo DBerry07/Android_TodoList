@@ -233,14 +233,17 @@ class MainScreen(val navigate: () -> Unit) {
                         .padding(horizontal = 10.dp, vertical = 10.dp)
                 )
                 {
-                    var str: String = (index + 1).toString()
-                    if ((index + 1) < 10) {
+                    var str: String = item.id.toString()
+                    if ((item.id) < 10) {
+                        str = "0$str"
+                    }
+                    if ((item.id) < 100) {
                         str = "0$str"
                     }
                     str = "$str:"
 
                     Text(
-                        modifier = Modifier.width(40.dp),
+                        modifier = Modifier.width(60.dp),
                         text = str,
                         color = border,
                         style = MaterialTheme.typography.displaySmall

@@ -15,7 +15,7 @@ class FirebaseRepoUtil {
             notes = item.get("notes").toString(),
             priority = Priority.valueOf(item.get("priority").toString())
         )
-        Log.d(TAG, "todo: ${todo}")
+//        Log.d(TAG, "todo: ${todo}")
         return todo
     }
 

@@ -9,6 +9,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,18 +25,32 @@ import self.dwjonesberry.simpletodolist.screens.MainScreen
 fun MyApp() {
     val navController = rememberNavController()
 
-    Scaffold(topBar = { MyAppBar(
-        navigateToAddScreen = { navController.navigate(Screens.ADD.name) },
-        navigateToMainScreen = { navController.navigate(Screens.MAIN.name)}
-    )
-        .Composable }) { padding ->
+    var currentScreen: Screens by remember { mutableStateOf(Screens.MAIN) }
+
+    @Composable
+    fun ChangeAppBar(screen: Screens) {
+        if (screen.name == Screens.MAIN.name) {
+            MyAppBar(
+                navigateToAddScreen = { navController.navigate(Screens.ADD.name) },
+                navigateToMainScreen = { navController.navigate(Screens.MAIN.name)} )
+                .Composable
+        }
+    }
+
+    Scaffold(topBar = { ChangeAppBar(screen = currentScreen) }) { padding ->
             NavHost(
                 modifier = Modifier.padding(padding),
                 navController = navController,
                 startDestination = Screens.MAIN.name
             ) {
-                composable(Screens.MAIN.name) { MainScreen().Screen }
-                composable(Screens.ADD.name) { AddToDoScreen({ navController.popBackStack() }).Screen }
+                composable(Screens.MAIN.name) {
+                    currentScreen = Screens.MAIN
+                    MainScreen().Screen
+                }
+                composable(Screens.ADD.name) {
+                    currentScreen = Screens.ADD
+                    AddToDoScreen({ navController.popBackStack() }).Screen
+                }
             }
         }
     }

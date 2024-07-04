@@ -13,7 +13,8 @@ class FirebaseRepoUtil {
             id = item.get("id").toString().toInt(),
             text = item.get("text").toString(),
             notes = item.get("notes").toString(),
-            priority = Priority.valueOf(item.get("priority").toString())
+            priority = Priority.valueOf(item.get("priority").toString()),
+            checked = item.get("checked").toString().toBoolean()
         )
 //        Log.d(TAG, "todo: ${todo}")
         return todo

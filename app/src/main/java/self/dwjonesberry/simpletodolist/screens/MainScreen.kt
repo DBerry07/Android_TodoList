@@ -79,23 +79,31 @@ class MainScreen(val navigate: () -> Unit) {
         refresh: () -> Unit,
         sortedBy: Int,
     ) {
+        val un = list.filter { !it.checked }
+        val com = list.filter { it.checked }
 
         var filter by remember { mutableStateOf(0) }
         val setFilter: (Int) -> Unit = {
             filter = it
         }
-        var filteredList = listOf<TodoItem>()
+        var unFiltered = listOf<TodoItem>()
+        var comFiltered = listOf<TodoItem>()
         if (filter > 0) {
-            filteredList = list.filter { item ->
+            unFiltered = un.filter { item ->
+                item.priority.ordinal == filter
+            }
+            comFiltered = com.filter { item ->
                 item.priority.ordinal == filter
             }
         } else {
-            filteredList = list
+            unFiltered = un
+            comFiltered = com
         }
 
         Column {
             MainActionBar(navigateToAdd = navigateToAdd, filter = setFilter, sort = sort, sortedBy = sortedBy)
-            MainLazyList(list = filteredList, update = update, deleteFromList = deleteFromList, refresh = refresh)
+            MyLazyList(list = unFiltered, update = update, deleteFromList = deleteFromList, refresh = refresh)
+            MyLazyList(list = comFiltered, update = update, deleteFromList = deleteFromList, refresh = refresh)
         }
     }
 
@@ -154,13 +162,14 @@ class MainScreen(val navigate: () -> Unit) {
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
-    private fun MainLazyList(
+    private fun MyLazyList(
         list: List<TodoItem>,
         update: (TodoItem) -> Unit,
         deleteFromList: (TodoItem) -> Unit,
         refresh: () -> Unit,
     ) {
         val context = LocalContext.current
+        Text("Heading")
         LazyColumn {
             items(
                 count = list.size
@@ -229,6 +238,7 @@ class MainScreen(val navigate: () -> Unit) {
                     item.checked = !(item.checked)
                     background = changeBackground(item.checked)
                     Log.d("MyProject", "checked = ${item.checked}")
+                    update(item)
                     refresh.invoke()
                 }) {
                     expanded = !expanded

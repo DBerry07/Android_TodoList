@@ -28,8 +28,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import self.dwjonesberry.simpletodolist.FirebaseRepository
 import self.dwjonesberry.simpletodolist.Priority
@@ -265,11 +268,17 @@ class MainScreen(val navigate: () -> Unit) {
                         modifier = Modifier.width(60.dp),
                         text = str,
                         color = border,
-                        style = MaterialTheme.typography.displaySmall
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.displaySmall,
+                        fontFamily = FontFamily.Monospace,
                     )
                     Text(
                         text = item.text,
-                        style = MaterialTheme.typography.displayMedium
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.displayMedium,
+                        maxLines = 1,
                     )
                 }
                 if (expanded) {

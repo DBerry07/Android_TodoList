@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -278,7 +279,10 @@ class MainScreen(val navigate: () -> Unit) {
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.displayMedium,
-                        maxLines = 1,
+                        maxLines =
+                            if (!expanded) 1
+                            else 10,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
                 if (expanded) {

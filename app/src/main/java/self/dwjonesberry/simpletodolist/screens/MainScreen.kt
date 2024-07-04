@@ -239,7 +239,7 @@ class MainScreen(val navigate: () -> Unit) {
                     background = changeBackground(item.checked)
                     Log.d("MyProject", "checked = ${item.checked}")
                     update(item)
-                    refresh.invoke()
+//                    refresh.invoke()
                 }) {
                     expanded = !expanded
                     Log.d("MyProject", "item $index double clicked")

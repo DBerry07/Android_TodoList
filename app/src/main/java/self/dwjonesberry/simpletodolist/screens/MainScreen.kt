@@ -113,8 +113,8 @@ class MainScreen(val navigate: () -> Unit) {
 
         Column {
             MainActionBar(navigateToAdd = navigateToAdd, filter = setFilter, sort = sort, sortedBy = sortedBy)
-            MyLazyList(list = unFiltered, update = update, deleteFromList = deleteFromList, refresh = refresh)
-            MyLazyList(list = comFiltered, update = update, deleteFromList = deleteFromList, refresh = refresh)
+            MyLazyList(heading = "Uncompleted", list = unFiltered, update = update, deleteFromList = deleteFromList, refresh = refresh)
+            MyLazyList(heading = "Completed", list = comFiltered, update = update, deleteFromList = deleteFromList, refresh = refresh)
         }
     }
 
@@ -174,13 +174,14 @@ class MainScreen(val navigate: () -> Unit) {
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     private fun MyLazyList(
+        heading: String,
         list: List<TodoItem>,
         update: (TodoItem) -> Unit,
         deleteFromList: (TodoItem) -> Unit,
         refresh: () -> Unit,
     ) {
         val context = LocalContext.current
-        Text("Heading")
+        Text(heading)
         LazyColumn {
             items(
                 count = list.size

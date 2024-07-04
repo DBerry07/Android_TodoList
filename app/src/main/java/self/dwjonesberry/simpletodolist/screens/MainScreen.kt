@@ -12,9 +12,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -295,7 +302,7 @@ class MainScreen(val navigate: () -> Unit) {
                                 onClick = {
                                     Log.d("MyProject", "edit button clicked on item #${item.id}")
                                 }) {
-                                Text("Edit")
+                                Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit item number ${item.id}")
                             }
                             Button(
                                 onClick = {
@@ -308,7 +315,7 @@ class MainScreen(val navigate: () -> Unit) {
                                     update(item)
                                     Log.d("MyProject", "new priority: ${item.priority.name}")
                                 }) {
-                                Text("UP")
+                                Icon(imageVector = Icons.Default.KeyboardArrowUp, contentDescription = "Increase priority of item number ${item.id}")
                             }
                             Button(
                                 onClick = {
@@ -322,13 +329,13 @@ class MainScreen(val navigate: () -> Unit) {
                                     Log.d("MyProject", "new priority: ${item.priority.name}")
                                 }
                             ) {
-                                Text("DWN")
+                                Icon(imageVector = Icons.Default.KeyboardArrowDown, contentDescription = "Decrease priority of item number ${item.id}")
                             }
                             Button(onClick = {
                                 Log.d(TAG, "delete button pressed on item #${item.id}")
                                 deleteFromList.invoke(item)
                             }) {
-                                Text("DEL")
+                                Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete item ${item.id}.")
                             }
                         }
                     }

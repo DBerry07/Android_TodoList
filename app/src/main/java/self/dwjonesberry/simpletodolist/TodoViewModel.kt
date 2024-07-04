@@ -30,16 +30,24 @@ class TodoViewModel(private val repo: FirebaseRepository) : ViewModel() {
     val maxId: Int
         get() = _todoList.value.last().id + 1
 
-    val sort: () -> Unit = {
+    fun incrementSortedBy() {
         sortedBy += 1
-        when(sortedBy) {
-            0 -> _todoList.value = _todoList.value.sortedBy { it.id }
-            1 -> _todoList.value = _todoList.value.sortedByDescending { it.id }
-            2 -> _todoList.value = _todoList.value.sortedBy { it.priority.ordinal }
-            3 -> _todoList.value = _todoList.value.sortedByDescending { it.priority.ordinal }
-            else -> _todoList.value = _todoList.value.sortedBy{ it.id }
-        }
         if (sortedBy > 3) sortedBy = 0
+    }
+
+    val cycleSort: () -> Unit = {
+        incrementSortedBy()
+        refresh.invoke()
+    }
+
+    val refresh: () -> Unit = {
+        when(sortedBy) {
+            0 -> _todoList.value = _todoList.value.sortedBy { it.id }.sortedBy { it.checked }
+            1 -> _todoList.value = _todoList.value.sortedByDescending { it.id }.sortedBy { it.checked }
+            2 -> _todoList.value = _todoList.value.sortedBy { it.priority.ordinal }.sortedBy { it.checked }
+            3 -> _todoList.value = _todoList.value.sortedByDescending { it.priority.ordinal }.sortedBy { it.checked }
+            else -> _todoList.value = _todoList.value.sortedBy{ it.id }.sortedBy { it.checked }
+        }
     }
 
     val add: () -> Unit = {

@@ -63,7 +63,8 @@ class MainScreen(val navigate: () -> Unit) {
             navigateToAdd = navigateToAdd,
             update = viewModel.update,
             deleteFromList = viewModel.delete,
-            sort = viewModel.sort,
+            sort = viewModel.cycleSort,
+            refresh = viewModel.refresh,
             sortedBy = viewModel.sortedBy,
         )
     }
@@ -75,6 +76,7 @@ class MainScreen(val navigate: () -> Unit) {
         update: (TodoItem) -> Unit,
         deleteFromList: (TodoItem) -> Unit,
         sort: () -> Unit,
+        refresh: () -> Unit,
         sortedBy: Int,
     ) {
 
@@ -93,7 +95,7 @@ class MainScreen(val navigate: () -> Unit) {
 
         Column {
             MainActionBar(navigateToAdd = navigateToAdd, filter = setFilter, sort = sort, sortedBy = sortedBy)
-            MainLazyList(list = filteredList, update = update, deleteFromList = deleteFromList)
+            MainLazyList(list = filteredList, update = update, deleteFromList = deleteFromList, refresh = refresh)
         }
     }
 
@@ -155,7 +157,8 @@ class MainScreen(val navigate: () -> Unit) {
     private fun MainLazyList(
         list: List<TodoItem>,
         update: (TodoItem) -> Unit,
-        deleteFromList: (TodoItem) -> Unit
+        deleteFromList: (TodoItem) -> Unit,
+        refresh: () -> Unit,
     ) {
         val context = LocalContext.current
         LazyColumn {
@@ -166,7 +169,8 @@ class MainScreen(val navigate: () -> Unit) {
                     item = list[it],
                     index = it,
                     update = update,
-                    deleteFromList = deleteFromList
+                    deleteFromList = deleteFromList,
+                    refresh = refresh,
                 )
             }
         }
@@ -203,7 +207,8 @@ class MainScreen(val navigate: () -> Unit) {
         item: TodoItem,
         index: Int,
         update: (TodoItem) -> Unit,
-        deleteFromList: (TodoItem) -> Unit
+        deleteFromList: (TodoItem) -> Unit,
+        refresh: () -> Unit
     ) {
         var background by remember { mutableStateOf(Color.White) }
         var expanded by remember { mutableStateOf(false) }
@@ -224,6 +229,7 @@ class MainScreen(val navigate: () -> Unit) {
                     item.checked = !(item.checked)
                     background = changeBackground(item.checked)
                     Log.d("MyProject", "checked = ${item.checked}")
+                    refresh.invoke()
                 }) {
                     expanded = !expanded
                     Log.d("MyProject", "item $index double clicked")

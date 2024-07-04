@@ -293,7 +293,7 @@ class MainScreen(val navigate: () -> Unit) {
                         Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
                             Button(
                                 onClick = {
-                                    Log.d("MyProject", "edit button clicked")
+                                    Log.d("MyProject", "edit button clicked on item #${item.id}")
                                 }) {
                                 Text("Edit")
                             }
@@ -301,7 +301,7 @@ class MainScreen(val navigate: () -> Unit) {
                                 onClick = {
                                     Log.d(
                                         "MyProject",
-                                        "item #${index}: increase priority button pressed"
+                                        "item #${item.id}: increase priority button pressed"
                                     )
                                     Log.d("MyProject", "current priority: ${item.priority.name}")
                                     item.increasePriority()
@@ -325,6 +325,7 @@ class MainScreen(val navigate: () -> Unit) {
                                 Text("DWN")
                             }
                             Button(onClick = {
+                                Log.d(TAG, "delete button pressed on item #${item.id}")
                                 deleteFromList.invoke(item)
                             }) {
                                 Text("DEL")

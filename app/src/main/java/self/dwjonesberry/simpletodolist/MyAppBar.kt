@@ -10,21 +10,20 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 
-class MyAppBar {
-
+class MyAppBar(val navigateToAddScreen: () -> Unit, val navigateToMainScreen: () -> Unit) {
 
     val Composable: Unit
         @Composable
-        get() {return TodoAppBar()}
+        get() {return TodoAppBar(navigateToAddScreen = navigateToAddScreen, navigateToMainScreen = navigateToMainScreen)}
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun TodoAppBar() {
+    fun TodoAppBar(navigateToAddScreen: () -> Unit, navigateToMainScreen: () -> Unit) {
             TopAppBar(
                 title = { Text("Task List") },
                 navigationIcon = { Icon(Icons.Default.Menu, "Menu button") },
                 actions = {
-                    Button(onClick = {}) {Text("Add Item")}
+                    Button(onClick = {navigateToAddScreen.invoke()}) {Text("Add Item")}
                 }
         )
     }

@@ -14,7 +14,7 @@ fun MainPreview() {
     val list = mutableListOf(TodoItem(0, "Hello"), TodoItem(1, "Goodbye"))
     SimpleToDoListTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            MainScreen({}).Screen
+            MainScreen().Screen
         }
     }
 }

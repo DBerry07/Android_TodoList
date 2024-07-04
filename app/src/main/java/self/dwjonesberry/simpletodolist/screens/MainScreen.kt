@@ -57,28 +57,26 @@ import self.dwjonesberry.simpletodolist.TodoViewModel
 import self.dwjonesberry.simpletodolist.TodoViewModelFactory
 import self.dwjonesberry.simpletodolist.ui.theme.SimpleToDoListTheme
 
-class MainScreen(val navigate: () -> Unit) {
+class MainScreen() {
 
     val TAG = "MyProject:MainScreen"
 
     val Screen: Unit
         @Composable
         get() {
-            return MainLayout(repo = FirebaseRepository(), navigateToAdd = navigate)
+            return MainLayout(repo = FirebaseRepository())
         }
 
     @Composable
     private fun MainLayout(
         repo: FirebaseRepository,
         viewModel: TodoViewModel = viewModel(factory = TodoViewModelFactory(repo)),
-        navigateToAdd: () -> Unit
     ) {
         val data by viewModel.todoList.collectAsState()
         val remembered = remember(data) { data }
 
         MainLayout(
             list = remembered,
-            navigateToAdd = navigateToAdd,
             update = viewModel.update,
             deleteFromList = viewModel.delete,
             sort = viewModel.cycleSort,
@@ -90,7 +88,6 @@ class MainScreen(val navigate: () -> Unit) {
     @Composable
     private fun MainLayout(
         list: List<TodoItem>,
-        navigateToAdd: () -> Unit,
         update: (TodoItem) -> Unit,
         deleteFromList: (TodoItem) -> Unit,
         sort: () -> Unit,
@@ -119,14 +116,14 @@ class MainScreen(val navigate: () -> Unit) {
         }
 
         Column {
-            MainActionBar(navigateToAdd = navigateToAdd, filter = setFilter, sort = sort, sortedBy = sortedBy)
+            MainActionBar(filter = setFilter, sort = sort, sortedBy = sortedBy)
             MyLazyList(heading = "Uncompleted", list = unFiltered, update = update, deleteFromList = deleteFromList, refresh = refresh)
             MyLazyList(heading = "Completed", list = comFiltered, update = update, deleteFromList = deleteFromList, refresh = refresh)
         }
     }
 
     @Composable
-    private fun MainActionBar(navigateToAdd: () -> Unit, filter: (Int) -> Unit, sort: () -> Unit, sortedBy: Int) {
+    private fun MainActionBar(filter: (Int) -> Unit, sort: () -> Unit, sortedBy: Int) {
         var sortedByText = "Sorted:"
 
         when(sortedBy) {
@@ -142,9 +139,6 @@ class MainScreen(val navigate: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                Button(onClick = { navigateToAdd.invoke() }) {
-                    Text("Add Item")
-                }
                 Button(onClick = { sort.invoke() }) {
                     Text(sortedByText)
                 }

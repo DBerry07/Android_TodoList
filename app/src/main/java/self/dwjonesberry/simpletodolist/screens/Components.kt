@@ -21,15 +21,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 
 @Composable
-fun ActionBar(map: HashMap<String, List<() -> Unit>>) {
+fun ActionBar(buttons: List<Pair<String, List<() -> Unit>>>) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-        for (key in map.keys) {
+        for (pair in buttons) {
             Button(onClick = {
-                for (function in map.getValue(key)) {
+                for (function in pair.second) {
                     function.invoke()
                 }
             }) {
-                Text(key)
+                Text(pair.first)
             }
         }
     }

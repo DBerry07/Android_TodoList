@@ -68,10 +68,10 @@ class AddToDoScreen(val navigate: () -> Unit) {
 
     @Composable
     private fun AddActionBar(addToList: () -> Unit, navigateToMainScreen: () -> Unit) {
-        val map: HashMap<String, List<() -> Unit>> = hashMapOf(
+        val buttons: List<Pair<String, List<() -> Unit>>> = listOf(
             Pair("Add", listOf(addToList, navigateToMainScreen)),
         )
-        ActionBar(map = map)
+        ActionBar(buttons)
     }
 
     @Composable

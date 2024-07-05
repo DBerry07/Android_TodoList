@@ -163,15 +163,13 @@ class MainScreen() {
             3 -> sortedByText = "${sortedByText} PRdn"
         }
 
-        val map1: HashMap<String, List<() -> Unit>> = hashMapOf(
-            Pair(sortedByText, listOf(sort)),
-        )
         val filterN = { filter.invoke(0) }
         val filterL = { filter.invoke(1) }
         val filterM = { filter.invoke(2) }
         val filterH = { filter.invoke(3) }
 
-        val map2: HashMap<String, List<() -> Unit>> = hashMapOf(
+        val buttons: List<Pair<String, List<() -> Unit>>> = listOf(
+            Pair(sortedByText, listOf(sort)),
             Pair("N", listOf(filterN)),
             Pair("L", listOf(filterL)),
             Pair("M", listOf(filterM)),
@@ -179,8 +177,7 @@ class MainScreen() {
         )
 
         Column() {
-            ActionBar(map1)
-            ActionBar(map2)
+            ActionBar(buttons)
         }
 
     }

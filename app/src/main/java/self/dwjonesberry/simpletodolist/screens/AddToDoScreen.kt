@@ -135,3 +135,10 @@ class AddToDoScreen(val navigate: () -> Unit) {
     }
 }
 
+@Preview
+@Composable
+fun ATSPreview() {
+    Surface(modifier = Modifier.fillMaxSize()) {
+        AddToDoScreen({}).Screen
+    }
+}

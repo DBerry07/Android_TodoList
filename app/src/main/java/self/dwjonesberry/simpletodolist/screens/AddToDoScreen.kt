@@ -68,21 +68,10 @@ class AddToDoScreen(val navigate: () -> Unit) {
 
     @Composable
     private fun AddActionBar(addToList: () -> Unit, navigateToMainScreen: () -> Unit) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(onClick = {
-                addToList.invoke()
-                navigateToMainScreen.invoke()
-            }) {
-                Text("Add to List")
-            }
-//        Button(onClick = { /*TODO*/ }) {
-//            Text("Goodbye")
-//        }
-        }
+        val map: HashMap<String, List<() -> Unit>> = hashMapOf(
+            Pair("Add", listOf(addToList, navigateToMainScreen)),
+        )
+        ActionBar(map = map)
     }
 
     @Composable

@@ -133,43 +133,26 @@ class MainScreen() {
             3 -> sortedByText = "${sortedByText} PRdn"
         }
 
+        val map1: HashMap<String, List<() -> Unit>> = hashMapOf(
+            Pair(sortedByText, listOf(sort)),
+        )
+        val filterN = { filter.invoke(0) }
+        val filterL = { filter.invoke(1) }
+        val filterM = { filter.invoke(2) }
+        val filterH = { filter.invoke(3) }
+
+        val map2: HashMap<String, List<() -> Unit>> = hashMapOf(
+            Pair("N", listOf(filterN)),
+            Pair("L", listOf(filterL)),
+            Pair("M", listOf(filterM)),
+            Pair("H", listOf(filterH))
+        )
+
         Column() {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Button(onClick = { sort.invoke() }) {
-                    Text(sortedByText)
-                }
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Button(onClick = {
-                    filter.invoke(0)
-                }) {
-                    Text("N")
-                }
-                Button(onClick = {
-                    filter.invoke(1)
-                }) {
-                    Text("L")
-                }
-                Button(onClick = {
-                    filter.invoke(2)
-                }) {
-                    Text("M")
-                }
-                Button(onClick = {
-                    filter.invoke(3)
-                }) {
-                    Text("H")
-                }
-            }
+            ActionBar(map1)
+            ActionBar(map2)
         }
+
     }
 
     @OptIn(ExperimentalFoundationApi::class)

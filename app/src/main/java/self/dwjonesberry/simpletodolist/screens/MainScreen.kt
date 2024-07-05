@@ -2,9 +2,14 @@ package self.dwjonesberry.simpletodolist.screens
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.OverscrollEffect
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.FlingBehavior
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +21,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Delete
@@ -41,6 +48,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -85,6 +93,7 @@ class MainScreen() {
         )
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     private fun MainLayout(
         list: List<TodoItem>,
@@ -115,10 +124,31 @@ class MainScreen() {
             comFiltered = com
         }
 
-        Column {
+        val height  = LocalConfiguration.current.screenHeightDp.dp
+
+        Column(modifier = Modifier.height(height)) {
             MainActionBar(filter = setFilter, sort = sort, sortedBy = sortedBy)
-            MyLazyList(heading = "Uncompleted", list = unFiltered, update = update, deleteFromList = deleteFromList, refresh = refresh)
-            MyLazyList(heading = "Completed", list = comFiltered, update = update, deleteFromList = deleteFromList, refresh = refresh)
+            LazyColumn(modifier = Modifier
+                .height(height)) {
+                item {
+                    MyLazyList(
+                        modifier = Modifier.height(height),
+                        heading = "Uncompleted",
+                        list = unFiltered,
+                        update = update,
+                        deleteFromList = deleteFromList,
+                        refresh = refresh
+                    )
+                    MyLazyList(
+                        modifier = Modifier.height(height),
+                        heading = "Completed",
+                        list = comFiltered,
+                        update = update,
+                        deleteFromList = deleteFromList,
+                        refresh = refresh
+                    )
+                }
+            }
         }
     }
 
@@ -158,6 +188,7 @@ class MainScreen() {
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     private fun MyLazyList(
+        modifier: Modifier,
         heading: String,
         list: List<TodoItem>,
         update: (TodoItem) -> Unit,
@@ -167,10 +198,15 @@ class MainScreen() {
         val context = LocalContext.current
         var showSection: Boolean by remember { mutableStateOf(true) }
 
-        Row( modifier = Modifier.fillMaxWidth().clickable { showSection = !showSection }.padding(10.dp)) {
+        Row( modifier = Modifier
+            .fillMaxWidth()
+            .clickable { showSection = !showSection }
+            .padding(10.dp)) {
             Box(contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .width(50.dp).height(30.dp).padding(horizontal = 5.dp)
+                    .width(50.dp)
+                    .height(30.dp)
+                    .padding(horizontal = 5.dp)
             ) {
                 if (!showSection) {
                     Icon(
@@ -183,20 +219,19 @@ class MainScreen() {
             SectionHeading(heading)
         }
         if (showSection) {
-            LazyColumn(
+            Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                items(
-                    count = list.size
-                ) {
+                    for (index in 0..<list.size) {
                     ListItem(
-                        item = list[it],
-                        index = it,
+                        item = list[index],
+                        index = index,
                         update = update,
                         deleteFromList = deleteFromList,
                         refresh = refresh,
                     )
                 }
+
             }
         } else {
             Spacer(modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp))

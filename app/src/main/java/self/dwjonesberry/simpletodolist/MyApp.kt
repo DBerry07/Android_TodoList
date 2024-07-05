@@ -22,7 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import self.dwjonesberry.simpletodolist.screens.AddToDoScreen
 import self.dwjonesberry.simpletodolist.screens.AppBarButton
-import self.dwjonesberry.simpletodolist.screens.MainScreen
+import self.dwjonesberry.simpletodolist.screens.MainLayout
 import self.dwjonesberry.simpletodolist.screens.TodoAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,7 +61,7 @@ fun MyApp() {
         ) {
             composable(Screens.MAIN.name) {
                 currentScreen = Screens.MAIN
-                MainScreen().Screen
+                MainLayout()
             }
             composable(Screens.ADD.name) {
                 currentScreen = Screens.ADD

@@ -125,6 +125,7 @@ private fun MainLayout(
                 .height(height)
         ) {
             item {
+                Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
                 MyLazyList(
                     modifier = Modifier.height(height),
                     heading = "Uncompleted",
@@ -133,6 +134,7 @@ private fun MainLayout(
                     deleteFromList = deleteFromList,
                     refresh = refresh
                 )
+                Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
                 MyLazyList(
                     modifier = Modifier.height(height),
                     heading = "Completed",
@@ -226,7 +228,7 @@ private fun MyLazyList(
 
         }
     } else {
-        Spacer(modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp))
+        Spacer(modifier = Modifier.padding(vertical = 20.dp))
     }
 }
 

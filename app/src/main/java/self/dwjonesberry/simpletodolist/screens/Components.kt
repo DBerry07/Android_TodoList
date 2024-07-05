@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 
 @Composable
-fun ActionBar(buttons: List<Pair<String, List<() -> Unit>>>) {
+fun ActionBar(buttons: List<Pair<@Composable () -> Unit, List<() -> Unit>>>) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
         for (pair in buttons) {
             Button(onClick = {
@@ -29,7 +29,7 @@ fun ActionBar(buttons: List<Pair<String, List<() -> Unit>>>) {
                     function.invoke()
                 }
             }) {
-                Text(pair.first)
+                pair.first.invoke()
             }
         }
     }

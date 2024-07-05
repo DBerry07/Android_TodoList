@@ -2,15 +2,9 @@ package self.dwjonesberry.simpletodolist.screens
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.OverscrollEffect
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.gestures.FlingBehavior
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,10 +15,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -33,7 +26,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -45,8 +37,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -59,7 +49,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import self.dwjonesberry.simpletodolist.FirebaseRepository
 import self.dwjonesberry.simpletodolist.Priority
-import self.dwjonesberry.simpletodolist.Screens
 import self.dwjonesberry.simpletodolist.TodoItem
 import self.dwjonesberry.simpletodolist.TodoViewModel
 import self.dwjonesberry.simpletodolist.TodoViewModelFactory
@@ -126,7 +115,7 @@ private fun MainLayout(
         ) {
             item {
                 Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
-                MyLazyList(
+                SectionList(
                     modifier = Modifier.height(height),
                     heading = "Uncompleted",
                     list = unFiltered,
@@ -135,7 +124,7 @@ private fun MainLayout(
                     refresh = refresh
                 )
                 Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
-                MyLazyList(
+                SectionList(
                     modifier = Modifier.height(height),
                     heading = "Completed",
                     list = comFiltered,
@@ -150,13 +139,29 @@ private fun MainLayout(
 
 @Composable
 private fun MainActionBar(filter: (Int) -> Unit, sort: () -> Unit, sortedBy: Int) {
-    var sortedByText = "Sorted:"
 
-    when (sortedBy) {
-        0 -> sortedByText = "${sortedByText} IDup"
-        1 -> sortedByText = "${sortedByText} IDdn"
-        2 -> sortedByText = "${sortedByText} PRup"
-        3 -> sortedByText = "${sortedByText} PRdn"
+    val sortButton: @Composable () -> Unit
+    sortButton = when (sortedBy) {
+        0 -> { { Row() {
+            Text("ID", fontFamily = FontFamily.Monospace)
+            Icon(Icons.Default.KeyboardArrowUp, "Sort by ID ascending")
+        } } }
+        1 -> { { Row() {
+            Text("ID", fontFamily = FontFamily.Monospace)
+            Icon(Icons.Default.KeyboardArrowDown, "Sort by ID descending")
+        } } }
+        2 -> {{Row() {
+            Text("PR", fontFamily = FontFamily.Monospace)
+            Icon(Icons.Default.KeyboardArrowUp, "Sort by Priority ascending")
+        }}}
+        3 -> {{Row() {
+            Text("PR", fontFamily = FontFamily.Monospace)
+            Icon(Icons.Default.KeyboardArrowDown, "Sort by Priority descending")
+        }}}
+        else -> {{Row() {
+            Text("UN", fontFamily = FontFamily.Monospace)
+            Icon(Icons.Default.Close, "Unknown sort")
+        }}}
     }
 
     val filterN = { filter.invoke(0) }
@@ -164,12 +169,12 @@ private fun MainActionBar(filter: (Int) -> Unit, sort: () -> Unit, sortedBy: Int
     val filterM = { filter.invoke(2) }
     val filterH = { filter.invoke(3) }
 
-    val buttons: List<Pair<String, List<() -> Unit>>> = listOf(
-        Pair(sortedByText, listOf(sort)),
-        Pair("N", listOf(filterN)),
-        Pair("L", listOf(filterL)),
-        Pair("M", listOf(filterM)),
-        Pair("H", listOf(filterH))
+    val buttons: List<Pair<@Composable () -> Unit, List<() -> Unit>>> = listOf(
+        Pair({ sortButton.invoke() }, listOf(sort)),
+        Pair({ Row { Text(text = "N", fontFamily = FontFamily.Monospace) } }, listOf(filterN)),
+        Pair({ Row { Text("L", fontFamily = FontFamily.Monospace) } }, listOf(filterL)),
+        Pair({ Row { Text("M", fontFamily = FontFamily.Monospace) } }, listOf(filterM)),
+        Pair({ Row { Text("H", fontFamily = FontFamily.Monospace) } }, listOf(filterH))
     )
 
     Column() {
@@ -180,7 +185,7 @@ private fun MainActionBar(filter: (Int) -> Unit, sort: () -> Unit, sortedBy: Int
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun MyLazyList(
+private fun SectionList(
     modifier: Modifier,
     heading: String,
     list: List<TodoItem>,

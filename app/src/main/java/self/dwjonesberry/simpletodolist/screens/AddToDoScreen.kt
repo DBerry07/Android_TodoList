@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -68,8 +71,16 @@ class AddToDoScreen(val navigate: () -> Unit) {
 
     @Composable
     private fun AddActionBar(addToList: () -> Unit, navigateToMainScreen: () -> Unit) {
-        val buttons: List<Pair<String, List<() -> Unit>>> = listOf(
-            Pair("Add", listOf(addToList, navigateToMainScreen)),
+
+        val row: @Composable () -> Unit = {
+            Row() {
+//                Icon(Icons.Default.Add, "Add item to todo list")
+                Text("Add")
+            }
+        }
+
+        val buttons: List<Pair<@Composable () -> Unit, List<() -> Unit>>> = listOf(
+            Pair(row, listOf(addToList, navigateToMainScreen)),
         )
         ActionBar(buttons)
     }

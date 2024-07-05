@@ -411,6 +411,10 @@ fun MainPreview() {
                 TodoItem(id = 1, text = "Test 002", priority = Priority.LOW),
                 TodoItem(id = 2, text = "Test 003", priority = Priority.MEDIUM),
                 TodoItem(id = 3, text = "Test 004", priority = Priority.HIGH),
+                TodoItem(id = 4, text = "Test 005", priority = Priority.NORMAL, checked = true),
+                TodoItem(id = 5, text = "Test 006", priority = Priority.LOW, checked = true),
+                TodoItem(id = 6, text = "Test 007", priority = Priority.MEDIUM, checked = true),
+                TodoItem(id = 7, text = "Test 008", priority = Priority.HIGH, checked = true),
             ),
                 deleteFromList = {}, update = {}, refresh = {}, sort = {}, sortedBy = 0
             )

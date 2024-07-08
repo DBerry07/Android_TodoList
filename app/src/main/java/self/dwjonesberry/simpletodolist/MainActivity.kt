@@ -17,9 +17,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             SimpleToDoListTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     MyApp()
-                }
+
             }
         }
     }

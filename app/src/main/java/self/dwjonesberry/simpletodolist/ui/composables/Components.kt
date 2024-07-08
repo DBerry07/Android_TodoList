@@ -9,9 +9,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import self.dwjonesberry.simpletodolist.ui.theme.PurpleGrey40
 
 
 @Composable
@@ -40,7 +43,11 @@ fun TodoAppBar(title: String, buttons: List<@Composable () -> Unit>) {
             for (index in 1..<buttons.size) {
                 buttons[index].invoke()
             }
-        }
+        },
+        colors = TopAppBarDefaults.topAppBarColors().copy(
+            //todo: change to better colour?
+            containerColor = Color.LightGray
+        )
     )
 }
 

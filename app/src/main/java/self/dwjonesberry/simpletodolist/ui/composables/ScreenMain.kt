@@ -264,7 +264,7 @@ private fun SectionList(
 
         }
     } else {
-        Spacer(modifier = Modifier.padding(vertical = 20.dp))
+//        Spacer(modifier = Modifier.padding(vertical = 20.dp))
     }
 }
 

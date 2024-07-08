@@ -34,6 +34,11 @@ class TodoViewModel(private val repo: FirebaseRepository) : ViewModel() {
         if (sortedBy > 3) sortedBy = 0
     }
 
+    val setSortedBy: (Sort) -> Unit = {
+        sortedBy = it.ordinal
+        refresh.invoke()
+    }
+
     val cycleSort: () -> Unit = {
         incrementSortedBy()
         refresh.invoke()

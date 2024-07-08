@@ -59,6 +59,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import self.dwjonesberry.simpletodolist.data.DummyList
 import self.dwjonesberry.simpletodolist.data.FirebaseRepository
 import self.dwjonesberry.simpletodolist.data.Priority
+import self.dwjonesberry.simpletodolist.data.Sort
 import self.dwjonesberry.simpletodolist.data.TodoItem
 import self.dwjonesberry.simpletodolist.data.TodoViewModel
 import self.dwjonesberry.simpletodolist.data.TodoViewModelFactory
@@ -75,14 +76,17 @@ fun MainLayout(
     val data by viewModel.todoList.collectAsState()
     val remembered = remember(data) { data }
 
-    Scaffold(topBar = { MainAppBar(navigateToAddToDoScreen = navigateToAddToDoScreen) }) { padding ->
+    Scaffold(topBar = {
+        MainAppBar(
+            navigateToAddToDoScreen = navigateToAddToDoScreen,
+            setSortedBy = viewModel.setSortedBy
+        )
+    }) { padding ->
         MainLayout(
+            modifier = Modifier.padding(padding),
             list = remembered,
             update = viewModel.update,
             deleteFromList = viewModel.delete,
-            sort = viewModel.cycleSort,
-            refresh = viewModel.refresh,
-            sortedBy = viewModel.sortedBy,
         )
     }
 }
@@ -90,12 +94,10 @@ fun MainLayout(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun MainLayout(
+    modifier: Modifier,
     list: List<TodoItem>,
     update: (TodoItem) -> Unit,
     deleteFromList: (TodoItem) -> Unit,
-    sort: () -> Unit,
-    refresh: () -> Unit,
-    sortedBy: Int,
 ) {
     val un = list.filter { !it.checked }
     val com = list.filter { it.checked }
@@ -120,8 +122,8 @@ private fun MainLayout(
 
     val height = LocalConfiguration.current.screenHeightDp.dp
 
-    Column(modifier = Modifier.height(height)) {
-        MainActionBar(filter = setFilter, sort = sort, sortedBy = sortedBy)
+    Column(modifier = modifier.height(height)) {
+//        MainActionBar(filter = setFilter, sort = sort)
         LazyColumn(
             modifier = Modifier
                 .height(height)
@@ -138,7 +140,6 @@ private fun MainLayout(
                     list = unFiltered,
                     update = update,
                     deleteFromList = deleteFromList,
-                    refresh = refresh
                 )
                 Spacer(
                     modifier = Modifier
@@ -151,7 +152,6 @@ private fun MainLayout(
                     list = comFiltered,
                     update = update,
                     deleteFromList = deleteFromList,
-                    refresh = refresh
                 )
             }
         }
@@ -160,7 +160,7 @@ private fun MainLayout(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MainAppBar(navigateToAddToDoScreen: () -> Unit) {
+private fun MainAppBar(navigateToAddToDoScreen: () -> Unit, setSortedBy: (Sort) -> Unit) {
     var dropDown by remember { mutableStateOf(false) }
 
     val getDropDown: () -> Boolean = {
@@ -178,7 +178,7 @@ private fun MainAppBar(navigateToAddToDoScreen: () -> Unit) {
                 Icon(Icons.Default.Menu, "Sort menu")
             }
             if (dropDown) {
-                AppBarDropDown(toggleDropDown, getDropDown)
+                AppBarDropDown(toggleDropDown, getDropDown, setSortedBy)
             }
         }
     })
@@ -261,7 +261,6 @@ private fun SectionList(
     list: List<TodoItem>,
     update: (TodoItem) -> Unit,
     deleteFromList: (TodoItem) -> Unit,
-    refresh: () -> Unit,
 ) {
     val context = LocalContext.current
     var showSection: Boolean by remember { mutableStateOf(true) }
@@ -297,7 +296,6 @@ private fun SectionList(
                     index = index,
                     update = update,
                     deleteFromList = deleteFromList,
-                    refresh = refresh,
                 )
             }
 
@@ -348,7 +346,6 @@ private fun ListItem(
     index: Int,
     update: (TodoItem) -> Unit,
     deleteFromList: (TodoItem) -> Unit,
-    refresh: () -> Unit
 ) {
     var background by remember { mutableStateOf(Color.White) }
     var showDialog by remember { mutableStateOf(false) }
@@ -425,7 +422,11 @@ private fun ListItem(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBarDropDown(toggleDropDown: () -> Unit, getDropDown: () -> Boolean) {
+fun AppBarDropDown(
+    toggleDropDown: () -> Unit,
+    getDropDown: () -> Boolean,
+    setSortedBy: (Sort) -> Unit
+) {
     DropdownMenu(
         expanded = getDropDown.invoke(),
         onDismissRequest = { toggleDropDown.invoke() }
@@ -435,29 +436,32 @@ fun AppBarDropDown(toggleDropDown: () -> Unit, getDropDown: () -> Boolean) {
             text = {
                 Text("ID", fontFamily = FontFamily.Monospace)
             },
-            onClick = { /*TODO*/ })
+            onClick = {
+                setSortedBy.invoke(Sort.ID_ASC)
+                toggleDropDown.invoke()
+            })
         DropdownMenuItem(leadingIcon = {
             Icon(
                 Icons.Default.KeyboardArrowDown,
                 "Sort by ID descending"
             )
         }, text = {
-
             Text("ID", fontFamily = FontFamily.Monospace)
-
-
-        }, onClick = { /*TODO*/ })
+        }, onClick = {
+            setSortedBy.invoke(Sort.ID_DEC)
+            toggleDropDown.invoke()
+        })
         DropdownMenuItem(leadingIcon = {
             Icon(
                 Icons.Default.KeyboardArrowUp,
                 "Sort by Priority ascending"
             )
         }, text = {
-
             Text("Priority", fontFamily = FontFamily.Monospace)
-
-
-        }, onClick = { /*TODO*/ })
+        }, onClick = {
+            setSortedBy(Sort.PR_ASC)
+            toggleDropDown.invoke()
+        })
         DropdownMenuItem(leadingIcon = {
             Icon(
                 Icons.Default.KeyboardArrowDown,
@@ -465,9 +469,10 @@ fun AppBarDropDown(toggleDropDown: () -> Unit, getDropDown: () -> Boolean) {
             )
         }, text = {
             Text("Priority", fontFamily = FontFamily.Monospace)
-
-        }, onClick = { /*TODO*/ })
-
+        }, onClick = {
+            setSortedBy.invoke(Sort.PR_DEC)
+            toggleDropDown.invoke()
+        })
     }
 }
 
@@ -478,7 +483,7 @@ fun MainPreview() {
     SimpleToDoListTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             MainLayout(list = DummyList,
-                deleteFromList = {}, update = {}, refresh = {}, sort = {}, sortedBy = 0
+                deleteFromList = {}, update = {}, modifier = Modifier
             )
         }
     }

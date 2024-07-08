@@ -2,6 +2,7 @@ package self.dwjonesberry.simpletodolist.ui.composables
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +23,7 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import self.dwjonesberry.simpletodolist.data.DummyTodo
+import self.dwjonesberry.simpletodolist.data.Priority
 import self.dwjonesberry.simpletodolist.data.TodoItem
 
 
@@ -46,15 +49,24 @@ fun ListItemPopUp(
     update: (TodoItem) -> Unit,
     delete: (TodoItem) -> Unit
 ) {
-    var background = Color.White
+    var bgColour = Color.White
+    var borderColour = Color.Black
+
     if (todoItem.checked) {
-        background = Color.LightGray
+        bgColour = Color.LightGray
+    }
+    when (todoItem.priority) {
+        Priority.NORMAL -> borderColour = Color.Black
+        Priority.LOW -> borderColour = Color.Green
+        Priority.MEDIUM -> borderColour = Color.Blue
+        Priority.HIGH -> borderColour = Color.Red
     }
 
     Dialog(onDismissRequest = { onDismissRequest.invoke() }) {
         Card(
-            modifier = Modifier, colors = CardDefaults.cardColors().copy(
-                containerColor = background
+            modifier = Modifier.border(5.dp, borderColour, shape = MaterialTheme.shapes.small),
+            colors = CardDefaults.cardColors().copy(
+                containerColor = bgColour
             )
         ) {
             Column(modifier = Modifier.padding(20.dp)) {

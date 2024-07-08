@@ -8,8 +8,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -27,11 +31,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import self.dwjonesberry.simpletodolist.data.DummyTodo
 import self.dwjonesberry.simpletodolist.data.Priority
 import self.dwjonesberry.simpletodolist.data.TodoItem
@@ -60,9 +66,18 @@ fun ListItemPopUp(
         Priority.HIGH -> priorityColour = Color.Red
     }
 
-    Dialog(onDismissRequest = { onDismissRequest.invoke() }) {
+    val width = LocalConfiguration.current.screenWidthDp
+    val height = LocalConfiguration.current.screenHeightDp
+    val dialogMinWidth = width - (width * 0.5).toInt()
+    val dialogMaxWidth = width
+    val dialogMaxHeight = height - (height * 0.1).toInt()
+    val dialogMinHeight = height - (height * 0.9).toInt()
+
+    Dialog(onDismissRequest = { onDismissRequest.invoke() }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Card(
-            modifier = Modifier.border(5.dp, priorityColour, shape = MaterialTheme.shapes.small),
+            modifier = Modifier
+                .border(5.dp, priorityColour, shape = MaterialTheme.shapes.small)
+                .widthIn(min = dialogMinWidth.dp, max = dialogMaxWidth.dp).heightIn(min = dialogMinHeight.dp, max = dialogMaxHeight.dp),
             colors = CardDefaults.cardColors().copy(
                 containerColor = bgColour
             )
@@ -105,9 +120,12 @@ fun PopUpActonBar(
     delete: (TodoItem) -> Unit,
     onDismissRequest: () -> Unit
 ) {
+    val width = LocalConfiguration.current.screenWidthDp
+    val maxWidth = width
+    val minWidth = width - (0.5 * width).toInt()
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.widthIn(min = minWidth.dp, max = maxWidth.dp)
     ) {
         IconButton(
             onClick = {

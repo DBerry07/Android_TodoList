@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -315,7 +316,7 @@ private fun ListItem(
     var border: Color by remember { mutableStateOf(Color.Black) }
     background = changeBackground(item.checked)
     border = determineBorder(item)
-    Card(
+    ElevatedCard(
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors().copy(
             containerColor = background

@@ -18,11 +18,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -114,9 +111,11 @@ private fun MainLayout(
                 .height(height)
         ) {
             item {
-                Spacer(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(20.dp))
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(20.dp)
+                )
                 SectionList(
                     modifier = Modifier.height(height),
                     heading = "Uncompleted",
@@ -125,9 +124,11 @@ private fun MainLayout(
                     deleteFromList = deleteFromList,
                     refresh = refresh
                 )
-                Spacer(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(20.dp))
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(20.dp)
+                )
                 SectionList(
                     modifier = Modifier.height(height),
                     heading = "Completed",
@@ -146,26 +147,50 @@ private fun MainActionBar(filter: (Int) -> Unit, sort: () -> Unit, sortedBy: Int
 
     val sortButton: @Composable () -> Unit
     sortButton = when (sortedBy) {
-        0 -> { { Row() {
-            Text("ID", fontFamily = FontFamily.Monospace)
-            Icon(Icons.Default.KeyboardArrowUp, "Sort by ID ascending")
-        } } }
-        1 -> { { Row() {
-            Text("ID", fontFamily = FontFamily.Monospace)
-            Icon(Icons.Default.KeyboardArrowDown, "Sort by ID descending")
-        } } }
-        2 -> {{Row() {
-            Text("PR", fontFamily = FontFamily.Monospace)
-            Icon(Icons.Default.KeyboardArrowUp, "Sort by Priority ascending")
-        }}}
-        3 -> {{Row() {
-            Text("PR", fontFamily = FontFamily.Monospace)
-            Icon(Icons.Default.KeyboardArrowDown, "Sort by Priority descending")
-        }}}
-        else -> {{Row() {
-            Text("UN", fontFamily = FontFamily.Monospace)
-            Icon(Icons.Default.Close, "Unknown sort")
-        }}}
+        0 -> {
+            {
+                Row() {
+                    Text("ID", fontFamily = FontFamily.Monospace)
+                    Icon(Icons.Default.KeyboardArrowUp, "Sort by ID ascending")
+                }
+            }
+        }
+
+        1 -> {
+            {
+                Row() {
+                    Text("ID", fontFamily = FontFamily.Monospace)
+                    Icon(Icons.Default.KeyboardArrowDown, "Sort by ID descending")
+                }
+            }
+        }
+
+        2 -> {
+            {
+                Row() {
+                    Text("PR", fontFamily = FontFamily.Monospace)
+                    Icon(Icons.Default.KeyboardArrowUp, "Sort by Priority ascending")
+                }
+            }
+        }
+
+        3 -> {
+            {
+                Row() {
+                    Text("PR", fontFamily = FontFamily.Monospace)
+                    Icon(Icons.Default.KeyboardArrowDown, "Sort by Priority descending")
+                }
+            }
+        }
+
+        else -> {
+            {
+                Row() {
+                    Text("UN", fontFamily = FontFamily.Monospace)
+                    Icon(Icons.Default.Close, "Unknown sort")
+                }
+            }
+        }
     }
 
     val filterN = { filter.invoke(0) }
@@ -285,7 +310,7 @@ private fun ListItem(
     refresh: () -> Unit
 ) {
     var background by remember { mutableStateOf(Color.White) }
-    var expanded by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
     var border: Color by remember { mutableStateOf(Color.Black) }
     background = changeBackground(item.checked)
     border = determineBorder(item)
@@ -306,7 +331,7 @@ private fun ListItem(
                 update(item)
 //                    refresh.invoke()
             }) {
-                expanded = !expanded
+                showDialog = !showDialog
                 Log.d("MyProject", "item $index double clicked")
             }
     ) {
@@ -344,69 +369,15 @@ private fun ListItem(
                     overflow = TextOverflow.Ellipsis
                 )
             }
-            if (expanded) {
-                ListItemPopUp(modifier = Modifier, onDismissRequest = { expanded = !expanded }, todoItem = item, update = update, delete = deleteFromList)
+            if (showDialog) {
+                ListItemPopUp(
+                    modifier = Modifier,
+                    onDismissRequest = { showDialog = !showDialog },
+                    todoItem = item,
+                    update = update,
+                    delete = deleteFromList
+                )
             }
-//            if (expanded) {
-//                Column {
-//                    Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
-//                        Text(item.notes)
-//                    }
-//                    Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
-//                        Button(
-//                            onClick = {
-//                                Log.d("MyProject", "edit button clicked on item #${item.id}")
-//                            }) {
-//                            Icon(
-//                                imageVector = Icons.Default.Edit,
-//                                contentDescription = "Edit item number ${item.id}"
-//                            )
-//                        }
-//                        Button(
-//                            onClick = {
-//                                Log.d(
-//                                    "MyProject",
-//                                    "item #${item.id}: increase priority button pressed"
-//                                )
-//                                Log.d("MyProject", "current priority: ${item.priority.name}")
-//                                item.increasePriority()
-//                                update(item)
-//                                Log.d("MyProject", "new priority: ${item.priority.name}")
-//                            }) {
-//                            Icon(
-//                                imageVector = Icons.Default.KeyboardArrowUp,
-//                                contentDescription = "Increase priority of item number ${item.id}"
-//                            )
-//                        }
-//                        Button(
-//                            onClick = {
-//                                Log.d(
-//                                    "MyProject",
-//                                    "item #${index}: decrease priority button pressed"
-//                                )
-//                                Log.d("MyProject", "current priority: ${item.priority.name}")
-//                                item.decreasePriority()
-//                                update(item)
-//                                Log.d("MyProject", "new priority: ${item.priority.name}")
-//                            }
-//                        ) {
-//                            Icon(
-//                                imageVector = Icons.Default.KeyboardArrowDown,
-//                                contentDescription = "Decrease priority of item number ${item.id}"
-//                            )
-//                        }
-//                        Button(onClick = {
-//                            Log.d(TAG, "delete button pressed on item #${item.id}")
-//                            deleteFromList.invoke(item)
-//                        }) {
-//                            Icon(
-//                                imageVector = Icons.Default.Delete,
-//                                contentDescription = "Delete item ${item.id}."
-//                            )
-//                        }
-//                    }
-//                }
-//            }
         }
     }
 }

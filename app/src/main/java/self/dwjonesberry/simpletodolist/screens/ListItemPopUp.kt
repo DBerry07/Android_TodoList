@@ -39,28 +39,52 @@ import self.dwjonesberry.simpletodolist.TodoItem
 private val TAG: String = "MyProject:PopUp"
 
 @Composable
-fun ListItemPopUp(modifier: Modifier, onDismissRequest: () -> Unit, todoItem: TodoItem, update: (TodoItem) -> Unit, delete: (TodoItem) -> Unit) {
+fun ListItemPopUp(
+    modifier: Modifier,
+    onDismissRequest: () -> Unit,
+    todoItem: TodoItem,
+    update: (TodoItem) -> Unit,
+    delete: (TodoItem) -> Unit
+) {
     Dialog(onDismissRequest = { onDismissRequest.invoke() }) {
         Card(modifier = Modifier) {
             Column(modifier = Modifier.padding(20.dp)) {
                 Text(todoItem.text, fontWeight = FontWeight.Bold, fontSize = 25.sp)
                 Spacer(modifier = Modifier.padding(5.dp))
-                Column(modifier = Modifier.heightIn(50.dp, 500.dp).verticalScroll(rememberScrollState())) {
+                Column(
+                    modifier = Modifier
+                        .heightIn(50.dp, 500.dp)
+                        .verticalScroll(rememberScrollState())
+                ) {
                     Spacer(modifier = Modifier.padding(5.dp))
                     Text(todoItem.notes, fontSize = 18.sp)
                     Spacer(modifier = Modifier.padding(5.dp))
                 }
                 Spacer(modifier = Modifier.padding(5.dp))
-                PopUpActonBar(modifier = Modifier, item = todoItem, update = update, delete = delete, onDismissRequest = onDismissRequest)
+                PopUpActonBar(
+                    modifier = Modifier,
+                    item = todoItem,
+                    update = update,
+                    delete = delete,
+                    onDismissRequest = onDismissRequest
+                )
             }
         }
     }
 }
 
 @Composable
-fun PopUpActonBar(modifier: Modifier, item: TodoItem, update: (TodoItem) -> Unit, delete: (TodoItem) -> Unit, onDismissRequest: () -> Unit) {
-    Row(horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth()) {
+fun PopUpActonBar(
+    modifier: Modifier,
+    item: TodoItem,
+    update: (TodoItem) -> Unit,
+    delete: (TodoItem) -> Unit,
+    onDismissRequest: () -> Unit
+) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth()
+    ) {
         IconButton(
             onClick = {
                 Log.d("MyProject", "edit button clicked on item #${item.id}")
@@ -94,7 +118,7 @@ fun PopUpActonBar(modifier: Modifier, item: TodoItem, update: (TodoItem) -> Unit
                 )
                 Log.d("MyProject", "current priority: ${item.priority.name}")
                 item.decreasePriority()
-                    update(item)
+                update(item)
                 Log.d("MyProject", "new priority: ${item.priority.name}")
             }
         ) {
@@ -105,8 +129,8 @@ fun PopUpActonBar(modifier: Modifier, item: TodoItem, update: (TodoItem) -> Unit
         }
         IconButton(onClick = {
             Log.d(TAG, "delete button pressed on item #${item.id}")
-                delete.invoke(item)
-                onDismissRequest.invoke()
+            delete.invoke(item)
+            onDismissRequest.invoke()
         }) {
             Icon(
                 imageVector = Icons.Default.Delete,

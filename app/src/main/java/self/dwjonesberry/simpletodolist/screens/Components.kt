@@ -37,7 +37,7 @@ fun ActionBar(buttons: List<Pair<@Composable () -> Unit, List<() -> Unit>>>) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoAppBar(title: String, buttons: List< @Composable () -> Unit>) {
+fun TodoAppBar(title: String, buttons: List<@Composable () -> Unit>) {
     val TAG = "TodoAppBar"
     TopAppBar(
         title = { Text(title) },

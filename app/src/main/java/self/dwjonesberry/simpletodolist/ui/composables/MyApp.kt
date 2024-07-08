@@ -22,39 +22,14 @@ import self.dwjonesberry.simpletodolist.data.Screens
 fun MyApp() {
     val navController = rememberNavController()
 
-    var currentScreen: Screens by remember { mutableStateOf(Screens.MAIN) }
-
-    @Composable
-    fun ChangeAppBar(screen: Screens) {
-        val menuButton: @Composable () -> Unit = { AppBarButton(function = { /*TODO*/ }, icon = Icons.Default.Menu, description = "Menu button") }
-
-        if (screen.name == Screens.MAIN.name) {
-            TodoAppBar(
-                title = "Task List",
-                buttons = listOf(
-                    menuButton,
-                    { AppBarButton(function = { navController.navigate(Screens.ADD.name) }, icon = Icons.Default.Add, description = "Add todo button") },
-//                    { AppBarDropDown() }
-                )
-            )
-        } else if (screen.name == Screens.ADD.name) {
-            TodoAppBar(title = "Add a Task",
-                buttons = listOf(
-                    menuButton,
-                )
-            )
-        }
-    }
         NavHost(
             navController = navController,
             startDestination = Screens.MAIN.name
         ) {
             composable(Screens.MAIN.name) {
-                currentScreen = Screens.MAIN
                 MainLayout(navigateToAddToDoScreen = { navController.navigate(Screens.ADD.name) })
             }
             composable(Screens.ADD.name) {
-                currentScreen = Screens.ADD
                 AddToDoScreen({ navController.popBackStack() }).Screen
             }
         }

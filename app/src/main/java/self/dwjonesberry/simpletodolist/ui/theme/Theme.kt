@@ -54,7 +54,7 @@ fun SimpleToDoListTheme(
         else -> LightColorScheme
     }
 
-    val corner = 8.dp
+    val corner = 20.dp
     val roundedCornerShape = RoundedCornerShape(corner, 0.dp, corner, corner)
 
     val shapes = Shapes(

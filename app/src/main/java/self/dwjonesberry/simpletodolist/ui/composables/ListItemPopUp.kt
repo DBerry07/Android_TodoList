@@ -106,7 +106,7 @@ fun PopUpTextDisplay(modifier: Modifier, todoItem: TodoItem, priorityColour: Col
             .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.padding(5.dp))
-        Text(todoItem.notes, fontSize = 18.sp)
+        Text(todoItem.notes, fontSize = 20.sp)
         Spacer(modifier = Modifier.padding(5.dp))
     }
     Spacer(modifier = Modifier.padding(5.dp))

@@ -114,7 +114,9 @@ private fun MainLayout(
                 .height(height)
         ) {
             item {
-                Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
+                Spacer(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(20.dp))
                 SectionList(
                     modifier = Modifier.height(height),
                     heading = "Uncompleted",
@@ -123,7 +125,9 @@ private fun MainLayout(
                     deleteFromList = deleteFromList,
                     refresh = refresh
                 )
-                Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
+                Spacer(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(20.dp))
                 SectionList(
                     modifier = Modifier.height(height),
                     heading = "Completed",
@@ -336,72 +340,73 @@ private fun ListItem(
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.displayMedium,
-                    maxLines =
-                    if (!expanded) 1
-                    else 10,
+                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
             }
             if (expanded) {
-                Column {
-                    Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
-                        Text(item.notes)
-                    }
-                    Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
-                        Button(
-                            onClick = {
-                                Log.d("MyProject", "edit button clicked on item #${item.id}")
-                            }) {
-                            Icon(
-                                imageVector = Icons.Default.Edit,
-                                contentDescription = "Edit item number ${item.id}"
-                            )
-                        }
-                        Button(
-                            onClick = {
-                                Log.d(
-                                    "MyProject",
-                                    "item #${item.id}: increase priority button pressed"
-                                )
-                                Log.d("MyProject", "current priority: ${item.priority.name}")
-                                item.increasePriority()
-                                update(item)
-                                Log.d("MyProject", "new priority: ${item.priority.name}")
-                            }) {
-                            Icon(
-                                imageVector = Icons.Default.KeyboardArrowUp,
-                                contentDescription = "Increase priority of item number ${item.id}"
-                            )
-                        }
-                        Button(
-                            onClick = {
-                                Log.d(
-                                    "MyProject",
-                                    "item #${index}: decrease priority button pressed"
-                                )
-                                Log.d("MyProject", "current priority: ${item.priority.name}")
-                                item.decreasePriority()
-                                update(item)
-                                Log.d("MyProject", "new priority: ${item.priority.name}")
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.KeyboardArrowDown,
-                                contentDescription = "Decrease priority of item number ${item.id}"
-                            )
-                        }
-                        Button(onClick = {
-                            Log.d(TAG, "delete button pressed on item #${item.id}")
-                            deleteFromList.invoke(item)
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "Delete item ${item.id}."
-                            )
-                        }
-                    }
-                }
+                ListItemPopUp(modifier = Modifier, onDismissRequest = { expanded = !expanded }, todoItem = item, update = update, delete = deleteFromList)
             }
+//            if (expanded) {
+//                Column {
+//                    Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
+//                        Text(item.notes)
+//                    }
+//                    Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
+//                        Button(
+//                            onClick = {
+//                                Log.d("MyProject", "edit button clicked on item #${item.id}")
+//                            }) {
+//                            Icon(
+//                                imageVector = Icons.Default.Edit,
+//                                contentDescription = "Edit item number ${item.id}"
+//                            )
+//                        }
+//                        Button(
+//                            onClick = {
+//                                Log.d(
+//                                    "MyProject",
+//                                    "item #${item.id}: increase priority button pressed"
+//                                )
+//                                Log.d("MyProject", "current priority: ${item.priority.name}")
+//                                item.increasePriority()
+//                                update(item)
+//                                Log.d("MyProject", "new priority: ${item.priority.name}")
+//                            }) {
+//                            Icon(
+//                                imageVector = Icons.Default.KeyboardArrowUp,
+//                                contentDescription = "Increase priority of item number ${item.id}"
+//                            )
+//                        }
+//                        Button(
+//                            onClick = {
+//                                Log.d(
+//                                    "MyProject",
+//                                    "item #${index}: decrease priority button pressed"
+//                                )
+//                                Log.d("MyProject", "current priority: ${item.priority.name}")
+//                                item.decreasePriority()
+//                                update(item)
+//                                Log.d("MyProject", "new priority: ${item.priority.name}")
+//                            }
+//                        ) {
+//                            Icon(
+//                                imageVector = Icons.Default.KeyboardArrowDown,
+//                                contentDescription = "Decrease priority of item number ${item.id}"
+//                            )
+//                        }
+//                        Button(onClick = {
+//                            Log.d(TAG, "delete button pressed on item #${item.id}")
+//                            deleteFromList.invoke(item)
+//                        }) {
+//                            Icon(
+//                                imageVector = Icons.Default.Delete,
+//                                contentDescription = "Delete item ${item.id}."
+//                            )
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 }

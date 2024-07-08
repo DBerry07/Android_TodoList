@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,10 +22,15 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -155,9 +161,25 @@ private fun MainLayout(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MainAppBar(navigateToAddToDoScreen: () -> Unit) {
+    var dropDown by remember { mutableStateOf(false) }
+
+    val getDropDown: () -> Boolean = {
+        dropDown
+    }
+    val toggleDropDown: () -> Unit = {
+        dropDown = !dropDown
+    }
     TopAppBar(title = { Text("Task List") }, actions = {
-        IconButton(onClick = { navigateToAddToDoScreen.invoke() }) {
-            Icon(Icons.Default.Add, "Add a task")
+        Row() {
+            IconButton(onClick = { navigateToAddToDoScreen.invoke() }) {
+                Icon(Icons.Default.Add, "Add a task")
+            }
+            IconButton(onClick = { dropDown = !dropDown }) {
+                Icon(Icons.Default.Menu, "Sort menu")
+            }
+            if (dropDown) {
+                AppBarDropDown(toggleDropDown, getDropDown)
+            }
         }
     })
 }
@@ -401,6 +423,53 @@ private fun ListItem(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppBarDropDown(toggleDropDown: () -> Unit, getDropDown: () -> Boolean) {
+    DropdownMenu(
+        expanded = getDropDown.invoke(),
+        onDismissRequest = { toggleDropDown.invoke() }
+    ) {
+        DropdownMenuItem(
+            leadingIcon = { Icon(Icons.Default.KeyboardArrowUp, "Sort by ID ascending") },
+            text = {
+                Text("ID", fontFamily = FontFamily.Monospace)
+            },
+            onClick = { /*TODO*/ })
+        DropdownMenuItem(leadingIcon = {
+            Icon(
+                Icons.Default.KeyboardArrowDown,
+                "Sort by ID descending"
+            )
+        }, text = {
+
+            Text("ID", fontFamily = FontFamily.Monospace)
+
+
+        }, onClick = { /*TODO*/ })
+        DropdownMenuItem(leadingIcon = {
+            Icon(
+                Icons.Default.KeyboardArrowUp,
+                "Sort by Priority ascending"
+            )
+        }, text = {
+
+            Text("Priority", fontFamily = FontFamily.Monospace)
+
+
+        }, onClick = { /*TODO*/ })
+        DropdownMenuItem(leadingIcon = {
+            Icon(
+                Icons.Default.KeyboardArrowDown,
+                "Sort by Priority descending"
+            )
+        }, text = {
+            Text("Priority", fontFamily = FontFamily.Monospace)
+
+        }, onClick = { /*TODO*/ })
+
+    }
+}
 
 @Preview
 @Composable

@@ -59,34 +59,6 @@ fun TodoAppBar(title: String, buttons: List<@Composable () -> Unit>) {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AppBarDropDown() {
-    ExposedDropdownMenuBox(
-        expanded = true,
-        onExpandedChange = {}
-    ) {
-        Column() {
-            Row() {
-                Text("ID", fontFamily = FontFamily.Monospace)
-                Icon(Icons.Default.KeyboardArrowUp, "Sort by ID ascending")
-            }
-            Row() {
-                Text("ID", fontFamily = FontFamily.Monospace)
-                Icon(Icons.Default.KeyboardArrowDown, "Sort by ID descending")
-            }
-            Row() {
-                Text("PR", fontFamily = FontFamily.Monospace)
-                Icon(Icons.Default.KeyboardArrowUp, "Sort by Priority ascending")
-            }
-            Row() {
-                Text("PR", fontFamily = FontFamily.Monospace)
-                Icon(Icons.Default.KeyboardArrowDown, "Sort by Priority descending")
-            }
-        }
-    }
-}
-
 @Composable
 fun AppBarButton(function: () -> Unit, icon: ImageVector, description: String) {
     IconButton(onClick = { function.invoke() }) {

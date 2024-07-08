@@ -70,7 +70,7 @@ fun ListItemPopUp(
     val height = LocalConfiguration.current.screenHeightDp
     val dialogMinWidth = width - (width * 0.5).toInt()
     val dialogMaxWidth = width
-    val dialogMaxHeight = height - (height * 0.1).toInt()
+    val dialogMaxHeight = height - (height * 0.15).toInt()
     val dialogMinHeight = height - (height * 0.9).toInt()
 
     Dialog(onDismissRequest = { onDismissRequest.invoke() }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
@@ -125,7 +125,7 @@ fun PopUpActonBar(
     val minWidth = width - (0.5 * width).toInt()
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.widthIn(min = minWidth.dp, max = maxWidth.dp)
+        modifier = Modifier.fillMaxWidth()
     ) {
         IconButton(
             onClick = {

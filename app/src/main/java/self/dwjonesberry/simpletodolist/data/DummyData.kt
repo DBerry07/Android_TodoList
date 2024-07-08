@@ -1,4 +1,4 @@
-package self.dwjonesberry.simpletodolist
+package self.dwjonesberry.simpletodolist.data
 
 val DummyTodo: TodoItem = TodoItem(
     id = 0,

@@ -1,4 +1,4 @@
-package self.dwjonesberry.simpletodolist
+package self.dwjonesberry.simpletodolist.data
 
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot

@@ -3,7 +3,7 @@ package self.dwjonesberry.simpletodolist.room
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import self.dwjonesberry.simpletodolist.Priority
+import self.dwjonesberry.simpletodolist.data.Priority
 
 @Entity
 data class Todo(

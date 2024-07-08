@@ -19,9 +19,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import self.dwjonesberry.simpletodolist.FirebaseRepository
-import self.dwjonesberry.simpletodolist.TodoViewModel
-import self.dwjonesberry.simpletodolist.TodoViewModelFactory
+import self.dwjonesberry.simpletodolist.data.FirebaseRepository
+import self.dwjonesberry.simpletodolist.data.TodoViewModel
+import self.dwjonesberry.simpletodolist.data.TodoViewModelFactory
 
 class AddToDoScreen(val navigate: () -> Unit) {
 

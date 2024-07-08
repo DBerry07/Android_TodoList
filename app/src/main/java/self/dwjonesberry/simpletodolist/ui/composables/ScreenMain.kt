@@ -44,12 +44,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import self.dwjonesberry.simpletodolist.DummyList
-import self.dwjonesberry.simpletodolist.FirebaseRepository
-import self.dwjonesberry.simpletodolist.Priority
-import self.dwjonesberry.simpletodolist.TodoItem
-import self.dwjonesberry.simpletodolist.TodoViewModel
-import self.dwjonesberry.simpletodolist.TodoViewModelFactory
+import self.dwjonesberry.simpletodolist.data.DummyList
+import self.dwjonesberry.simpletodolist.data.FirebaseRepository
+import self.dwjonesberry.simpletodolist.data.Priority
+import self.dwjonesberry.simpletodolist.data.TodoItem
+import self.dwjonesberry.simpletodolist.data.TodoViewModel
+import self.dwjonesberry.simpletodolist.data.TodoViewModelFactory
 import self.dwjonesberry.simpletodolist.ui.theme.SimpleToDoListTheme
 
 private val TAG: String = "MyProject:MainScreen"

@@ -1,4 +1,4 @@
-package self.dwjonesberry.simpletodolist
+package self.dwjonesberry.simpletodolist.data
 
 import android.app.Application
 import self.dwjonesberry.simpletodolist.room.TodoDatabase

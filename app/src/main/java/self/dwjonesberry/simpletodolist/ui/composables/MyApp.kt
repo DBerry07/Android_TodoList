@@ -1,4 +1,4 @@
-package self.dwjonesberry.simpletodolist
+package self.dwjonesberry.simpletodolist.ui.composables
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -15,10 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import self.dwjonesberry.simpletodolist.ui.composables.AddToDoScreen
-import self.dwjonesberry.simpletodolist.ui.composables.AppBarButton
-import self.dwjonesberry.simpletodolist.ui.composables.MainLayout
-import self.dwjonesberry.simpletodolist.ui.composables.TodoAppBar
+import self.dwjonesberry.simpletodolist.data.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

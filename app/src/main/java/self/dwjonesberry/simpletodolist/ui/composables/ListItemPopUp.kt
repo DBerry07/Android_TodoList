@@ -45,18 +45,7 @@ fun ListItemPopUp(
     Dialog(onDismissRequest = { onDismissRequest.invoke() }) {
         Card(modifier = Modifier) {
             Column(modifier = Modifier.padding(20.dp)) {
-                Text(todoItem.text, fontWeight = FontWeight.Bold, fontSize = 25.sp)
-                Spacer(modifier = Modifier.padding(5.dp))
-                Column(
-                    modifier = Modifier
-                        .heightIn(50.dp, 500.dp)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    Spacer(modifier = Modifier.padding(5.dp))
-                    Text(todoItem.notes, fontSize = 18.sp)
-                    Spacer(modifier = Modifier.padding(5.dp))
-                }
-                Spacer(modifier = Modifier.padding(5.dp))
+                PopUpTextDisplay(modifier = Modifier, todoItem = todoItem)
                 PopUpActonBar(
                     modifier = Modifier,
                     item = todoItem,
@@ -67,6 +56,22 @@ fun ListItemPopUp(
             }
         }
     }
+}
+
+@Composable
+fun PopUpTextDisplay(modifier: Modifier, todoItem: TodoItem) {
+    Text(todoItem.text, fontWeight = FontWeight.Bold, fontSize = 25.sp)
+    Spacer(modifier = Modifier.padding(5.dp))
+    Column(
+        modifier = Modifier
+            .heightIn(50.dp, 500.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        Spacer(modifier = Modifier.padding(5.dp))
+        Text(todoItem.notes, fontSize = 18.sp)
+        Spacer(modifier = Modifier.padding(5.dp))
+    }
+    Spacer(modifier = Modifier.padding(5.dp))
 }
 
 @Composable

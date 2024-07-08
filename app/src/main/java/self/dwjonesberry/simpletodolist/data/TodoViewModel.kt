@@ -36,15 +36,10 @@ class TodoViewModel(private val repo: FirebaseRepository) : ViewModel() {
 
     val setSortedBy: (Sort) -> Unit = {
         sortedBy = it.ordinal
-        refresh.invoke()
+        sort.invoke()
     }
 
-    val cycleSort: () -> Unit = {
-        incrementSortedBy()
-        refresh.invoke()
-    }
-
-    val refresh: () -> Unit = {
+    val sort: () -> Unit = {
         when(sortedBy) {
             0 -> _todoList.value = _todoList.value.sortedBy { it.id }.sortedBy { it.checked }
             1 -> _todoList.value = _todoList.value.sortedByDescending { it.id }.sortedBy { it.checked }

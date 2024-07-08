@@ -44,6 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import self.dwjonesberry.simpletodolist.DummyList
 import self.dwjonesberry.simpletodolist.FirebaseRepository
 import self.dwjonesberry.simpletodolist.Priority
 import self.dwjonesberry.simpletodolist.TodoItem
@@ -389,16 +390,7 @@ fun MainPreview() {
     val list = mutableListOf(TodoItem(0, "Hello"), TodoItem(1, "Goodbye"))
     SimpleToDoListTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            MainLayout(list = listOf(
-                TodoItem(id = 0, text = "Test 001", priority = Priority.NORMAL),
-                TodoItem(id = 1, text = "Test 002", priority = Priority.LOW),
-                TodoItem(id = 2, text = "Test 003", priority = Priority.MEDIUM),
-                TodoItem(id = 3, text = "Test 004", priority = Priority.HIGH),
-                TodoItem(id = 4, text = "Test 005", priority = Priority.NORMAL, checked = true),
-                TodoItem(id = 5, text = "Test 006", priority = Priority.LOW, checked = true),
-                TodoItem(id = 6, text = "Test 007", priority = Priority.MEDIUM, checked = true),
-                TodoItem(id = 7, text = "Test 008", priority = Priority.HIGH, checked = true),
-            ),
+            MainLayout(list = DummyList,
                 deleteFromList = {}, update = {}, refresh = {}, sort = {}, sortedBy = 0
             )
         }

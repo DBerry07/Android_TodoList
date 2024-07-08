@@ -1,7 +1,6 @@
 package self.dwjonesberry.simpletodolist.ui.composables
 
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,7 +18,6 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -50,27 +48,27 @@ fun ListItemPopUp(
     delete: (TodoItem) -> Unit
 ) {
     var bgColour = Color.White
-    var borderColour = Color.Black
+    var priorityColour = Color.Black
 
     if (todoItem.checked) {
         bgColour = Color.LightGray
     }
     when (todoItem.priority) {
-        Priority.NORMAL -> borderColour = Color.Black
-        Priority.LOW -> borderColour = Color.Green
-        Priority.MEDIUM -> borderColour = Color.Blue
-        Priority.HIGH -> borderColour = Color.Red
+        Priority.NORMAL -> priorityColour = Color.Black
+        Priority.LOW -> priorityColour = Color.Green
+        Priority.MEDIUM -> priorityColour = Color.Blue
+        Priority.HIGH -> priorityColour = Color.Red
     }
 
     Dialog(onDismissRequest = { onDismissRequest.invoke() }) {
         Card(
-            modifier = Modifier.border(5.dp, borderColour, shape = MaterialTheme.shapes.small),
+            modifier = Modifier.border(5.dp, priorityColour, shape = MaterialTheme.shapes.small),
             colors = CardDefaults.cardColors().copy(
                 containerColor = bgColour
             )
         ) {
             Column(modifier = Modifier.padding(20.dp)) {
-                PopUpTextDisplay(modifier = Modifier, todoItem = todoItem)
+                PopUpTextDisplay(modifier = Modifier, todoItem = todoItem, priorityColour = priorityColour)
                 PopUpActonBar(
                     modifier = Modifier,
                     item = todoItem,
@@ -84,8 +82,8 @@ fun ListItemPopUp(
 }
 
 @Composable
-fun PopUpTextDisplay(modifier: Modifier, todoItem: TodoItem) {
-    Text(todoItem.text, fontWeight = FontWeight.Bold, fontSize = 25.sp)
+fun PopUpTextDisplay(modifier: Modifier, todoItem: TodoItem, priorityColour: Color) {
+    Text(todoItem.text, fontWeight = FontWeight.Bold, fontSize = 25.sp, color = priorityColour)
     Spacer(modifier = Modifier.padding(5.dp))
     Column(
         modifier = Modifier

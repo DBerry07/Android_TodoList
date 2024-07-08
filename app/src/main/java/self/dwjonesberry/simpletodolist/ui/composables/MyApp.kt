@@ -22,16 +22,16 @@ import self.dwjonesberry.simpletodolist.data.Screens
 fun MyApp() {
     val navController = rememberNavController()
 
-        NavHost(
-            navController = navController,
-            startDestination = Screens.MAIN.name
-        ) {
-            composable(Screens.MAIN.name) {
-                MainLayout(navigateToAddToDoScreen = { navController.navigate(Screens.ADD.name) })
-            }
-            composable(Screens.ADD.name) {
-                AddToDoScreen({ navController.popBackStack() }).Screen
-            }
+    NavHost(
+        navController = navController,
+        startDestination = Screens.MAIN.name
+    ) {
+        composable(Screens.MAIN.name) {
+            MainLayout(navigateToAddToDoScreen = { navController.navigate(Screens.ADD.name) })
         }
+        composable(Screens.ADD.name) {
+            AddToDoScreen({ navController.popBackStack() }).Screen
+        }
+    }
 
 }

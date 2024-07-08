@@ -1,4 +1,4 @@
-package self.dwjonesberry.simpletodolist.screens
+package self.dwjonesberry.simpletodolist.ui.composables
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi

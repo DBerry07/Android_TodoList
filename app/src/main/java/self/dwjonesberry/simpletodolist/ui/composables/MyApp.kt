@@ -45,21 +45,18 @@ fun MyApp() {
             )
         }
     }
-
-    Scaffold(topBar = { ChangeAppBar(screen = currentScreen) }) { padding ->
         NavHost(
-            modifier = Modifier.padding(padding),
             navController = navController,
             startDestination = Screens.MAIN.name
         ) {
             composable(Screens.MAIN.name) {
                 currentScreen = Screens.MAIN
-                MainLayout()
+                MainLayout(navigateToAddToDoScreen = { navController.navigate(Screens.ADD.name) })
             }
             composable(Screens.ADD.name) {
                 currentScreen = Screens.ADD
                 AddToDoScreen({ navController.popBackStack() }).Screen
             }
         }
-    }
+
 }

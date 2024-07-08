@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -23,10 +24,14 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -59,18 +64,21 @@ private val TAG: String = "MyProject:MainScreen"
 fun MainLayout(
     repo: FirebaseRepository = FirebaseRepository(),
     viewModel: TodoViewModel = viewModel(factory = TodoViewModelFactory(repo)),
+    navigateToAddToDoScreen: () -> Unit,
 ) {
     val data by viewModel.todoList.collectAsState()
     val remembered = remember(data) { data }
 
-    MainLayout(
-        list = remembered,
-        update = viewModel.update,
-        deleteFromList = viewModel.delete,
-        sort = viewModel.cycleSort,
-        refresh = viewModel.refresh,
-        sortedBy = viewModel.sortedBy,
-    )
+    Scaffold(topBar = { MainAppBar(navigateToAddToDoScreen = navigateToAddToDoScreen) }) { padding ->
+        MainLayout(
+            list = remembered,
+            update = viewModel.update,
+            deleteFromList = viewModel.delete,
+            sort = viewModel.cycleSort,
+            refresh = viewModel.refresh,
+            sortedBy = viewModel.sortedBy,
+        )
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -144,6 +152,16 @@ private fun MainLayout(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MainAppBar(navigateToAddToDoScreen: () -> Unit) {
+    TopAppBar(title = { Text("Task List") }, actions = {
+        IconButton(onClick = { navigateToAddToDoScreen.invoke() }) {
+            Icon(Icons.Default.Add, "Add a task")
+        }
+    })
+}
+
 @Composable
 private fun MainActionBar(filter: (Int) -> Unit, sort: () -> Unit, sortedBy: Int) {
 
@@ -214,7 +232,6 @@ private fun MainActionBar(filter: (Int) -> Unit, sort: () -> Unit, sortedBy: Int
 
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SectionList(
     modifier: Modifier,

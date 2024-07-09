@@ -55,7 +55,7 @@ fun SimpleToDoListTheme(
     }
 
     val corner = 20.dp
-    val roundedCornerShape = RoundedCornerShape(corner, 0.dp, corner, corner)
+    val roundedCornerShape = RoundedCornerShape(0.dp, corner, corner, corner)
 
     val shapes = Shapes(
         extraSmall = roundedCornerShape,

@@ -41,14 +41,14 @@ fun MainAppBar(navigateToAddToDoScreen: () -> Unit, setSortedBy: (Sort) -> Unit)
                 Icon(Icons.Default.Menu, "Sort menu")
             }
             if (dropDown) {
-                AppBarDropDown(toggleDropDown, getDropDown, setSortedBy)
+                SortDropDown(toggleDropDown, getDropDown, setSortedBy)
             }
         }
     })
 }
 
 @Composable
-fun AppBarDropDown(
+fun SortDropDown(
     toggleDropDown: () -> Unit,
     getDropDown: () -> Boolean,
     setSortedBy: (Sort) -> Unit

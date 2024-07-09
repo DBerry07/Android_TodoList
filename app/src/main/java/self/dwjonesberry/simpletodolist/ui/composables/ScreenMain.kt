@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -57,7 +59,11 @@ fun MainLayout(
         filter = it
     }
 
-    Scaffold(topBar = {
+    Scaffold(
+        floatingActionButton = { FloatingActionButton(onClick = { navigateToAddToDoScreen.invoke() }) {
+            Icon(Icons.Default.Add, "Add a task")
+        } },
+        topBar = {
         MainAppBar(
             navigateToAddToDoScreen = navigateToAddToDoScreen,
             setSortedBy = viewModel.setSortedBy,

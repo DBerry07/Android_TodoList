@@ -44,9 +44,9 @@ fun MainAppBar(navigateToAddToDoScreen: () -> Unit, setSortedBy: (Sort) -> Unit,
     }
     TopAppBar(title = { Text("Task List") }, actions = {
         Row() {
-            IconButton(onClick = { navigateToAddToDoScreen.invoke() }) {
-                Icon(Icons.Default.Add, "Add a task")
-            }
+//            IconButton(onClick = { navigateToAddToDoScreen.invoke() }) {
+//                Icon(Icons.Default.Add, "Add a task")
+//            }
             Box() {
                 IconButton(onClick = { isSortMenuShown = !isSortMenuShown }) {
                     Icon(Icons.Default.Menu, "Sort menu")

@@ -160,10 +160,13 @@ fun FilterDropDown(
             text = { Text("NONE", color = Priority.NORMAL.colour) },
             onClick = { setFilterBy.invoke(Priority.NORMAL) })
         DropdownMenuItem(
-            text = { Text("LOW", color = Priority.LOW.colour) }, onClick = { setFilterBy.invoke(Priority.LOW) })
+            text = { Text("LOW", color = Priority.LOW.colour) },
+            onClick = { setFilterBy.invoke(Priority.LOW) })
         DropdownMenuItem(
             text = { Text("MEDIUM", color = Priority.MEDIUM.colour) },
             onClick = { setFilterBy.invoke(Priority.MEDIUM) })
-        DropdownMenuItem(text = { Text("HIGH", color = Priority.HIGH.colour) }, onClick = { setFilterBy.invoke(Priority.HIGH) })
+        DropdownMenuItem(
+            text = { Text("HIGH", color = Priority.HIGH.colour) },
+            onClick = { setFilterBy.invoke(Priority.HIGH) })
     }
 }

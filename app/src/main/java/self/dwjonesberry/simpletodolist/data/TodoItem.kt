@@ -25,10 +25,3 @@ class TodoItem(
         return "TODO:: id:${id.toString()}, text:${text}, notes:${notes}, priority:${priority.name.toString()}"
     }
 }
-
-enum class Priority {
-    NORMAL,
-    LOW,
-    MEDIUM,
-    HIGH,
-}

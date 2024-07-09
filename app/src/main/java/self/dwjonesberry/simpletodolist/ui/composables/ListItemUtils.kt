@@ -7,19 +7,19 @@ import self.dwjonesberry.simpletodolist.data.TodoItem
 fun determineBorder(todoItem: TodoItem): Color {
     return when (todoItem.priority) {
         Priority.NORMAL -> {
-            Color.Black
+            Priority.NORMAL.colour
         }
 
         Priority.LOW -> {
-            Color.Green
+            Priority.LOW.colour
         }
 
         Priority.MEDIUM -> {
-            Color.Blue
+            Priority.MEDIUM.colour
         }
 
         Priority.HIGH -> {
-            Color.Red
+            Priority.HIGH.colour
         }
     }
 }

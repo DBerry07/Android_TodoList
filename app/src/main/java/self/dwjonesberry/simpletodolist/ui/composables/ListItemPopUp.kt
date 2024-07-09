@@ -60,10 +60,10 @@ fun ListItemPopUp(
         bgColour = Color.LightGray
     }
     when (todoItem.priority) {
-        Priority.NORMAL -> priorityColour = Color.Black
-        Priority.LOW -> priorityColour = Color.Green
-        Priority.MEDIUM -> priorityColour = Color.Blue
-        Priority.HIGH -> priorityColour = Color.Red
+        Priority.NORMAL -> priorityColour = Priority.NORMAL.colour
+        Priority.LOW -> priorityColour = Priority.LOW.colour
+        Priority.MEDIUM -> priorityColour = Priority.MEDIUM.colour
+        Priority.HIGH -> priorityColour = Priority.HIGH.colour
     }
 
     val width = LocalConfiguration.current.screenWidthDp

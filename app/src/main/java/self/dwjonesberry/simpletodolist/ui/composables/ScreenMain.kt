@@ -1,11 +1,7 @@
 package self.dwjonesberry.simpletodolist.ui.composables
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,27 +13,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -46,12 +26,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,7 +36,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import self.dwjonesberry.simpletodolist.data.DummyList
 import self.dwjonesberry.simpletodolist.data.FirebaseRepository
 import self.dwjonesberry.simpletodolist.data.Priority
-import self.dwjonesberry.simpletodolist.data.Sort
 import self.dwjonesberry.simpletodolist.data.TodoItem
 import self.dwjonesberry.simpletodolist.data.TodoViewModel
 import self.dwjonesberry.simpletodolist.data.TodoViewModelFactory
@@ -76,10 +52,16 @@ fun MainLayout(
     val data by viewModel.todoList.collectAsState()
     val remembered = remember(data) { data }
 
+    var filter by remember { mutableStateOf(Priority.NORMAL) }
+    val setFilter: (Priority) -> Unit = {
+        filter = it
+    }
+
     Scaffold(topBar = {
         MainAppBar(
             navigateToAddToDoScreen = navigateToAddToDoScreen,
-            setSortedBy = viewModel.setSortedBy
+            setSortedBy = viewModel.setSortedBy,
+            setFilterBy = setFilter,
         )
     }) { padding ->
         MainLayout(
@@ -87,6 +69,7 @@ fun MainLayout(
             list = remembered,
             update = viewModel.update,
             deleteFromList = viewModel.delete,
+            filter = filter
         )
     }
 }
@@ -98,26 +81,24 @@ private fun MainLayout(
     list: List<TodoItem>,
     update: (TodoItem) -> Unit,
     deleteFromList: (TodoItem) -> Unit,
+    filter: Priority,
 ) {
-    val un = list.filter { !it.checked }
-    val com = list.filter { it.checked }
+    val uncompletedTodos = list.filter { !it.checked }
+    val completedTodos = list.filter { it.checked }
 
-    var filter by remember { mutableStateOf(0) }
-    val setFilter: (Int) -> Unit = {
-        filter = it
-    }
-    var unFiltered = listOf<TodoItem>()
-    var comFiltered = listOf<TodoItem>()
-    if (filter > 0) {
-        unFiltered = un.filter { item ->
-            item.priority.ordinal == filter
+
+    var uncompletedTodosFiltered = listOf<TodoItem>()
+    var completedTodosFiltered = listOf<TodoItem>()
+    if (filter != Priority.NORMAL) {
+        uncompletedTodosFiltered = uncompletedTodos.filter { item ->
+            item.priority == filter
         }
-        comFiltered = com.filter { item ->
-            item.priority.ordinal == filter
+        completedTodosFiltered = completedTodos.filter { item ->
+            item.priority == filter
         }
     } else {
-        unFiltered = un
-        comFiltered = com
+        uncompletedTodosFiltered = uncompletedTodos
+        completedTodosFiltered = completedTodos
     }
 
     val height = LocalConfiguration.current.screenHeightDp.dp
@@ -137,7 +118,7 @@ private fun MainLayout(
                 SectionList(
                     modifier = Modifier.height(height),
                     heading = "Uncompleted",
-                    list = unFiltered,
+                    list = uncompletedTodosFiltered,
                     update = update,
                     deleteFromList = deleteFromList,
                 )
@@ -149,7 +130,7 @@ private fun MainLayout(
                 SectionList(
                     modifier = Modifier.height(height),
                     heading = "Completed",
-                    list = comFiltered,
+                    list = completedTodosFiltered,
                     update = update,
                     deleteFromList = deleteFromList,
                 )
@@ -225,7 +206,7 @@ fun MainPreview() {
     SimpleToDoListTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             MainLayout(list = DummyList,
-                deleteFromList = {}, update = {}, modifier = Modifier
+                deleteFromList = {}, update = {}, modifier = Modifier, filter = Priority.NORMAL
             )
         }
     }

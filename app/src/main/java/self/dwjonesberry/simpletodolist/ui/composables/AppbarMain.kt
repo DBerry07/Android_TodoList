@@ -3,6 +3,7 @@ package self.dwjonesberry.simpletodolist.ui.composables
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Menu
@@ -19,29 +20,43 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontFamily
+import self.dwjonesberry.simpletodolist.data.Priority
 import self.dwjonesberry.simpletodolist.data.Sort
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainAppBar(navigateToAddToDoScreen: () -> Unit, setSortedBy: (Sort) -> Unit) {
-    var dropDown by remember { mutableStateOf(false) }
+fun MainAppBar(navigateToAddToDoScreen: () -> Unit, setSortedBy: (Sort) -> Unit, setFilterBy: (Priority) -> Unit) {
+    var isSortMenuShown by remember { mutableStateOf(false) }
+    var isFilterMenuShown by remember { mutableStateOf(false) }
 
-    val getDropDown: () -> Boolean = {
-        dropDown
+    val isSortMenuOpen: () -> Boolean = {
+        isSortMenuShown
     }
-    val toggleDropDown: () -> Unit = {
-        dropDown = !dropDown
+    val isFilterMenuOpen: () -> Boolean = {
+        isFilterMenuShown
+    }
+    val toggleSortDropDown: () -> Unit = {
+        isSortMenuShown = !isSortMenuShown
+    }
+    val toggleFilterDropDown: () -> Unit = {
+        isFilterMenuShown = !isFilterMenuShown
     }
     TopAppBar(title = { Text("Task List") }, actions = {
         Row() {
             IconButton(onClick = { navigateToAddToDoScreen.invoke() }) {
                 Icon(Icons.Default.Add, "Add a task")
             }
-            IconButton(onClick = { dropDown = !dropDown }) {
+            IconButton(onClick = { isSortMenuShown = !isSortMenuShown }) {
                 Icon(Icons.Default.Menu, "Sort menu")
             }
-            if (dropDown) {
-                SortDropDown(toggleDropDown, getDropDown, setSortedBy)
+            IconButton(onClick = { isFilterMenuShown = !isFilterMenuShown}) {
+                Icon(Icons.Default.Face, "Filter menu")
+            }
+            if (isSortMenuShown) {
+                SortDropDown(toggleSortDropDown, isSortMenuOpen, setSortedBy)
+            }
+            if (isFilterMenuShown) {
+                FilterDropDown(toggleFilterDropDown, isFilterMenuOpen, setFilterBy)
             }
         }
     })
@@ -50,11 +65,11 @@ fun MainAppBar(navigateToAddToDoScreen: () -> Unit, setSortedBy: (Sort) -> Unit)
 @Composable
 fun SortDropDown(
     toggleDropDown: () -> Unit,
-    getDropDown: () -> Boolean,
+    isMenuShown: () -> Boolean,
     setSortedBy: (Sort) -> Unit
 ) {
     DropdownMenu(
-        expanded = getDropDown.invoke(),
+        expanded = isMenuShown.invoke(),
         onDismissRequest = { toggleDropDown.invoke() }
     ) {
         DropdownMenuItem(
@@ -99,5 +114,21 @@ fun SortDropDown(
             setSortedBy.invoke(Sort.PR_DEC)
             toggleDropDown.invoke()
         })
+    }
+}
+
+@Composable
+fun FilterDropDown(
+    toggleDropDown: () -> Unit,
+    getDropDown: () -> Boolean,
+    setFilterBy: (Priority) -> Unit,
+) {
+    DropdownMenu(expanded = getDropDown.invoke()
+        , onDismissRequest = { toggleDropDown.invoke() })
+    {
+        DropdownMenuItem(text = { Text("Normal") }, onClick = { setFilterBy.invoke(Priority.NORMAL) })
+        DropdownMenuItem(text = { Text("Low") }, onClick = { setFilterBy.invoke(Priority.LOW) })
+        DropdownMenuItem(text = { Text("Medium") }, onClick = { setFilterBy.invoke(Priority.MEDIUM) })
+        DropdownMenuItem(text = { Text("High") }, onClick = { setFilterBy.invoke(Priority.HIGH)})
     }
 }

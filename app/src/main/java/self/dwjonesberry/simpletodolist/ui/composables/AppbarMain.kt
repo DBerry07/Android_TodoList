@@ -79,7 +79,7 @@ fun SortDropDown(
             },
             onClick = {
                 setSortedBy.invoke(Sort.ID_ASC)
-                toggleDropDown.invoke()
+//                toggleDropDown.invoke()
             })
         DropdownMenuItem(leadingIcon = {
             Icon(
@@ -90,7 +90,7 @@ fun SortDropDown(
             Text("ID", fontFamily = FontFamily.Monospace)
         }, onClick = {
             setSortedBy.invoke(Sort.ID_DEC)
-            toggleDropDown.invoke()
+//            toggleDropDown.invoke()
         })
         DropdownMenuItem(leadingIcon = {
             Icon(
@@ -101,7 +101,7 @@ fun SortDropDown(
             Text("Priority", fontFamily = FontFamily.Monospace)
         }, onClick = {
             setSortedBy(Sort.PR_ASC)
-            toggleDropDown.invoke()
+//            toggleDropDown.invoke()
         })
         DropdownMenuItem(leadingIcon = {
             Icon(
@@ -112,7 +112,7 @@ fun SortDropDown(
             Text("Priority", fontFamily = FontFamily.Monospace)
         }, onClick = {
             setSortedBy.invoke(Sort.PR_DEC)
-            toggleDropDown.invoke()
+//            toggleDropDown.invoke()
         })
     }
 }

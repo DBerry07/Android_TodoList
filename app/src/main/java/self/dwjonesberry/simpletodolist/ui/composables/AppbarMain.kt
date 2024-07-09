@@ -2,12 +2,17 @@ package self.dwjonesberry.simpletodolist.ui.composables
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,13 +25,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.dp
 import self.dwjonesberry.simpletodolist.data.Priority
 import self.dwjonesberry.simpletodolist.data.Sort
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainAppBar(navigateToAddToDoScreen: () -> Unit, setSortedBy: (Sort) -> Unit, setFilterBy: (Priority) -> Unit) {
+fun MainAppBar(
+    navigateToAddToDoScreen: () -> Unit,
+    setSortedBy: (Sort) -> Unit,
+    setFilterBy: (Priority) -> Unit
+) {
     var isSortMenuShown by remember { mutableStateOf(false) }
     var isFilterMenuShown by remember { mutableStateOf(false) }
 
@@ -48,22 +60,35 @@ fun MainAppBar(navigateToAddToDoScreen: () -> Unit, setSortedBy: (Sort) -> Unit,
 //                Icon(Icons.Default.Add, "Add a task")
 //            }
             Box() {
-                IconButton(onClick = { isSortMenuShown = !isSortMenuShown }) {
-                    Icon(Icons.Default.Menu, "Sort menu")
+                Button(
+                    onClick = { isSortMenuShown = !isSortMenuShown },
+                    colors = ButtonDefaults.buttonColors()
+                        .copy(containerColor = Color.Transparent, contentColor = Color.Black)
+                ) {
+                    Text("SORT")
+//                    Icon(Icons.Default.Menu, "Sort menu")
                 }
                 if (isSortMenuShown) {
                     SortDropDown(toggleSortDropDown, isSortMenuOpen, setSortedBy)
                 }
             }
+
             Box() {
-            IconButton(onClick = { isFilterMenuShown = !isFilterMenuShown}) {
-                Icon(Icons.Default.Face, "Filter menu")
-            }
-            if (isFilterMenuShown) {
-                FilterDropDown(toggleFilterDropDown, isFilterMenuOpen, setFilterBy)
-            }
+                Button(
+                    onClick = { isFilterMenuShown = !isFilterMenuShown },
+                    colors = ButtonDefaults.buttonColors()
+                        .copy(containerColor = Color.Transparent, contentColor = Color.Black)
+                )
+                {
+                    Text("FILTER")
+//                Icon(Icons.Default.Face, "Filter menu")
                 }
+                if (isFilterMenuShown) {
+                    FilterDropDown(toggleFilterDropDown, isFilterMenuOpen, setFilterBy)
+                }
+            }
         }
+        Spacer(modifier = Modifier.padding(horizontal = 10.dp))
     })
 }
 
@@ -128,12 +153,15 @@ fun FilterDropDown(
     getDropDown: () -> Boolean,
     setFilterBy: (Priority) -> Unit,
 ) {
-    DropdownMenu(expanded = getDropDown.invoke()
-        , onDismissRequest = { toggleDropDown.invoke() })
+    DropdownMenu(expanded = getDropDown.invoke(), onDismissRequest = { toggleDropDown.invoke() })
     {
-        DropdownMenuItem(text = { Text("Normal") }, onClick = { setFilterBy.invoke(Priority.NORMAL) })
+        DropdownMenuItem(
+            text = { Text("Normal") },
+            onClick = { setFilterBy.invoke(Priority.NORMAL) })
         DropdownMenuItem(text = { Text("Low") }, onClick = { setFilterBy.invoke(Priority.LOW) })
-        DropdownMenuItem(text = { Text("Medium") }, onClick = { setFilterBy.invoke(Priority.MEDIUM) })
-        DropdownMenuItem(text = { Text("High") }, onClick = { setFilterBy.invoke(Priority.HIGH)})
+        DropdownMenuItem(
+            text = { Text("Medium") },
+            onClick = { setFilterBy.invoke(Priority.MEDIUM) })
+        DropdownMenuItem(text = { Text("High") }, onClick = { setFilterBy.invoke(Priority.HIGH) })
     }
 }

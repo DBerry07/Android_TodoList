@@ -1,5 +1,6 @@
 package self.dwjonesberry.simpletodolist.ui.composables
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -46,18 +47,22 @@ fun MainAppBar(navigateToAddToDoScreen: () -> Unit, setSortedBy: (Sort) -> Unit,
             IconButton(onClick = { navigateToAddToDoScreen.invoke() }) {
                 Icon(Icons.Default.Add, "Add a task")
             }
-            IconButton(onClick = { isSortMenuShown = !isSortMenuShown }) {
-                Icon(Icons.Default.Menu, "Sort menu")
+            Box() {
+                IconButton(onClick = { isSortMenuShown = !isSortMenuShown }) {
+                    Icon(Icons.Default.Menu, "Sort menu")
+                }
+                if (isSortMenuShown) {
+                    SortDropDown(toggleSortDropDown, isSortMenuOpen, setSortedBy)
+                }
             }
+            Box() {
             IconButton(onClick = { isFilterMenuShown = !isFilterMenuShown}) {
                 Icon(Icons.Default.Face, "Filter menu")
-            }
-            if (isSortMenuShown) {
-                SortDropDown(toggleSortDropDown, isSortMenuOpen, setSortedBy)
             }
             if (isFilterMenuShown) {
                 FilterDropDown(toggleFilterDropDown, isFilterMenuOpen, setFilterBy)
             }
+                }
         }
     })
 }

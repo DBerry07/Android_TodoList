@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Menu
@@ -156,12 +157,13 @@ fun FilterDropDown(
     DropdownMenu(expanded = getDropDown.invoke(), onDismissRequest = { toggleDropDown.invoke() })
     {
         DropdownMenuItem(
-            text = { Text("Normal") },
+            text = { Text("NONE", color = Priority.NORMAL.colour) },
             onClick = { setFilterBy.invoke(Priority.NORMAL) })
-        DropdownMenuItem(text = { Text("Low") }, onClick = { setFilterBy.invoke(Priority.LOW) })
         DropdownMenuItem(
-            text = { Text("Medium") },
+            text = { Text("LOW", color = Priority.LOW.colour) }, onClick = { setFilterBy.invoke(Priority.LOW) })
+        DropdownMenuItem(
+            text = { Text("MEDIUM", color = Priority.MEDIUM.colour) },
             onClick = { setFilterBy.invoke(Priority.MEDIUM) })
-        DropdownMenuItem(text = { Text("High") }, onClick = { setFilterBy.invoke(Priority.HIGH) })
+        DropdownMenuItem(text = { Text("HIGH", color = Priority.HIGH.colour) }, onClick = { setFilterBy.invoke(Priority.HIGH) })
     }
 }

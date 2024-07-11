@@ -167,6 +167,19 @@ private fun ListLayout(
     }
 }
 
+/**
+ * A [Composable] that contains the [SectionHeading] and associated collection of [ListItem] (which
+ * are [TodoItem]). If the [SectionHeading] is clicked by the user, all the associated [ListItem]
+ * are hidden in the UI from the user.
+ * - Compatible with [Preview]
+ * @param modifier The [Modifier] for this composable. Currently unused.
+ * @param heading The [String] used to name the section. Passed to [SectionHeading].
+ * @param list The [List] that contains all the relevant [TodoItem] associated with that heading.
+ * @param update The lambda function that updates the database with new information of one [TodoItem].
+ * The UI automatically updates to reflect any changes.
+ * @param deleteFromList The lambda function that deletes a [TodoItem] from the database. The UI automatically
+ * updates to reflect the change.
+ */
 @Composable
 private fun SectionList(
     modifier: Modifier,
@@ -218,6 +231,10 @@ private fun SectionList(
     }
 }
 
+/**
+ * A [Composable] that is used to display the title of the relevant [SectionList].
+ * @param heading A [String] used for naming the section.
+ */
 @Composable
 fun SectionHeading(heading: String) {
     Text(

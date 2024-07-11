@@ -46,6 +46,15 @@ import self.dwjonesberry.simpletodolist.ui.theme.SimpleToDoListTheme
 
 private val TAG: String = "MyProject:MainScreen"
 
+/**
+ * A [Composable] function that defines the entire first and main screen of the app. Primary [Composable]
+ * is a [Scaffold] that holds a top app bar of [MainAppBar], the [ListLayout], and a [FloatingActionButton].
+ * - Not compatible with [Preview] because of inclusion of a view model.
+ * @param repo a [FirebaseRepository], which is a class defined in this app.
+ * @param viewModel a view model for the screen; defaults to a [TodoViewModel].
+ * @param navigateToAddToDoScreen the function (passed from [MyApp]) that navigates the user
+ * from this [MainLayout] to [AddToDoScreen].
+ */
 @Composable
 fun MainLayout(
     repo: FirebaseRepository = FirebaseRepository(),
@@ -71,7 +80,7 @@ fun MainLayout(
             setFilterBy = setFilter,
         )
     }) { padding ->
-        MainLayout(
+        ListLayout(
             modifier = Modifier.padding(padding),
             list = remembered,
             update = viewModel.update,
@@ -81,9 +90,21 @@ fun MainLayout(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+/**
+ * A [Composable] function that holds [SectionList] for each type of list (currently just "Completed" and
+ * "Uncompleted"). Primary [Composable] is a [LazyColumn] inside a [Column].
+ * - Compatible with [Preview]
+ * @param modifier The passed [Modifier] for this composable.
+ * @param list The actual [List] of [TodoItem] that the whole app depends upon.
+ * @param update A lambda function that updates the database (and thus also the UI) with new information
+ * regarding a particular [TodoItem].
+ * @param deleteFromList A lambda function that deletes a [TodoItem] from the database. The UI is
+ * automatically updated when this happens.
+ * @param filter The user-selected [Priority]-based filter; based on which filter is selected,
+ * only those [TodoItem] with the same [Priority] as the filter will be shown.
+ */
 @Composable
-private fun MainLayout(
+private fun ListLayout(
     modifier: Modifier,
     list: List<TodoItem>,
     update: (TodoItem) -> Unit,
@@ -212,7 +233,7 @@ fun MainPreview() {
     val list = mutableListOf(TodoItem(0, "Hello"), TodoItem(1, "Goodbye"))
     SimpleToDoListTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            MainLayout(list = DummyList,
+            ListLayout(list = DummyList,
                 deleteFromList = {}, update = {}, modifier = Modifier, filter = Priority.NORMAL
             )
         }

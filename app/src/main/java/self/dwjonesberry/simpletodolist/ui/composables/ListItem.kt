@@ -27,6 +27,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import self.dwjonesberry.simpletodolist.data.TodoItem
 
+/**
+ * The [Composable] used to display each entry in the [List] of [TodoItem] retrieved from the database.
+ * Used in conjunction with [MainLayout].
+ * @param item The [TodoItem] that this composable will show in the UI.
+ * @param index The index of the [item] in the list of [TodoItem]
+ * @param update The lambda function that updates the [TodoItem] entry in the database with new or
+ * changed information. Primarily used to update the [TodoItem.priority] and the [TodoItem.checked].
+ * @param deleteFromList The lambda function that deletes the [item] from the database. The UI
+ * automatically updates after this action.
+ * @see [MainLayout]
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ListItem(

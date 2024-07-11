@@ -45,6 +45,24 @@ import self.dwjonesberry.simpletodolist.data.TodoItem
 
 private val TAG: String = "MyProject:PopUp"
 
+/**
+ * A [Composable] for the dialog pop-up which displays the [TodoItem] details. Shows when a user
+ * clicks on a [ListItem] and hides when dismissed. The composable itself acts as a container for
+ * the other parts of the dialog, namely the [PopUpTextDisplay] and the [PopUpActonBar].
+ * @param modifier The modifier for this composable.
+ * @param onDismissRequest The lambda function that contains the actions taken by the app when the
+ * user dismisses the dialog. Currently, only hides the dialog on dismiss.
+ * @param todoItem The [TodoItem] associated with the [ListItem] that this [ListItemPopUp] corresponds
+ * to.
+ * @param update The lambda function that updates the [TodoItem] with new or different information to
+ * the database. The changes are automatically displayed in the UI. Executes when the user changes
+ * the [TodoItem.priority]
+ * @param delete The lambda function that deletes a given [TodoItem] from the database. Executes when
+ * the user presses the "delete" button.
+ * @see [ListItem]
+ * @see [PopUpTextDisplay]
+ * @see [PopUpActonBar]
+ */
 @Composable
 fun ListItemPopUp(
     modifier: Modifier,
@@ -96,6 +114,16 @@ fun ListItemPopUp(
     }
 }
 
+/**
+ * A [Composable] that contains the text associated with the given [TodoItem], namely the item
+ * heading and the notes. Used in conjunction with [ListItemPopUp].
+ * @param modifier The modifier for this composable.
+ * @param todoItem The [TodoItem] whose contents are displayed by the [PopUpTextDisplay] composable.
+ * @param priorityColour The colour associated with the [TodoItem.priority]. Used to colour the
+ * title text.
+ * @see [ListItemPopUp]
+ * @see [PopUpActonBar]
+ */
 @Composable
 fun PopUpTextDisplay(modifier: Modifier, todoItem: TodoItem, priorityColour: Color) {
     Text(todoItem.text, fontWeight = FontWeight.Bold, fontSize = 25.sp, color = priorityColour)
@@ -112,6 +140,20 @@ fun PopUpTextDisplay(modifier: Modifier, todoItem: TodoItem, priorityColour: Col
     Spacer(modifier = Modifier.padding(5.dp))
 }
 
+/**
+ * A [Composable] that contains the buttons that execute various actions related to the given [TodoItem].
+ * Used in conjunction with [ListItemPopUp].
+ * @param modifier The modifier for this [Composable]
+ * @param item The [TodoItem] associated with the buttons' actions.
+ * @param update The lambda function that updates the [TodoItem] in the database with new or different
+ * information. Currently used when the user changes the [TodoItem.priority]. The changes are automatically
+ * reflected in the UI.
+ * @param delete The lambda function that deletes the [TodoItem] from the database. The deletion is
+ * automatically reflected in the UI.
+ * @param onDismissRequest The actions taken by the app when the [ListItemPopUp] is dismissed by the
+ * user. Also dismisses the [ListItemPopUp] when called. In this case, dismisses the dialog when
+ * the user deletes the [TodoItem].
+ */
 @Composable
 fun PopUpActonBar(
     modifier: Modifier,

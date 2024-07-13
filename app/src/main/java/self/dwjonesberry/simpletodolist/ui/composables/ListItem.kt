@@ -25,15 +25,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import self.dwjonesberry.simpletodolist.data.TodoItem
+import self.dwjonesberry.simpletodolist.data.MyTask
 
 /**
- * The [Composable] used to display each entry in the [List] of [TodoItem] retrieved from the database.
+ * The [Composable] used to display each entry in the [List] of [MyTask] retrieved from the database.
  * Used in conjunction with [MainLayout].
- * @param item The [TodoItem] that this composable will show in the UI.
- * @param index The index of the [item] in the list of [TodoItem]
- * @param update The lambda function that updates the [TodoItem] entry in the database with new or
- * changed information. Primarily used to update the [TodoItem.priority] and the [TodoItem.checked].
+ * @param item The [MyTask] that this composable will show in the UI.
+ * @param index The index of the [item] in the list of [MyTask]
+ * @param update The lambda function that updates the [MyTask] entry in the database with new or
+ * changed information. Primarily used to update the [MyTask.priority] and the [MyTask.checked].
  * @param deleteFromList The lambda function that deletes the [item] from the database. The UI
  * automatically updates after this action.
  * @see [MainLayout]
@@ -41,11 +41,11 @@ import self.dwjonesberry.simpletodolist.data.TodoItem
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ListItem(
-    item: TodoItem,
+    item: MyTask,
     index: Int,
-    update: (TodoItem) -> Unit,
-    edit: (TodoItem) -> Unit,
-    deleteFromList: (TodoItem) -> Unit,
+    update: (MyTask) -> Unit,
+    edit: (MyTask) -> Unit,
+    deleteFromList: (MyTask) -> Unit,
 ) {
     var background by remember { mutableStateOf(Color.White) }
     var showDialog by remember { mutableStateOf(false) }
@@ -99,7 +99,7 @@ fun ListItem(
                     fontFamily = FontFamily.Monospace,
                 )
                 Text(
-                    text = item.text,
+                    text = item.title,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.displayMedium,
@@ -111,7 +111,7 @@ fun ListItem(
                 ListItemPopUp(
                     modifier = Modifier,
                     onDismissRequest = { showDialog = !showDialog },
-                    todoItem = item,
+                    myTask = item,
                     update = update,
                     edit = edit,
                     delete = deleteFromList

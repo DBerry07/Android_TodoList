@@ -7,11 +7,11 @@ class FirebaseRepoUtil {
 
     private val TAG: String = "MyProject: FirebaseUtil"
 
-    fun decodeResult(item: DocumentSnapshot): TodoItem {
+    fun decodeResult(item: DocumentSnapshot): MyTask {
         Log.d(TAG, "Attempting to decode document snapshot...")
-        val todo = TodoItem(
+        val todo = MyTask(
             id = item.get("id").toString().toInt(),
-            text = item.get("text").toString(),
+            title = item.get("text").toString(),
             notes = item.get("notes").toString(),
             priority = Priority.valueOf(item.get("priority").toString()),
             checked = item.get("checked").toString().toBoolean()
@@ -20,19 +20,19 @@ class FirebaseRepoUtil {
         return todo
     }
 
-    fun makeHashMap(todoItem: TodoItem): HashMap<String, String> {
+    fun makeHashMap(myTask: MyTask): HashMap<String, String> {
         val map: HashMap<String, String> =
             try {
-                Log.d(TAG, "ATTEMPTING to create hashmap of id #${todoItem.id}...")
+                Log.d(TAG, "ATTEMPTING to create hashmap of id #${myTask.id}...")
                 hashMapOf(
-                    "id" to todoItem.id.toString(),
-                    "text" to todoItem.text,
-                    "notes" to todoItem.notes,
-                    "priority" to todoItem.priority.name.toString(),
-                    "checked" to todoItem.checked.toString()
+                    "id" to myTask.id.toString(),
+                    "text" to myTask.title,
+                    "notes" to myTask.notes,
+                    "priority" to myTask.priority.name.toString(),
+                    "checked" to myTask.checked.toString()
                 )
             } catch (e: Exception) {
-                Log.w(TAG, "---FAILED to make hashmap of id#${todoItem.id}", e)
+                Log.w(TAG, "---FAILED to make hashmap of id#${myTask.id}", e)
                 hashMapOf<String, String>()
             }
         return map

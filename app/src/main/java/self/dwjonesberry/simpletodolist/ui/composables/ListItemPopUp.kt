@@ -8,11 +8,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -40,24 +37,24 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import self.dwjonesberry.simpletodolist.data.DummyTodo
 import self.dwjonesberry.simpletodolist.data.Priority
-import self.dwjonesberry.simpletodolist.data.TodoItem
+import self.dwjonesberry.simpletodolist.data.MyTask
 
 
 private val TAG: String = "MyProject:PopUp"
 
 /**
- * A [Composable] for the dialog pop-up which displays the [TodoItem] details. Shows when a user
+ * A [Composable] for the dialog pop-up which displays the [MyTask] details. Shows when a user
  * clicks on a [ListItem] and hides when dismissed. The composable itself acts as a container for
  * the other parts of the dialog, namely the [PopUpTextDisplay] and the [PopUpActonBar].
  * @param modifier The modifier for this composable.
  * @param onDismissRequest The lambda function that contains the actions taken by the app when the
  * user dismisses the dialog. Currently, only hides the dialog on dismiss.
- * @param todoItem The [TodoItem] associated with the [ListItem] that this [ListItemPopUp] corresponds
+ * @param myTask The [MyTask] associated with the [ListItem] that this [ListItemPopUp] corresponds
  * to.
- * @param update The lambda function that updates the [TodoItem] with new or different information to
+ * @param update The lambda function that updates the [MyTask] with new or different information to
  * the database. The changes are automatically displayed in the UI. Executes when the user changes
- * the [TodoItem.priority]
- * @param delete The lambda function that deletes a given [TodoItem] from the database. Executes when
+ * the [MyTask.priority]
+ * @param delete The lambda function that deletes a given [MyTask] from the database. Executes when
  * the user presses the "delete" button.
  * @see [ListItem]
  * @see [PopUpTextDisplay]
@@ -67,18 +64,18 @@ private val TAG: String = "MyProject:PopUp"
 fun ListItemPopUp(
     modifier: Modifier,
     onDismissRequest: () -> Unit,
-    todoItem: TodoItem,
-    edit: (TodoItem) -> Unit,
-    update: (TodoItem) -> Unit,
-    delete: (TodoItem) -> Unit
+    myTask: MyTask,
+    edit: (MyTask) -> Unit,
+    update: (MyTask) -> Unit,
+    delete: (MyTask) -> Unit
 ) {
     var bgColour = Color.White
     var priorityColour = Color.Black
 
-    if (todoItem.checked) {
+    if (myTask.checked) {
         bgColour = Color.LightGray
     }
-    when (todoItem.priority) {
+    when (myTask.priority) {
         Priority.NORMAL -> priorityColour = Priority.NORMAL.colour
         Priority.LOW -> priorityColour = Priority.LOW.colour
         Priority.MEDIUM -> priorityColour = Priority.MEDIUM.colour
@@ -102,10 +99,10 @@ fun ListItemPopUp(
             )
         ) {
             Column(modifier = Modifier.padding(20.dp)) {
-                PopUpTextDisplay(modifier = Modifier, todoItem = todoItem, priorityColour = priorityColour)
+                PopUpTextDisplay(modifier = Modifier, myTask = myTask, priorityColour = priorityColour)
                 PopUpActonBar(
                     modifier = Modifier,
-                    item = todoItem,
+                    item = myTask,
                     update = update,
                     delete = delete,
                     edit = edit,
@@ -117,18 +114,18 @@ fun ListItemPopUp(
 }
 
 /**
- * A [Composable] that contains the text associated with the given [TodoItem], namely the item
+ * A [Composable] that contains the text associated with the given [MyTask], namely the item
  * heading and the notes. Used in conjunction with [ListItemPopUp].
  * @param modifier The modifier for this composable.
- * @param todoItem The [TodoItem] whose contents are displayed by the [PopUpTextDisplay] composable.
- * @param priorityColour The colour associated with the [TodoItem.priority]. Used to colour the
+ * @param myTask The [MyTask] whose contents are displayed by the [PopUpTextDisplay] composable.
+ * @param priorityColour The colour associated with the [MyTask.priority]. Used to colour the
  * title text.
  * @see [ListItemPopUp]
  * @see [PopUpActonBar]
  */
 @Composable
-fun PopUpTextDisplay(modifier: Modifier, todoItem: TodoItem, priorityColour: Color) {
-    Text(todoItem.text, fontWeight = FontWeight.Bold, fontSize = 25.sp, color = priorityColour)
+fun PopUpTextDisplay(modifier: Modifier, myTask: MyTask, priorityColour: Color) {
+    Text(myTask.title, fontWeight = FontWeight.Bold, fontSize = 25.sp, color = priorityColour)
     Spacer(modifier = Modifier.padding(5.dp))
     Column(
         modifier = Modifier
@@ -136,33 +133,33 @@ fun PopUpTextDisplay(modifier: Modifier, todoItem: TodoItem, priorityColour: Col
             .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.padding(5.dp))
-        Text(todoItem.notes, fontSize = 20.sp)
+        Text(myTask.notes, fontSize = 20.sp)
         Spacer(modifier = Modifier.padding(5.dp))
     }
     Spacer(modifier = Modifier.padding(5.dp))
 }
 
 /**
- * A [Composable] that contains the buttons that execute various actions related to the given [TodoItem].
+ * A [Composable] that contains the buttons that execute various actions related to the given [MyTask].
  * Used in conjunction with [ListItemPopUp].
  * @param modifier The modifier for this [Composable]
- * @param item The [TodoItem] associated with the buttons' actions.
- * @param update The lambda function that updates the [TodoItem] in the database with new or different
- * information. Currently used when the user changes the [TodoItem.priority]. The changes are automatically
+ * @param item The [MyTask] associated with the buttons' actions.
+ * @param update The lambda function that updates the [MyTask] in the database with new or different
+ * information. Currently used when the user changes the [MyTask.priority]. The changes are automatically
  * reflected in the UI.
- * @param delete The lambda function that deletes the [TodoItem] from the database. The deletion is
+ * @param delete The lambda function that deletes the [MyTask] from the database. The deletion is
  * automatically reflected in the UI.
  * @param onDismissRequest The actions taken by the app when the [ListItemPopUp] is dismissed by the
  * user. Also dismisses the [ListItemPopUp] when called. In this case, dismisses the dialog when
- * the user deletes the [TodoItem].
+ * the user deletes the [MyTask].
  */
 @Composable
 fun PopUpActonBar(
     modifier: Modifier,
-    item: TodoItem,
-    update: (TodoItem) -> Unit,
-    edit: (TodoItem) -> Unit,
-    delete: (TodoItem) -> Unit,
+    item: MyTask,
+    update: (MyTask) -> Unit,
+    edit: (MyTask) -> Unit,
+    delete: (MyTask) -> Unit,
     onDismissRequest: () -> Unit
 ) {
     val width = LocalConfiguration.current.screenWidthDp
@@ -234,6 +231,6 @@ fun ListItemPopUpPreview() {
     val item = DummyTodo
 
     Surface(modifier = Modifier.fillMaxSize()) {
-        ListItemPopUp(modifier = Modifier, onDismissRequest = { /*TODO*/ }, todoItem = item, {}, {}, {})
+        ListItemPopUp(modifier = Modifier, onDismissRequest = { /*TODO*/ }, myTask = item, {}, {}, {})
     }
 }

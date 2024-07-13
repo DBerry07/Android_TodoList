@@ -2,10 +2,10 @@ package self.dwjonesberry.simpletodolist.ui.composables
 
 import androidx.compose.ui.graphics.Color
 import self.dwjonesberry.simpletodolist.data.Priority
-import self.dwjonesberry.simpletodolist.data.TodoItem
+import self.dwjonesberry.simpletodolist.data.MyTask
 
-fun determineBorder(todoItem: TodoItem): Color {
-    return when (todoItem.priority) {
+fun determineBorder(myTask: MyTask): Color {
+    return when (myTask.priority) {
         Priority.NORMAL -> {
             Priority.NORMAL.colour
         }

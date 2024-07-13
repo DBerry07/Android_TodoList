@@ -8,17 +8,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class TodoViewModel(private val repo: FirebaseRepository) : ViewModel() {
+class TaskViewModel(private val repo: FirebaseRepository) : ViewModel() {
 
     var text: String = ""
         private set
     var notes: String = ""
         private set
-    var selectedTodo: TodoItem? = null
+    var selectedTodo: MyTask? = null
         set(value) {
             field = value
             if (value != null) {
-                setText(value.text)
+                setText(value.title)
                 setNotes(value.notes)
             }
             else {
@@ -27,8 +27,8 @@ class TodoViewModel(private val repo: FirebaseRepository) : ViewModel() {
             }
         }
 
-    private val _todoList = MutableStateFlow<List<TodoItem>>(emptyList())
-    val todoList: StateFlow<List<TodoItem>> = _todoList.asStateFlow()
+    private val _todoList = MutableStateFlow<List<MyTask>>(emptyList())
+    val todoList: StateFlow<List<MyTask>> = _todoList.asStateFlow()
     var sortedBy = 0
 
     init {
@@ -63,7 +63,7 @@ class TodoViewModel(private val repo: FirebaseRepository) : ViewModel() {
     }
 
     val add: () -> Unit = {
-        val item = TodoItem(id = maxId, text = text, notes = notes)
+        val item = MyTask(id = maxId, title = text, notes = notes)
         repo.addToDatabase(item)
         text = ""
         notes = ""
@@ -77,18 +77,18 @@ class TodoViewModel(private val repo: FirebaseRepository) : ViewModel() {
         notes = it
     }
 
-    val delete: (TodoItem) -> Unit = { todo ->
+    val delete: (MyTask) -> Unit = { todo ->
         repo.deleteFromDatabase(todo)
     }
 
-    val update: (TodoItem) -> Unit = { todo ->
+    val update: (MyTask) -> Unit = { todo ->
         repo.updateDatabase(todo)
     }
 
     val updateSelected: () -> Unit = {
         val todoItem = selectedTodo
         if (todoItem != null) {
-            todoItem.text = text
+            todoItem.title = text
             todoItem.notes = notes
             repo.updateDatabase(todoItem)
         }
@@ -96,10 +96,10 @@ class TodoViewModel(private val repo: FirebaseRepository) : ViewModel() {
 
 }
 
-class TodoViewModelFactory(private val repository: FirebaseRepository) : ViewModelProvider.Factory {
+class TaskViewModelFactory(private val repository: FirebaseRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(TodoViewModel::class.java)) {
-            return TodoViewModel(repository) as T
+        if (modelClass.isAssignableFrom(TaskViewModel::class.java)) {
+            return TaskViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

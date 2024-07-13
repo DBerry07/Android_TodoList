@@ -1,6 +1,5 @@
 package self.dwjonesberry.simpletodolist.ui.composables
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,9 +38,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import self.dwjonesberry.simpletodolist.data.DummyList
 import self.dwjonesberry.simpletodolist.data.FirebaseRepository
 import self.dwjonesberry.simpletodolist.data.Priority
-import self.dwjonesberry.simpletodolist.data.TodoItem
-import self.dwjonesberry.simpletodolist.data.TodoViewModel
-import self.dwjonesberry.simpletodolist.data.TodoViewModelFactory
+import self.dwjonesberry.simpletodolist.data.MyTask
+import self.dwjonesberry.simpletodolist.data.TaskViewModel
+import self.dwjonesberry.simpletodolist.data.TaskViewModelFactory
 import self.dwjonesberry.simpletodolist.ui.theme.SimpleToDoListTheme
 
 private val TAG: String = "MyProject:MainScreen"
@@ -51,15 +50,15 @@ private val TAG: String = "MyProject:MainScreen"
  * is a [Scaffold] that holds a top app bar of [MainAppBar], the [ListLayout], and a [FloatingActionButton].
  * - Not compatible with [Preview] because of inclusion of a view model.
  * @param repo a [FirebaseRepository], which is a class defined in this app.
- * @param viewModel a view model for the screen; defaults to a [TodoViewModel].
+ * @param viewModel a view model for the screen; defaults to a [TaskViewModel].
  * @param navigateToAddToDoScreen the function (passed from [MyApp]) that navigates the user
  * from this [MainLayout] to [AddToDoScreen].
  */
 @Composable
 fun MainLayout(
     repo: FirebaseRepository = FirebaseRepository(),
-    viewModel: TodoViewModel = viewModel(factory = TodoViewModelFactory(repo)),
-    navigateToAddToDoScreen: (TodoItem?) -> Unit,
+    viewModel: TaskViewModel = viewModel(factory = TaskViewModelFactory(repo)),
+    navigateToAddToDoScreen: (MyTask?) -> Unit,
 ) {
     val data by viewModel.todoList.collectAsState()
     val remembered = remember(data) { data }
@@ -95,29 +94,29 @@ fun MainLayout(
  * "Uncompleted"). Primary [Composable] is a [LazyColumn] inside a [Column].
  * - Compatible with [Preview]
  * @param modifier The passed [Modifier] for this composable.
- * @param list The actual [List] of [TodoItem] that the whole app depends upon.
+ * @param list The actual [List] of [MyTask] that the whole app depends upon.
  * @param update A lambda function that updates the database (and thus also the UI) with new information
- * regarding a particular [TodoItem].
- * @param deleteFromList A lambda function that deletes a [TodoItem] from the database. The UI is
+ * regarding a particular [MyTask].
+ * @param deleteFromList A lambda function that deletes a [MyTask] from the database. The UI is
  * automatically updated when this happens.
  * @param filter The user-selected [Priority]-based filter; based on which filter is selected,
- * only those [TodoItem] with the same [Priority] as the filter will be shown.
+ * only those [MyTask] with the same [Priority] as the filter will be shown.
  */
 @Composable
 private fun ListLayout(
     modifier: Modifier,
-    list: List<TodoItem>,
-    update: (TodoItem) -> Unit,
-    deleteFromList: (TodoItem) -> Unit,
-    edit: (TodoItem) -> Unit,
+    list: List<MyTask>,
+    update: (MyTask) -> Unit,
+    deleteFromList: (MyTask) -> Unit,
+    edit: (MyTask) -> Unit,
     filter: Priority,
 ) {
     val uncompletedTodos = list.filter { !it.checked }
     val completedTodos = list.filter { it.checked }
 
 
-    var uncompletedTodosFiltered = listOf<TodoItem>()
-    var completedTodosFiltered = listOf<TodoItem>()
+    var uncompletedTodosFiltered = listOf<MyTask>()
+    var completedTodosFiltered = listOf<MyTask>()
     if (filter != Priority.NORMAL) {
         uncompletedTodosFiltered = uncompletedTodos.filter { item ->
             item.priority == filter
@@ -172,25 +171,25 @@ private fun ListLayout(
 
 /**
  * A [Composable] that contains the [SectionHeading] and associated collection of [ListItem] (which
- * are [TodoItem]). If the [SectionHeading] is clicked by the user, all the associated [ListItem]
+ * are [MyTask]). If the [SectionHeading] is clicked by the user, all the associated [ListItem]
  * are hidden in the UI from the user.
  * - Compatible with [Preview]
  * @param modifier The [Modifier] for this composable. Currently unused.
  * @param heading The [String] used to name the section. Passed to [SectionHeading].
- * @param list The [List] that contains all the relevant [TodoItem] associated with that heading.
- * @param update The lambda function that updates the database with new information of one [TodoItem].
+ * @param list The [List] that contains all the relevant [MyTask] associated with that heading.
+ * @param update The lambda function that updates the database with new information of one [MyTask].
  * The UI automatically updates to reflect any changes.
- * @param deleteFromList The lambda function that deletes a [TodoItem] from the database. The UI automatically
+ * @param deleteFromList The lambda function that deletes a [MyTask] from the database. The UI automatically
  * updates to reflect the change.
  */
 @Composable
 private fun SectionList(
     modifier: Modifier,
     heading: String,
-    list: List<TodoItem>,
-    update: (TodoItem) -> Unit,
-    edit: (TodoItem) -> Unit,
-    deleteFromList: (TodoItem) -> Unit,
+    list: List<MyTask>,
+    update: (MyTask) -> Unit,
+    edit: (MyTask) -> Unit,
+    deleteFromList: (MyTask) -> Unit,
 ) {
     val context = LocalContext.current
     var showSection: Boolean by remember { mutableStateOf(true) }
@@ -252,7 +251,7 @@ fun SectionHeading(heading: String) {
 @Preview
 @Composable
 fun MainPreview() {
-    val list = mutableListOf(TodoItem(0, "Hello"), TodoItem(1, "Goodbye"))
+    val list = mutableListOf(MyTask(0, "Hello"), MyTask(1, "Goodbye"))
     SimpleToDoListTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             ListLayout(list = DummyList,

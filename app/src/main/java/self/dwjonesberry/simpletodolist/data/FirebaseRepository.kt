@@ -13,7 +13,7 @@ class FirebaseRepository {
     private val TAG: String = "MyProject: FirebaseRepo"
     private val util = FirebaseRepoUtil()
 
-    fun getAllFromDatabase(): Flow<List<TodoItem>> = callbackFlow {
+    fun getAllFromDatabase(): Flow<List<MyTask>> = callbackFlow {
         val db: FirebaseFirestore = Firebase.firestore
         Log.d(TAG, "Attempting to get collection from database...")
 
@@ -25,7 +25,7 @@ class FirebaseRepository {
                     close(e)
                 }
                 Log.d(TAG, "Success: got documents from database")
-                val list = mutableListOf<TodoItem>()
+                val list = mutableListOf<MyTask>()
                 for (result in snapshot!!.documents) {
                     list.add(util.decodeResult(result))
                 }
@@ -44,7 +44,7 @@ class FirebaseRepository {
      */
 
 
-    fun addToDatabase(item: TodoItem) {
+    fun addToDatabase(item: MyTask) {
         val db = Firebase.firestore
         val hashMap = util.makeHashMap(item)
         db.collection("todos").document(item.id.toString()).set(hashMap)
@@ -56,11 +56,11 @@ class FirebaseRepository {
             }
     }
 
-    fun updateDatabase(todoItem: TodoItem) {
+    fun updateDatabase(myTask: MyTask) {
         val db = Firebase.firestore
-        val hashMap: Map<String, String> = util.makeHashMap(todoItem)
+        val hashMap: Map<String, String> = util.makeHashMap(myTask)
 
-        db.collection("todos").document(todoItem.id.toString()).update(hashMap)
+        db.collection("todos").document(myTask.id.toString()).update(hashMap)
             .addOnSuccessListener { result ->
                 Log.d(TAG, "Success: item updated in database")
             }
@@ -69,7 +69,7 @@ class FirebaseRepository {
             }
     }
 
-    fun deleteFromDatabase(todo: TodoItem) {
+    fun deleteFromDatabase(todo: MyTask) {
         val db = Firebase.firestore
         db.collection("todos").document(todo.id.toString()).delete()
     }

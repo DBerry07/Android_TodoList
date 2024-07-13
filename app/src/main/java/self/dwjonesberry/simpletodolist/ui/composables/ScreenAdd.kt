@@ -20,17 +20,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import self.dwjonesberry.simpletodolist.data.FirebaseRepository
-import self.dwjonesberry.simpletodolist.data.TodoViewModel
-import self.dwjonesberry.simpletodolist.data.TodoViewModelFactory
+import self.dwjonesberry.simpletodolist.data.TaskViewModel
+import self.dwjonesberry.simpletodolist.data.TaskViewModelFactory
 
 
 @Composable
-fun AddTodoLayout(
+fun AddTaskScreen(
     repo: FirebaseRepository = FirebaseRepository(),
-    viewModel: TodoViewModel = viewModel(factory = TodoViewModelFactory(repo)),
+    viewModel: TaskViewModel = viewModel(factory = TaskViewModelFactory(repo)),
     navigateToMainScreen: () -> Unit
 ) {
-    AddTodoScreen(
+    AddTaskLayout(
         holdingText = viewModel.text,
         holdingNotes = viewModel.notes,
         addToList = viewModel.add,
@@ -38,12 +38,12 @@ fun AddTodoLayout(
         setNotes = viewModel.setNotes,
         navigateToMainScreen = navigateToMainScreen,
         update = viewModel.updateSelected,
-        editing = if (viewModel.selectedTodo != null) true else false
+        isEditing = if (viewModel.selectedTodo != null) true else false
     )
 }
 
 @Composable
-private fun AddTodoScreen(
+private fun AddTaskLayout(
     holdingText: String,
     holdingNotes: String,
     addToList: () -> Unit,
@@ -51,10 +51,10 @@ private fun AddTodoScreen(
     setNotes: (String) -> Unit,
     navigateToMainScreen: () -> Unit,
     update: () -> Unit,
-    editing: Boolean,
+    isEditing: Boolean,
 ) {
     Column {
-        AddActionBar(addToList, update, navigateToMainScreen, editing)
+        AddActionBar(addToList, update, navigateToMainScreen, isEditing)
         AddTodoText(holdingText, setText)
         AddTodoNotes(holdingNotes, setNotes)
     }
@@ -121,7 +121,7 @@ private fun AddTodoText(holdingText: String, setText: (String) -> Unit) {
 @Composable
 private fun AddTodoNotes(holdingNotes: String, setNotes: (String) -> Unit) {
     var notes by remember { mutableStateOf(holdingNotes) }
-    
+
     OutlinedTextField(value = notes,
         modifier = Modifier
             .fillMaxWidth()
@@ -143,6 +143,6 @@ private fun AddTodoNotes(holdingNotes: String, setNotes: (String) -> Unit) {
 @Composable
 fun ATSPreview() {
     Surface(modifier = Modifier.fillMaxSize()) {
-        AddTodoScreen("", "", {}, {}, {}, {}, {}, false)
+        AddTaskLayout("", "", {}, {}, {}, {}, {}, false)
     }
 }

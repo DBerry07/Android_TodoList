@@ -1,8 +1,8 @@
 package self.dwjonesberry.simpletodolist.data
 
-class TodoItem(
+class MyTask(
     val id: Int,
-    var text: String = "",
+    var title: String = "",
     var notes: String = "",
     var checked: Boolean = false,
     var priority: Priority = Priority.NORMAL
@@ -22,6 +22,6 @@ class TodoItem(
     }
 
     override fun toString(): String {
-        return "TODO:: id:${id.toString()}, text:${text}, notes:${notes}, priority:${priority.name.toString()}"
+        return "TODO:: id:${id.toString()}, text:${title}, notes:${notes}, priority:${priority.name.toString()}"
     }
 }

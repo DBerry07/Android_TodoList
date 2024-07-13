@@ -44,6 +44,7 @@ fun ListItem(
     item: TodoItem,
     index: Int,
     update: (TodoItem) -> Unit,
+    edit: (TodoItem) -> Unit,
     deleteFromList: (TodoItem) -> Unit,
 ) {
     var background by remember { mutableStateOf(Color.White) }
@@ -112,6 +113,7 @@ fun ListItem(
                     onDismissRequest = { showDialog = !showDialog },
                     todoItem = item,
                     update = update,
+                    edit = edit,
                     delete = deleteFromList
                 )
             }

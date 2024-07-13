@@ -68,6 +68,7 @@ fun ListItemPopUp(
     modifier: Modifier,
     onDismissRequest: () -> Unit,
     todoItem: TodoItem,
+    edit: (TodoItem) -> Unit,
     update: (TodoItem) -> Unit,
     delete: (TodoItem) -> Unit
 ) {
@@ -107,6 +108,7 @@ fun ListItemPopUp(
                     item = todoItem,
                     update = update,
                     delete = delete,
+                    edit = edit,
                     onDismissRequest = onDismissRequest
                 )
             }
@@ -159,6 +161,7 @@ fun PopUpActonBar(
     modifier: Modifier,
     item: TodoItem,
     update: (TodoItem) -> Unit,
+    edit: (TodoItem) -> Unit,
     delete: (TodoItem) -> Unit,
     onDismissRequest: () -> Unit
 ) {
@@ -172,6 +175,7 @@ fun PopUpActonBar(
         IconButton(
             onClick = {
                 Log.d("MyProject", "edit button clicked on item #${item.id}")
+                edit.invoke(item)
             }) {
             Icon(
                 imageVector = Icons.Default.Edit,
@@ -230,6 +234,6 @@ fun ListItemPopUpPreview() {
     val item = DummyTodo
 
     Surface(modifier = Modifier.fillMaxSize()) {
-        ListItemPopUp(modifier = Modifier, onDismissRequest = { /*TODO*/ }, todoItem = item, {}, {})
+        ListItemPopUp(modifier = Modifier, onDismissRequest = { /*TODO*/ }, todoItem = item, {}, {}, {})
     }
 }

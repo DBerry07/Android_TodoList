@@ -36,7 +36,6 @@ import self.dwjonesberry.simpletodolist.data.Sort
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainAppBar(
-    navigateToAddToDoScreen: () -> Unit,
     setSortedBy: (Sort) -> Unit,
     setFilterBy: (Priority) -> Unit
 ) {

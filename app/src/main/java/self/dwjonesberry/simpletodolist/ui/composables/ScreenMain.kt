@@ -59,7 +59,7 @@ private val TAG: String = "MyProject:MainScreen"
 fun MainLayout(
     repo: FirebaseRepository = FirebaseRepository(),
     viewModel: TodoViewModel = viewModel(factory = TodoViewModelFactory(repo)),
-    navigateToAddToDoScreen: () -> Unit,
+    navigateToAddToDoScreen: (TodoItem?) -> Unit,
 ) {
     val data by viewModel.todoList.collectAsState()
     val remembered = remember(data) { data }
@@ -70,12 +70,11 @@ fun MainLayout(
     }
 
     Scaffold(
-        floatingActionButton = { FloatingActionButton(onClick = { navigateToAddToDoScreen.invoke() }, containerColor = Color.White) {
+        floatingActionButton = { FloatingActionButton(onClick = { navigateToAddToDoScreen.invoke(null) }, containerColor = Color.White) {
             Icon(Icons.Default.Add, "Add a task")
         } },
         topBar = {
         MainAppBar(
-            navigateToAddToDoScreen = navigateToAddToDoScreen,
             setSortedBy = viewModel.setSortedBy,
             setFilterBy = setFilter,
         )
@@ -85,6 +84,7 @@ fun MainLayout(
             list = remembered,
             update = viewModel.update,
             deleteFromList = viewModel.delete,
+            edit = navigateToAddToDoScreen,
             filter = filter
         )
     }
@@ -109,6 +109,7 @@ private fun ListLayout(
     list: List<TodoItem>,
     update: (TodoItem) -> Unit,
     deleteFromList: (TodoItem) -> Unit,
+    edit: (TodoItem) -> Unit,
     filter: Priority,
 ) {
     val uncompletedTodos = list.filter { !it.checked }
@@ -148,6 +149,7 @@ private fun ListLayout(
                     heading = "Uncompleted",
                     list = uncompletedTodosFiltered,
                     update = update,
+                    edit = edit,
                     deleteFromList = deleteFromList,
                 )
                 Spacer(
@@ -159,6 +161,7 @@ private fun ListLayout(
                     modifier = Modifier.height(height),
                     heading = "Completed",
                     list = completedTodosFiltered,
+                    edit = edit,
                     update = update,
                     deleteFromList = deleteFromList,
                 )
@@ -186,6 +189,7 @@ private fun SectionList(
     heading: String,
     list: List<TodoItem>,
     update: (TodoItem) -> Unit,
+    edit: (TodoItem) -> Unit,
     deleteFromList: (TodoItem) -> Unit,
 ) {
     val context = LocalContext.current
@@ -221,6 +225,7 @@ private fun SectionList(
                     item = list[index],
                     index = index,
                     update = update,
+                    edit = edit,
                     deleteFromList = deleteFromList,
                 )
             }
@@ -251,7 +256,7 @@ fun MainPreview() {
     SimpleToDoListTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             ListLayout(list = DummyList,
-                deleteFromList = {}, update = {}, modifier = Modifier, filter = Priority.NORMAL
+                deleteFromList = {}, update = {}, modifier = Modifier, filter = Priority.NORMAL, edit = {}
             )
         }
     }

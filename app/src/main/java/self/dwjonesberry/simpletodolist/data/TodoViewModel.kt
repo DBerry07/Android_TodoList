@@ -14,6 +14,19 @@ class TodoViewModel(private val repo: FirebaseRepository) : ViewModel() {
         private set
     var notes: String = ""
         private set
+    var selectedTodo: TodoItem? = null
+        set(value) {
+            field = value
+            if (value != null) {
+                text = value.text
+                notes = value.notes
+            }
+            else {
+                text = ""
+                notes = ""
+            }
+        }
+
     private val _todoList = MutableStateFlow<List<TodoItem>>(emptyList())
     val todoList: StateFlow<List<TodoItem>> = _todoList.asStateFlow()
     var sortedBy = 0

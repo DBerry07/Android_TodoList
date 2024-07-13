@@ -36,7 +36,9 @@ fun AddTodoLayout(
         addToList = viewModel.add,
         setText = viewModel.setText,
         setNotes = viewModel.setNotes,
-        navigateToMainScreen = navigateToMainScreen
+        navigateToMainScreen = navigateToMainScreen,
+        update = viewModel.updateSelected,
+        editing = if (viewModel.selectedTodo != null) true else false
     )
 }
 
@@ -47,37 +49,55 @@ private fun AddTodoScreen(
     addToList: () -> Unit,
     setText: (String) -> Unit,
     setNotes: (String) -> Unit,
-    navigateToMainScreen: () -> Unit
+    navigateToMainScreen: () -> Unit,
+    update: () -> Unit,
+    editing: Boolean,
 ) {
     Column {
-        AddActionBar(addToList, navigateToMainScreen)
+        AddActionBar(addToList, update, navigateToMainScreen, editing)
         AddTodoText(holdingText, setText)
         AddTodoNotes(holdingNotes, setNotes)
     }
 }
 
 @Composable
-private fun AddActionBar(addToList: () -> Unit, navigateToMainScreen: () -> Unit) {
+private fun AddActionBar(
+    addToList: () -> Unit,
+    update: () -> Unit,
+    navigateToMainScreen: () -> Unit,
+    editing: Boolean
+) {
 
-    val row: @Composable () -> Unit = {
-        Row() {
+    var buttons: List<Pair<@Composable () -> Unit, List<() -> Unit>>>? = null
+
+    if (!editing) {
+        val row: @Composable () -> Unit = {
+            Row() {
 //                Icon(Icons.Default.Add, "Add item to todo list")
-            Text("Add")
+                Text("Add")
+            }
         }
-    }
 
-    val buttons: List<Pair<@Composable () -> Unit, List<() -> Unit>>> = listOf(
-        Pair(row, listOf(addToList, navigateToMainScreen)),
-    )
-    ActionBar(buttons)
+        buttons = listOf(
+            Pair(row, listOf(addToList, navigateToMainScreen)),
+        )
+    } else {
+        val row: @Composable () -> Unit = {
+            Row() {
+//                Icon(Icons.Default.Add, "Add item to todo list")
+                Text("Update")
+            }
+        }
+        buttons = listOf(
+            Pair(row, listOf(update, navigateToMainScreen)),
+        )
+    }
+    ActionBar(buttons = buttons)
 }
 
 @Composable
 private fun AddTodoText(holdingText: String, setText: (String) -> Unit) {
-    var text by remember { mutableStateOf("") }
-    if (holdingText.isNotBlank()) {
-        text = holdingText
-    }
+    var text by remember { mutableStateOf(holdingText) }
 
     OutlinedTextField(
         modifier = Modifier
@@ -100,10 +120,8 @@ private fun AddTodoText(holdingText: String, setText: (String) -> Unit) {
 
 @Composable
 private fun AddTodoNotes(holdingNotes: String, setNotes: (String) -> Unit) {
-    var notes by remember { mutableStateOf("") }
-    if (holdingNotes.isNotBlank()) {
-        notes = holdingNotes
-    }
+    var notes by remember { mutableStateOf(holdingNotes) }
+    
     OutlinedTextField(value = notes,
         modifier = Modifier
             .fillMaxWidth()
@@ -125,6 +143,6 @@ private fun AddTodoNotes(holdingNotes: String, setNotes: (String) -> Unit) {
 @Composable
 fun ATSPreview() {
     Surface(modifier = Modifier.fillMaxSize()) {
-        AddTodoScreen("", "", {}, {}, {}, {})
+        AddTodoScreen("", "", {}, {}, {}, {}, {}, false)
     }
 }

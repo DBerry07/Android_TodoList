@@ -18,12 +18,12 @@ class TodoViewModel(private val repo: FirebaseRepository) : ViewModel() {
         set(value) {
             field = value
             if (value != null) {
-                text = value.text
-                notes = value.notes
+                setText(value.text)
+                setNotes(value.notes)
             }
             else {
-                text = ""
-                notes = ""
+                setText("")
+                setNotes("")
             }
         }
 
@@ -83,6 +83,15 @@ class TodoViewModel(private val repo: FirebaseRepository) : ViewModel() {
 
     val update: (TodoItem) -> Unit = { todo ->
         repo.updateDatabase(todo)
+    }
+
+    val updateSelected: () -> Unit = {
+        val todoItem = selectedTodo
+        if (todoItem != null) {
+            todoItem.text = text
+            todoItem.notes = notes
+            repo.updateDatabase(todoItem)
+        }
     }
 
 }

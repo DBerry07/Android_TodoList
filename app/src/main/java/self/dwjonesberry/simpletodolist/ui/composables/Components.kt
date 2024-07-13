@@ -1,16 +1,11 @@
 package self.dwjonesberry.simpletodolist.ui.composables
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -20,21 +15,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import self.dwjonesberry.simpletodolist.ui.theme.PurpleGrey40
 
 
 @Composable
-fun ActionBar(buttons: List<Pair<@Composable () -> Unit, List<() -> Unit>>>) {
+fun ActionBar(buttons: List<Pair<@Composable () -> Unit, List<() -> Unit>>>?) {
     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp), horizontalArrangement = Arrangement.SpaceAround) {
-        for (pair in buttons) {
-            Button(onClick = {
-                for (function in pair.second) {
-                    function.invoke()
+        if (buttons != null) {
+            for (pair in buttons) {
+                Button(onClick = {
+                    for (function in pair.second) {
+                        function.invoke()
+                    }
+                }) {
+                    pair.first.invoke()
                 }
-            }) {
-                pair.first.invoke()
             }
         }
     }

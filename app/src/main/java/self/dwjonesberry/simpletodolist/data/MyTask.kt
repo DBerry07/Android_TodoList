@@ -5,7 +5,8 @@ class MyTask(
     var title: String = "",
     var notes: String = "",
     var checked: Boolean = false,
-    var priority: Priority = Priority.NORMAL
+    var priority: Priority = Priority.NORMAL,
+    var taskList: String = "unknown"
 ) {
     fun increasePriority() {
         val current = this.priority.ordinal

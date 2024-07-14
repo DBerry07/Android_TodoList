@@ -39,9 +39,12 @@ import self.dwjonesberry.simpletodolist.data.DummyList
 import self.dwjonesberry.simpletodolist.data.FirebaseRepository
 import self.dwjonesberry.simpletodolist.data.Priority
 import self.dwjonesberry.simpletodolist.data.MyTask
+import self.dwjonesberry.simpletodolist.data.TaskList
+import self.dwjonesberry.simpletodolist.data.TaskListRepo
 import self.dwjonesberry.simpletodolist.data.TaskViewModel
 import self.dwjonesberry.simpletodolist.data.TaskViewModelFactory
 import self.dwjonesberry.simpletodolist.ui.theme.SimpleToDoListTheme
+import java.util.Locale
 
 private val TAG: String = "MyProject:MainScreen"
 
@@ -111,23 +114,19 @@ private fun ListLayout(
     viewModel: TaskViewModel,
     filter: Priority,
 ) {
-    val uncompletedTodos = list.filter { !it.checked }
-    val completedTodos = list.filter { it.checked }
 
 
-    var uncompletedTodosFiltered = listOf<MyTask>()
-    var completedTodosFiltered = listOf<MyTask>()
-    if (filter != Priority.NORMAL) {
-        uncompletedTodosFiltered = uncompletedTodos.filter { item ->
-            item.priority == filter
-        }
-        completedTodosFiltered = completedTodos.filter { item ->
-            item.priority == filter
-        }
-    } else {
-        uncompletedTodosFiltered = uncompletedTodos
-        completedTodosFiltered = completedTodos
-    }
+//    if (filter != Priority.NORMAL) {
+//        uncompletedTodosFiltered = uncompletedTodos.filter { item ->
+//            item.priority == filter
+//        }
+//        completedTodosFiltered = completedTodos.filter { item ->
+//            item.priority == filter
+//        }
+//    } else {
+//        uncompletedTodosFiltered = uncompletedTodos
+//        completedTodosFiltered = completedTodos
+//    }
 
     val height = LocalConfiguration.current.screenHeightDp.dp
 
@@ -143,23 +142,19 @@ private fun ListLayout(
                         .fillMaxWidth()
                         .height(20.dp)
                 )
-                SectionList(
-                    modifier = Modifier.height(height),
-                    heading = "Uncompleted",
-                    list = uncompletedTodosFiltered,
-                    viewModel = viewModel,
-                )
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(20.dp)
-                )
-                SectionList(
-                    modifier = Modifier.height(height),
-                    heading = "Completed",
-                    list = completedTodosFiltered,
-                    viewModel = viewModel,
-                )
+                for (each in TaskListRepo.taskMap.keys) {
+                    SectionList(
+                        modifier = Modifier.height(height),
+                        list = TaskListRepo.taskMap.get(each),
+                        viewModel = viewModel,
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(20.dp)
+                    )
+                }
+
             }
         }
     }
@@ -181,8 +176,7 @@ private fun ListLayout(
 @Composable
 private fun SectionList(
     modifier: Modifier,
-    heading: String,
-    list: List<MyTask>,
+    list: TaskList?,
     viewModel: TaskViewModel,
 ) {
     val context = LocalContext.current
@@ -207,18 +201,24 @@ private fun SectionList(
                 )
             }
         }
-        SectionHeading(heading)
+        if (list != null) {
+            SectionHeading(list.heading)
+        } else {
+            SectionHeading(heading = "Unknown")
+        }
     }
     if (showSection) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            for (index in 0..<list.size) {
-                ListItem(
-                    item = list[index],
-                    index = index,
-                    viewModel = viewModel,
-                )
+            if (list != null) {
+                for (index in 0..<list.taskList.size) {
+                    ListItem(
+                        item = list.taskList.get(index),
+                        index = index,
+                        viewModel = viewModel,
+                    )
+                }
             }
 
         }
@@ -234,7 +234,7 @@ private fun SectionList(
 @Composable
 fun SectionHeading(heading: String) {
     Text(
-        text = heading,
+        text = heading.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.CANADA) else it.toString() },
         fontWeight = FontWeight.Bold,
         fontSize = 25.sp,
     )

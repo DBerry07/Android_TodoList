@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class TaskViewModel(private val repo: FirebaseRepository) : ViewModel(), TaskViewModelInterface {
@@ -47,7 +48,13 @@ class TaskViewModel(private val repo: FirebaseRepository) : ViewModel(), TaskVie
     init {
         viewModelScope.launch {
             repo.getAllFromDatabase().collect { newList ->
-                _todoList.value = newList
+                if (_todoList.value.isEmpty()) {
+                    _todoList.value = newList
+                    TaskListRepo.sort(_todoList.value)
+                } else {
+                    _todoList.value = newList
+                    TaskListRepo.sort(_todoList.value)
+                }
             }
         }
     }

@@ -27,6 +27,9 @@ class TaskViewModel(private val repo: FirebaseRepository) : ViewModel() {
             }
         }
 
+    var navigateToMainScreen: (() -> Unit)? = null
+    var navigateToAddScreen: ((MyTask?) -> Unit)? = null
+
     private val _todoList = MutableStateFlow<List<MyTask>>(emptyList())
     val todoList: StateFlow<List<MyTask>> = _todoList.asStateFlow()
     var sortedBy = 0

@@ -18,6 +18,14 @@ fun MyApp() {
     val navController = rememberNavController()
     val taskViewModel: TaskViewModel = TaskViewModel(repo = FirebaseRepository())
 
+    taskViewModel.navigateToMainScreen = {
+        navController.popBackStack()
+    }
+    taskViewModel.navigateToAddScreen = { myTask ->
+        taskViewModel.selectedTodo = myTask
+        navController.navigate(Screens.ADD.name)
+    }
+
     NavHost(
         navController = navController,
         startDestination = Screens.MAIN.name

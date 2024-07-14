@@ -21,9 +21,12 @@ fun MyApp() {
     taskViewModel.navigateToMainScreen = {
         navController.popBackStack()
     }
-    taskViewModel.navigateToAddScreen = { myTask ->
+    taskViewModel.navigateToAddScreenWithArguments = { myTask ->
         taskViewModel.selectedTodo = myTask
         navController.navigate(Screens.ADD.name)
+    }
+    taskViewModel.popBackStack = {
+        navController.popBackStack()
     }
 
     NavHost(
@@ -37,7 +40,7 @@ fun MyApp() {
         composable(Screens.ADD.name) {
             AddTaskScreen(
                 viewModel = taskViewModel,
-                navigateToMainScreen = { navController.popBackStack() })
+            )
         }
     }
 

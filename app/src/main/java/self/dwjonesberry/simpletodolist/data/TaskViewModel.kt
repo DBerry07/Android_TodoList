@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class TaskViewModel(private val repo: FirebaseRepository) : ViewModel() {
+class TaskViewModel(private val repo: FirebaseRepository) : ViewModel(), TaskViewModelInterface {
 
     var title: String = ""
         private set
@@ -36,12 +36,13 @@ class TaskViewModel(private val repo: FirebaseRepository) : ViewModel() {
             }
         }
 
-    var navigateToMainScreen: (() -> Unit)? = null
-    var navigateToAddScreen: ((MyTask?) -> Unit)? = null
+    override var navigateToMainScreen: (() -> Unit)? = null
+    override var navigateToAddScreenWithArguments: ((MyTask?) -> Unit)? = null
+    override var popBackStack: (() -> Unit)? = null
 
     private val _todoList = MutableStateFlow<List<MyTask>>(emptyList())
-    val todoList: StateFlow<List<MyTask>> = _todoList.asStateFlow()
-    var sortedBy = 0
+    override val todoList: StateFlow<List<MyTask>> = _todoList.asStateFlow()
+    override var sortedBy = 0
 
     init {
         viewModelScope.launch {
@@ -74,7 +75,7 @@ class TaskViewModel(private val repo: FirebaseRepository) : ViewModel() {
         }
     }
 
-    val add: () -> Unit = {
+    override val add: () -> Unit = {
         val item = MyTask(id = maxId, title = title, notes = notes)
         repo.addToDatabase(item)
         title = ""
@@ -89,11 +90,11 @@ class TaskViewModel(private val repo: FirebaseRepository) : ViewModel() {
         notes = it
     }
 
-    val delete: (MyTask) -> Unit = { todo ->
+    override val delete: (MyTask) -> Unit = { todo ->
         repo.deleteFromDatabase(todo)
     }
 
-    val update: (MyTask) -> Unit = { todo ->
+    override val update: (MyTask) -> Unit = { todo ->
         repo.updateDatabase(todo)
     }
 

@@ -28,7 +28,6 @@ import self.dwjonesberry.simpletodolist.data.TaskViewModelFactory
 fun AddTaskScreen(
     repo: FirebaseRepository = FirebaseRepository(),
     viewModel: TaskViewModel = viewModel(factory = TaskViewModelFactory(repo)),
-    navigateToMainScreen: () -> Unit
 ) {
     AddTaskLayout(
         viewModel = viewModel,
@@ -64,7 +63,7 @@ private fun AddActionBar(
         }
 
         buttons = listOf(
-            Pair(row, listOf(viewModel.add, viewModel.navigateToMainScreen)),
+            Pair(row, listOf(viewModel.add, viewModel.popBackStack)),
         )
     } else {
         val row: @Composable () -> Unit = {

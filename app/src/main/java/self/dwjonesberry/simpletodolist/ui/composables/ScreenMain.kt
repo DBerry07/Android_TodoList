@@ -70,7 +70,7 @@ fun MainLayout(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { viewModel.navigateToAddScreen?.invoke(null) },
+                onClick = { viewModel.navigateToAddScreenWithArguments?.invoke(null) },
                 containerColor = Color.White
             ) {
                 Icon(Icons.Default.Add, "Add a task")

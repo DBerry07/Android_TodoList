@@ -176,7 +176,7 @@ fun PopUpActonBar(
         IconButton(
             onClick = {
                 Log.d("MyProject", "edit button clicked on item #${item.id}")
-                viewModel.navigateToAddScreen?.invoke(item)
+                viewModel.navigateToAddScreenWithArguments?.invoke(item)
             }) {
             Icon(
                 imageVector = Icons.Default.Edit,

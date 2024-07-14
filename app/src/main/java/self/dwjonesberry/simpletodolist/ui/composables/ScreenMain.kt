@@ -39,6 +39,7 @@ import self.dwjonesberry.simpletodolist.data.DummyList
 import self.dwjonesberry.simpletodolist.data.FirebaseRepository
 import self.dwjonesberry.simpletodolist.data.Priority
 import self.dwjonesberry.simpletodolist.data.MyTask
+import self.dwjonesberry.simpletodolist.data.Sort
 import self.dwjonesberry.simpletodolist.data.TaskList
 import self.dwjonesberry.simpletodolist.data.TaskListRepo
 import self.dwjonesberry.simpletodolist.data.TaskViewModel
@@ -65,9 +66,16 @@ fun MainLayout(
     val data by viewModel.todoList.collectAsState()
     val remembered = remember(data) { data }
 
-    var filter by remember { mutableStateOf(Priority.NORMAL) }
+    var filter by remember { mutableStateOf(viewModel.filter) }
+    var sorted by remember { mutableStateOf(viewModel.sortedBy) }
+
     val setFilter: (Priority) -> Unit = {
-        filter = it
+        viewModel.filter = it
+        filter = viewModel.filter
+    }
+    val setSorted: (Sort) -> Unit = {
+        viewModel.sortedBy = it.ordinal
+        sorted = viewModel.sortedBy
     }
 
     Scaffold(
@@ -81,7 +89,7 @@ fun MainLayout(
         },
         topBar = {
             MainAppBar(
-                setSortedBy = viewModel.setSortedBy,
+                setSortedBy = setSorted,
                 setFilterBy = setFilter,
             )
         }) { padding ->

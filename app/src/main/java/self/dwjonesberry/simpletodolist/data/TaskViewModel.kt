@@ -37,6 +37,12 @@ class TaskViewModel(private val repo: FirebaseRepository) : ViewModel(), TaskVie
             }
         }
 
+    var filter: Priority = Priority.NORMAL
+
+    val setFilter: (Priority) -> Unit = {
+        filter = it
+    }
+
     override var navigateToMainScreen: (() -> Unit)? = null
     override var navigateToAddScreenWithArguments: ((MyTask?) -> Unit)? = null
     override var popBackStack: (() -> Unit)? = null
@@ -44,6 +50,10 @@ class TaskViewModel(private val repo: FirebaseRepository) : ViewModel(), TaskVie
     private val _todoList = MutableStateFlow<List<MyTask>>(emptyList())
     override val todoList: StateFlow<List<MyTask>> = _todoList.asStateFlow()
     override var sortedBy = 0
+        set(value) {
+            field = value
+            sort.invoke()
+        }
 
     init {
         viewModelScope.launch {
@@ -53,22 +63,13 @@ class TaskViewModel(private val repo: FirebaseRepository) : ViewModel(), TaskVie
                 } else {
                     _todoList.value = newList
                 }
+                sort.invoke()
             }
         }
     }
 
     val maxId: Int
         get() = _todoList.value.last().id + 1
-
-    fun incrementSortedBy() {
-        sortedBy += 1
-        if (sortedBy > 3) sortedBy = 0
-    }
-
-    val setSortedBy: (Sort) -> Unit = {
-        sortedBy = it.ordinal
-        sort.invoke()
-    }
 
     val sort: () -> Unit = {
         when(sortedBy) {
@@ -100,7 +101,9 @@ class TaskViewModel(private val repo: FirebaseRepository) : ViewModel(), TaskVie
     }
 
     override val update: (MyTask) -> Unit = { todo ->
+        val holder = sortedBy
         repo.updateDatabase(todo)
+        sortedBy = holder
     }
 
     val updateSelected: () -> Unit = {

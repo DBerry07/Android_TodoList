@@ -31,73 +31,57 @@ fun AddTaskScreen(
     navigateToMainScreen: () -> Unit
 ) {
     AddTaskLayout(
-        holdingText = viewModel.text,
-        holdingNotes = viewModel.notes,
-        addToList = viewModel.add,
-        setText = viewModel.setText,
-        setNotes = viewModel.setNotes,
-        navigateToMainScreen = navigateToMainScreen,
-        update = viewModel.updateSelected,
+        viewModel = viewModel,
         isEditing = if (viewModel.selectedTodo != null) true else false
     )
 }
 
 @Composable
 private fun AddTaskLayout(
-    holdingText: String,
-    holdingNotes: String,
-    addToList: () -> Unit,
-    setText: (String) -> Unit,
-    setNotes: (String) -> Unit,
-    navigateToMainScreen: () -> Unit,
-    update: () -> Unit,
+    viewModel: TaskViewModel,
     isEditing: Boolean,
 ) {
     Column {
-        AddActionBar(addToList, update, navigateToMainScreen, isEditing)
-        AddTodoText(holdingText, setText)
-        AddTodoNotes(holdingNotes, setNotes)
+        AddActionBar(viewModel = viewModel, isEditing = isEditing)
+        AddTodoText(viewModel = viewModel)
+        AddTodoNotes(viewModel = viewModel)
     }
 }
 
 @Composable
 private fun AddActionBar(
-    addToList: () -> Unit,
-    update: () -> Unit,
-    navigateToMainScreen: () -> Unit,
-    editing: Boolean
+    viewModel: TaskViewModel,
+    isEditing: Boolean
 ) {
 
-    var buttons: List<Pair<@Composable () -> Unit, List<() -> Unit>>>? = null
+    var buttons: List<Pair<@Composable () -> Unit, List<(() -> Unit)?>>>? = null
 
-    if (!editing) {
+    if (!isEditing) {
         val row: @Composable () -> Unit = {
             Row() {
-//                Icon(Icons.Default.Add, "Add item to todo list")
                 Text("Add")
             }
         }
 
         buttons = listOf(
-            Pair(row, listOf(addToList, navigateToMainScreen)),
+            Pair(row, listOf(viewModel.add, viewModel.navigateToMainScreen)),
         )
     } else {
         val row: @Composable () -> Unit = {
             Row() {
-//                Icon(Icons.Default.Add, "Add item to todo list")
                 Text("Update")
             }
         }
         buttons = listOf(
-            Pair(row, listOf(update, navigateToMainScreen)),
+            Pair(row, listOf(viewModel.updateSelected, viewModel.navigateToMainScreen)),
         )
     }
     ActionBar(buttons = buttons)
 }
 
 @Composable
-private fun AddTodoText(holdingText: String, setText: (String) -> Unit) {
-    var text by remember { mutableStateOf(holdingText) }
+private fun AddTodoText(viewModel: TaskViewModel) {
+    var text by remember { mutableStateOf(viewModel.title) }
 
     OutlinedTextField(
         modifier = Modifier
@@ -112,15 +96,15 @@ private fun AddTodoText(holdingText: String, setText: (String) -> Unit) {
         maxLines = 2,
         value = text,
         onValueChange = {
-            setText.invoke(it)
+            viewModel.setText(it)
             text = it
         }
     )
 }
 
 @Composable
-private fun AddTodoNotes(holdingNotes: String, setNotes: (String) -> Unit) {
-    var notes by remember { mutableStateOf(holdingNotes) }
+private fun AddTodoNotes(viewModel: TaskViewModel) {
+    var notes by remember { mutableStateOf(viewModel.notes) }
 
     OutlinedTextField(value = notes,
         modifier = Modifier
@@ -134,7 +118,7 @@ private fun AddTodoNotes(holdingNotes: String, setNotes: (String) -> Unit) {
             focusedContainerColor = Color.Transparent,
         ),
         onValueChange = {
-            setNotes.invoke(it)
+            viewModel.setNotes(it)
             notes = it
         })
 }
@@ -142,7 +126,9 @@ private fun AddTodoNotes(holdingNotes: String, setNotes: (String) -> Unit) {
 @Preview
 @Composable
 fun ATSPreview() {
+    val vm = TaskViewModel(FirebaseRepository())
+
     Surface(modifier = Modifier.fillMaxSize()) {
-        AddTaskLayout("", "", {}, {}, {}, {}, {}, false)
+        AddTaskLayout(vm, false)
     }
 }

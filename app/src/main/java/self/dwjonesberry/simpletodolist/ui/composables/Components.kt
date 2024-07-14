@@ -19,13 +19,13 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun ActionBar(buttons: List<Pair<@Composable () -> Unit, List<() -> Unit>>>?) {
+fun ActionBar(buttons: List<Pair<@Composable () -> Unit, List<(() -> Unit)?>>>?) {
     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp), horizontalArrangement = Arrangement.SpaceAround) {
         if (buttons != null) {
             for (pair in buttons) {
                 Button(onClick = {
                     for (function in pair.second) {
-                        function.invoke()
+                        function?.invoke()
                     }
                 }) {
                     pair.first.invoke()

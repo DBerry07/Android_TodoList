@@ -10,20 +10,29 @@ import kotlinx.coroutines.launch
 
 class TaskViewModel(private val repo: FirebaseRepository) : ViewModel() {
 
-    var text: String = ""
+    var title: String = ""
         private set
     var notes: String = ""
+        private set
+    var priority: Priority = Priority.NORMAL
+        private set
+    var id: Int = 0
         private set
     var selectedTodo: MyTask? = null
         set(value) {
             field = value
             if (value != null) {
-                setText(value.title)
-                setNotes(value.notes)
+                title = value.title
+                notes = value.notes
+                priority = value.priority
+                id = value.id
+
             }
             else {
-                setText("")
-                setNotes("")
+                title = ""
+                notes = ""
+                priority = Priority.NORMAL
+                id = maxId
             }
         }
 
@@ -66,14 +75,14 @@ class TaskViewModel(private val repo: FirebaseRepository) : ViewModel() {
     }
 
     val add: () -> Unit = {
-        val item = MyTask(id = maxId, title = text, notes = notes)
+        val item = MyTask(id = maxId, title = title, notes = notes)
         repo.addToDatabase(item)
-        text = ""
+        title = ""
         notes = ""
     }
 
     val setText: (String) -> Unit = {
-        text = it
+        title = it
     }
 
     val setNotes: (String) -> Unit = {
@@ -91,7 +100,7 @@ class TaskViewModel(private val repo: FirebaseRepository) : ViewModel() {
     val updateSelected: () -> Unit = {
         val todoItem = selectedTodo
         if (todoItem != null) {
-            todoItem.title = text
+            todoItem.title = title
             todoItem.notes = notes
             repo.updateDatabase(todoItem)
         }

@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import self.dwjonesberry.simpletodolist.data.MyTask
+import self.dwjonesberry.simpletodolist.data.TaskViewModel
 
 /**
  * The [Composable] used to display each entry in the [List] of [MyTask] retrieved from the database.
@@ -41,12 +42,11 @@ import self.dwjonesberry.simpletodolist.data.MyTask
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ListItem(
+    viewModel: TaskViewModel,
     item: MyTask,
     index: Int,
-    update: (MyTask) -> Unit,
-    edit: (MyTask) -> Unit,
-    deleteFromList: (MyTask) -> Unit,
-) {
+
+    ) {
     var background by remember { mutableStateOf(Color.White) }
     var showDialog by remember { mutableStateOf(false) }
     var border: Color by remember { mutableStateOf(Color.Black) }
@@ -66,7 +66,7 @@ fun ListItem(
                 item.checked = !(item.checked)
                 background = changeBackground(item.checked)
                 Log.d("MyProject", "checked = ${item.checked}")
-                update(item)
+                viewModel.update(item)
 //                    refresh.invoke()
             }) {
                 showDialog = !showDialog
@@ -110,11 +110,9 @@ fun ListItem(
             if (showDialog) {
                 ListItemPopUp(
                     modifier = Modifier,
+                    viewModel = viewModel,
                     onDismissRequest = { showDialog = !showDialog },
                     myTask = item,
-                    update = update,
-                    edit = edit,
-                    delete = deleteFromList
                 )
             }
         }

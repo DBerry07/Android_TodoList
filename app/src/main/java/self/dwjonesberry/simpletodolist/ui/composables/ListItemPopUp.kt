@@ -36,8 +36,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import self.dwjonesberry.simpletodolist.data.DummyTodo
+import self.dwjonesberry.simpletodolist.data.FirebaseRepository
 import self.dwjonesberry.simpletodolist.data.Priority
 import self.dwjonesberry.simpletodolist.data.MyTask
+import self.dwjonesberry.simpletodolist.data.TaskViewModel
 
 
 private val TAG: String = "MyProject:PopUp"
@@ -65,9 +67,7 @@ fun ListItemPopUp(
     modifier: Modifier,
     onDismissRequest: () -> Unit,
     myTask: MyTask,
-    edit: (MyTask) -> Unit,
-    update: (MyTask) -> Unit,
-    delete: (MyTask) -> Unit
+    viewModel: TaskViewModel,
 ) {
     var bgColour = Color.White
     var priorityColour = Color.Black
@@ -89,23 +89,29 @@ fun ListItemPopUp(
     val dialogMaxHeight = height - (height * 0.15).toInt()
     val dialogMinHeight = height - (height * 0.9).toInt()
 
-    Dialog(onDismissRequest = { onDismissRequest.invoke() }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+    Dialog(
+        onDismissRequest = { onDismissRequest.invoke() },
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
         Card(
             modifier = Modifier
                 .border(5.dp, priorityColour, shape = MaterialTheme.shapes.small)
-                .widthIn(min = dialogMinWidth.dp, max = dialogMaxWidth.dp).heightIn(min = dialogMinHeight.dp, max = dialogMaxHeight.dp),
+                .widthIn(min = dialogMinWidth.dp, max = dialogMaxWidth.dp)
+                .heightIn(min = dialogMinHeight.dp, max = dialogMaxHeight.dp),
             colors = CardDefaults.cardColors().copy(
                 containerColor = bgColour
             )
         ) {
             Column(modifier = Modifier.padding(20.dp)) {
-                PopUpTextDisplay(modifier = Modifier, myTask = myTask, priorityColour = priorityColour)
+                PopUpTextDisplay(
+                    modifier = Modifier,
+                    myTask = myTask,
+                    priorityColour = priorityColour
+                )
                 PopUpActonBar(
                     modifier = Modifier,
                     item = myTask,
-                    update = update,
-                    delete = delete,
-                    edit = edit,
+                    viewModel = viewModel,
                     onDismissRequest = onDismissRequest
                 )
             }
@@ -157,9 +163,7 @@ fun PopUpTextDisplay(modifier: Modifier, myTask: MyTask, priorityColour: Color) 
 fun PopUpActonBar(
     modifier: Modifier,
     item: MyTask,
-    update: (MyTask) -> Unit,
-    edit: (MyTask) -> Unit,
-    delete: (MyTask) -> Unit,
+    viewModel: TaskViewModel,
     onDismissRequest: () -> Unit
 ) {
     val width = LocalConfiguration.current.screenWidthDp
@@ -172,7 +176,7 @@ fun PopUpActonBar(
         IconButton(
             onClick = {
                 Log.d("MyProject", "edit button clicked on item #${item.id}")
-                edit.invoke(item)
+                viewModel.navigateToAddScreen?.invoke(item)
             }) {
             Icon(
                 imageVector = Icons.Default.Edit,
@@ -187,7 +191,7 @@ fun PopUpActonBar(
                 )
                 Log.d("MyProject", "current priority: ${item.priority.name}")
                 item.increasePriority()
-                update(item)
+                viewModel.update(item)
                 Log.d("MyProject", "new priority: ${item.priority.name}")
             }) {
             Icon(
@@ -203,7 +207,7 @@ fun PopUpActonBar(
                 )
                 Log.d("MyProject", "current priority: ${item.priority.name}")
                 item.decreasePriority()
-                update(item)
+                viewModel.update(item)
                 Log.d("MyProject", "new priority: ${item.priority.name}")
             }
         ) {
@@ -214,7 +218,7 @@ fun PopUpActonBar(
         }
         IconButton(onClick = {
             Log.d(TAG, "delete button pressed on item #${item.id}")
-            delete.invoke(item)
+            viewModel.delete.invoke(item)
             onDismissRequest.invoke()
         }) {
             Icon(
@@ -229,8 +233,14 @@ fun PopUpActonBar(
 @Composable
 fun ListItemPopUpPreview() {
     val item = DummyTodo
+    val vm = TaskViewModel(FirebaseRepository())
 
     Surface(modifier = Modifier.fillMaxSize()) {
-        ListItemPopUp(modifier = Modifier, onDismissRequest = { /*TODO*/ }, myTask = item, {}, {}, {})
+        ListItemPopUp(
+            modifier = Modifier,
+            onDismissRequest = { /*TODO*/ },
+            myTask = item,
+            viewModel = vm
+        )
     }
 }

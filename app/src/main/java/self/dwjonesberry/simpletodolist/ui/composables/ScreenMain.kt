@@ -58,7 +58,6 @@ private val TAG: String = "MyProject:MainScreen"
 fun MainLayout(
     repo: FirebaseRepository = FirebaseRepository(),
     viewModel: TaskViewModel = viewModel(factory = TaskViewModelFactory(repo)),
-    navigateToAddToDoScreen: (MyTask?) -> Unit,
 ) {
     val data by viewModel.todoList.collectAsState()
     val remembered = remember(data) { data }
@@ -69,22 +68,25 @@ fun MainLayout(
     }
 
     Scaffold(
-        floatingActionButton = { FloatingActionButton(onClick = { navigateToAddToDoScreen.invoke(null) }, containerColor = Color.White) {
-            Icon(Icons.Default.Add, "Add a task")
-        } },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { viewModel.navigateToAddScreen?.invoke(null) },
+                containerColor = Color.White
+            ) {
+                Icon(Icons.Default.Add, "Add a task")
+            }
+        },
         topBar = {
-        MainAppBar(
-            setSortedBy = viewModel.setSortedBy,
-            setFilterBy = setFilter,
-        )
-    }) { padding ->
+            MainAppBar(
+                setSortedBy = viewModel.setSortedBy,
+                setFilterBy = setFilter,
+            )
+        }) { padding ->
         ListLayout(
             modifier = Modifier.padding(padding),
+            viewModel = viewModel,
             list = remembered,
-            update = viewModel.update,
-            deleteFromList = viewModel.delete,
-            edit = navigateToAddToDoScreen,
-            filter = filter
+            filter = filter,
         )
     }
 }
@@ -106,9 +108,7 @@ fun MainLayout(
 private fun ListLayout(
     modifier: Modifier,
     list: List<MyTask>,
-    update: (MyTask) -> Unit,
-    deleteFromList: (MyTask) -> Unit,
-    edit: (MyTask) -> Unit,
+    viewModel: TaskViewModel,
     filter: Priority,
 ) {
     val uncompletedTodos = list.filter { !it.checked }
@@ -147,9 +147,7 @@ private fun ListLayout(
                     modifier = Modifier.height(height),
                     heading = "Uncompleted",
                     list = uncompletedTodosFiltered,
-                    update = update,
-                    edit = edit,
-                    deleteFromList = deleteFromList,
+                    viewModel = viewModel,
                 )
                 Spacer(
                     modifier = Modifier
@@ -160,9 +158,7 @@ private fun ListLayout(
                     modifier = Modifier.height(height),
                     heading = "Completed",
                     list = completedTodosFiltered,
-                    edit = edit,
-                    update = update,
-                    deleteFromList = deleteFromList,
+                    viewModel = viewModel,
                 )
             }
         }
@@ -187,9 +183,7 @@ private fun SectionList(
     modifier: Modifier,
     heading: String,
     list: List<MyTask>,
-    update: (MyTask) -> Unit,
-    edit: (MyTask) -> Unit,
-    deleteFromList: (MyTask) -> Unit,
+    viewModel: TaskViewModel,
 ) {
     val context = LocalContext.current
     var showSection: Boolean by remember { mutableStateOf(true) }
@@ -223,9 +217,7 @@ private fun SectionList(
                 ListItem(
                     item = list[index],
                     index = index,
-                    update = update,
-                    edit = edit,
-                    deleteFromList = deleteFromList,
+                    viewModel = viewModel,
                 )
             }
 
@@ -252,11 +244,11 @@ fun SectionHeading(heading: String) {
 @Composable
 fun MainPreview() {
     val list = mutableListOf(MyTask(0, "Hello"), MyTask(1, "Goodbye"))
+    val vm = TaskViewModel(FirebaseRepository())
+    val filter = Priority.NORMAL
     SimpleToDoListTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            ListLayout(list = DummyList,
-                deleteFromList = {}, update = {}, modifier = Modifier, filter = Priority.NORMAL, edit = {}
-            )
+            ListLayout(list = DummyList, viewModel = vm, filter = filter, modifier = Modifier)
         }
     }
 }

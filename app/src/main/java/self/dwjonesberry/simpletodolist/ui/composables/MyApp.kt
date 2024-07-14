@@ -32,10 +32,7 @@ fun MyApp() {
     ) {
         composable(Screens.MAIN.name) {
             MainLayout(
-                viewModel = taskViewModel,
-                navigateToAddToDoScreen = { myTask: MyTask? ->
-                    taskViewModel.selectedTodo = myTask
-                    navController.navigate(Screens.ADD.name) })
+                viewModel = taskViewModel)
         }
         composable(Screens.ADD.name) {
             AddTaskScreen(

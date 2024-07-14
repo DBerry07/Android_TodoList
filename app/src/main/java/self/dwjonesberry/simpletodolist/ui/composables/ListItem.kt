@@ -93,9 +93,18 @@ fun ListItem(
                 str = "0$str"
             }
             str = "$str:"
-            Column(modifier = Modifier.background(border).fillMaxHeight().padding(5.dp, 0.dp, 0.dp, 0.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier
+                    .background(border)
+                    .fillMaxHeight()
+                    .padding(5.dp, 0.dp, 0.dp, 0.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(
-                    modifier = Modifier.width(70.dp).padding(horizontal = 10.dp),
+                    modifier = Modifier
+                        .width(70.dp)
+                        .padding(horizontal = 10.dp),
                     text = str,
                     color = Color.White,
                     fontSize = 20.sp,

@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class TaskViewModel(private val repo: FirebaseRepository) : ViewModel(), TaskViewModelInterface {
@@ -69,7 +70,15 @@ class TaskViewModel(private val repo: FirebaseRepository) : ViewModel(), TaskVie
     }
 
     val maxId: Int
-        get() = _todoList.value.last().id + 1
+        get() {
+            var max = _todoList.value.first().id
+            for (each in _todoList.value) {
+                if (each.id > max) {
+                    max = each.id
+                }
+            }
+            return max + 1
+        }
 
     val sort: () -> Unit = {
         when(sortedBy) {

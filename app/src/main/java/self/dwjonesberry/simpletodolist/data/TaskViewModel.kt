@@ -50,10 +50,8 @@ class TaskViewModel(private val repo: FirebaseRepository) : ViewModel(), TaskVie
             repo.getAllFromDatabase().collect { newList ->
                 if (_todoList.value.isEmpty()) {
                     _todoList.value = newList
-                    TaskListRepo.sort(_todoList.value)
                 } else {
                     _todoList.value = newList
-                    TaskListRepo.sort(_todoList.value)
                 }
             }
         }

@@ -116,17 +116,13 @@ private fun ListLayout(
 ) {
 
 
-//    if (filter != Priority.NORMAL) {
-//        uncompletedTodosFiltered = uncompletedTodos.filter { item ->
-//            item.priority == filter
-//        }
-//        completedTodosFiltered = completedTodos.filter { item ->
-//            item.priority == filter
-//        }
-//    } else {
-//        uncompletedTodosFiltered = uncompletedTodos
-//        completedTodosFiltered = completedTodos
-//    }
+    if (filter != Priority.NORMAL) {
+        TaskListRepo.sort(list.filter { item ->
+            item.priority == filter
+        })
+    } else {
+        TaskListRepo.sort(list)
+    }
 
     val height = LocalConfiguration.current.screenHeightDp.dp
 

@@ -150,18 +150,13 @@ fun PopUpTextDisplay(modifier: Modifier, myTask: MyTask, priorityColour: Color) 
  * Used in conjunction with [ListItemPopUp].
  * @param modifier The modifier for this [Composable]
  * @param item The [MyTask] associated with the buttons' actions.
- * @param update The lambda function that updates the [MyTask] in the database with new or different
- * information. Currently used when the user changes the [MyTask.priority]. The changes are automatically
- * reflected in the UI.
- * @param delete The lambda function that deletes the [MyTask] from the database. The deletion is
- * automatically reflected in the UI.
  * @param onDismissRequest The actions taken by the app when the [ListItemPopUp] is dismissed by the
  * user. Also dismisses the [ListItemPopUp] when called. In this case, dismisses the dialog when
  * the user deletes the [MyTask].
  */
 @Composable
 fun PopUpActonBar(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     item: MyTask,
     viewModel: TaskViewModel,
     onDismissRequest: () -> Unit
@@ -171,7 +166,7 @@ fun PopUpActonBar(
     val minWidth = width - (0.5 * width).toInt()
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         IconButton(
             onClick = {

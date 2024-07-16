@@ -43,10 +43,6 @@ import self.dwjonesberry.simpletodolist.data.TaskViewModel
  * Used in conjunction with [MainLayout].
  * @param item The [MyTask] that this composable will show in the UI.
  * @param index The index of the [item] in the list of [MyTask]
- * @param update The lambda function that updates the [MyTask] entry in the database with new or
- * changed information. Primarily used to update the [MyTask.priority] and the [MyTask.checked].
- * @param deleteFromList The lambda function that deletes the [item] from the database. The UI
- * automatically updates after this action.
  * @see [MainLayout]
  */
 @OptIn(ExperimentalFoundationApi::class)

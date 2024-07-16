@@ -52,11 +52,8 @@ private val TAG: String = "MyProject:MainScreen"
 /**
  * A [Composable] function that defines the entire first and main screen of the app. Primary [Composable]
  * is a [Scaffold] that holds a top app bar of [MainAppBar], the [ListLayout], and a [FloatingActionButton].
- * - Not compatible with [Preview] because of inclusion of a view model.
  * @param repo a [FirebaseRepository], which is a class defined in this app.
  * @param viewModel a view model for the screen; defaults to a [TaskViewModel].
- * @param navigateToAddToDoScreen the function (passed from [MyApp]) that navigates the user
- * from this [MainLayout] to [AddToDoScreen].
  */
 @Composable
 fun MainLayout(
@@ -108,16 +105,12 @@ fun MainLayout(
  * - Compatible with [Preview]
  * @param modifier The passed [Modifier] for this composable.
  * @param list The actual [List] of [MyTask] that the whole app depends upon.
- * @param update A lambda function that updates the database (and thus also the UI) with new information
- * regarding a particular [MyTask].
- * @param deleteFromList A lambda function that deletes a [MyTask] from the database. The UI is
- * automatically updated when this happens.
  * @param filter The user-selected [Priority]-based filter; based on which filter is selected,
  * only those [MyTask] with the same [Priority] as the filter will be shown.
  */
 @Composable
 private fun ListLayout(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     list: List<MyTask>,
     viewModel: TaskViewModel,
     filter: Priority,
@@ -169,24 +162,19 @@ private fun ListLayout(
  * are [MyTask]). If the [SectionHeading] is clicked by the user, all the associated [ListItem]
  * are hidden in the UI from the user.
  * - Compatible with [Preview]
- * @param modifier The [Modifier] for this composable. Currently unused.
- * @param heading The [String] used to name the section. Passed to [SectionHeading].
+ * @param modifier The [Modifier] for this composable.
  * @param list The [List] that contains all the relevant [MyTask] associated with that heading.
- * @param update The lambda function that updates the database with new information of one [MyTask].
- * The UI automatically updates to reflect any changes.
- * @param deleteFromList The lambda function that deletes a [MyTask] from the database. The UI automatically
- * updates to reflect the change.
  */
 @Composable
 private fun SectionList(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     list: TaskList?,
     viewModel: TaskViewModel,
 ) {
     val context = LocalContext.current
     var showSection: Boolean by remember { mutableStateOf(true) }
 
-    Row(modifier = Modifier
+    Row(modifier = modifier
         .fillMaxWidth()
         .clickable { showSection = !showSection }
         .padding(10.dp)) {
@@ -247,7 +235,6 @@ fun SectionHeading(heading: String) {
 @Preview
 @Composable
 fun MainPreview() {
-    val list = mutableListOf(MyTask(0, "Hello"), MyTask(1, "Goodbye"))
     val vm = TaskViewModel(FirebaseRepository())
     val filter = Priority.NORMAL
     SimpleToDoListTheme {

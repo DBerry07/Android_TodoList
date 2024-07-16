@@ -37,6 +37,13 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+private val MyColourScheme = lightColorScheme(
+    primary = myColours.Primary,
+    secondary = myColours.Secondary,
+    tertiary = myColours.Tertiary,
+    error = myColours.Error,
+)
+
 @Composable
 fun SimpleToDoListTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -51,7 +58,7 @@ fun SimpleToDoListTheme(
         }
 
         darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        else -> MyColourScheme
     }
 
     val corner = 20.dp

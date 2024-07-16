@@ -6,13 +6,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CardDefaults
@@ -53,86 +51,91 @@ fun ListItem(
     index: Int,
 
     ) {
-    var background by remember { mutableStateOf(Color.White) }
-    var showDialog by remember { mutableStateOf(false) }
-    var border: Color by remember { mutableStateOf(Color.Black) }
-    background = changeBackground(item.checked)
-    border = determineBorder(item)
+    var bgColour by remember { mutableStateOf(Color.White) }
+    var isDialogShowing by remember { mutableStateOf(false) }
+    var borderColour: Color by remember { mutableStateOf(Color.Black) }
+    bgColour = changeBackground(item.checked)
+    borderColour = determineBorder(item)
     ElevatedCard(
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors().copy(
-            containerColor = background
+            containerColor = bgColour
         ),
         modifier =
         Modifier
             .height(55.dp)
             .padding(horizontal = 10.dp, vertical = 5.dp)
-            .border(2.dp, border, shape = MaterialTheme.shapes.medium)
+            .border(2.dp, borderColour, shape = MaterialTheme.shapes.medium)
             .fillMaxWidth()
             .combinedClickable(onDoubleClick = {
                 item.checked = !(item.checked)
-                background = changeBackground(item.checked)
+                bgColour = changeBackground(item.checked)
                 Log.d("MyProject", "checked = ${item.checked}")
                 viewModel.update(item)
 //                    refresh.invoke()
             }) {
-                showDialog = !showDialog
+                isDialogShowing = !isDialogShowing
                 Log.d("MyProject", "item $index double clicked")
             }
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            var str: String = item.id.toString()
-            if ((item.id) < 10) {
-                str = "0$str"
-            }
-            if ((item.id) < 100) {
-                str = "0$str"
-            }
-            str = "$str:"
-            Column(
-                modifier = Modifier
-                    .background(border)
-                    .fillMaxHeight()
-                    .padding(5.dp, 0.dp, 0.dp, 0.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    modifier = Modifier
-                        .width(70.dp)
-                        .padding(horizontal = 10.dp),
-                    text = str,
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.displaySmall,
-                    fontFamily = FontFamily.Monospace,
-                )
-            }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier =
-                Modifier
-                    .padding(10.dp, 0.dp, 10.dp, 0.dp)
+        ListItemText(item, borderColour)
+        if (isDialogShowing) {
+            ListItemPopUp(
+                modifier = Modifier,
+                viewModel = viewModel,
+                onDismissRequest = { isDialogShowing = !isDialogShowing },
+                myTask = item,
             )
-            {
-                Text(
-                    text = item.title,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.displayMedium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-            if (showDialog) {
-                ListItemPopUp(
-                    modifier = Modifier,
-                    viewModel = viewModel,
-                    onDismissRequest = { showDialog = !showDialog },
-                    myTask = item,
-                )
-            }
+        }
+    }
+}
+
+@Composable
+fun ListItemText(item: MyTask, borderColour: Color) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        var str: String = item.id.toString()
+        if ((item.id) < 10) {
+            str = "0$str"
+        }
+        if ((item.id) < 100) {
+            str = "0$str"
+        }
+        str = "$str:"
+        Column(
+            modifier = Modifier
+                .background(borderColour)
+                .fillMaxHeight()
+                .padding(5.dp, 0.dp, 0.dp, 0.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                modifier = Modifier
+                    .width(70.dp)
+                    .padding(horizontal = 10.dp),
+                text = str,
+                color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.displaySmall,
+                fontFamily = FontFamily.Monospace,
+            )
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier =
+            Modifier
+                .padding(10.dp, 0.dp, 10.dp, 0.dp)
+        )
+        {
+            Text(
+                text = item.title,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.displayMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }
 }

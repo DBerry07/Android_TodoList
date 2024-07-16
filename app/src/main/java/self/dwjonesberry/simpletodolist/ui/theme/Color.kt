@@ -9,3 +9,14 @@ val Pink80 = Color(0xFFEFB8C8)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
+
+
+// https://www.materialpalette.com/green/yellow
+val DarkPrimaryGreen = Color(0xFF388E3C)
+val LightPrimaryGreen = Color(0xFFC8E6C9)
+val PrimaryGreen = Color(0xFF4CAF50)
+val TextIconsGreen = Color(0xFFFFFFFF)
+val AccentGreen = Color(0xFFFFEB3B)
+val PrimaryTextGreen = Color(0xFF212121)
+val SecondaryTextGreen = Color(0xFF757575)
+val DividerGreen = Color(0xFFBDBDBD)

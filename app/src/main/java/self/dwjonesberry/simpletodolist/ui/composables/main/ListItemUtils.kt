@@ -1,4 +1,4 @@
-package self.dwjonesberry.simpletodolist.ui.composables
+package self.dwjonesberry.simpletodolist.ui.composables.main
 
 import androidx.compose.ui.graphics.Color
 import self.dwjonesberry.simpletodolist.data.Priority

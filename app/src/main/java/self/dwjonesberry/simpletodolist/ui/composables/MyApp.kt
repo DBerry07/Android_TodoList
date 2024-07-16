@@ -6,8 +6,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import self.dwjonesberry.simpletodolist.data.FirebaseRepository
 import self.dwjonesberry.simpletodolist.data.Screens
-import self.dwjonesberry.simpletodolist.data.MyTask
 import self.dwjonesberry.simpletodolist.data.TaskViewModel
+import self.dwjonesberry.simpletodolist.ui.composables.add.AddTaskScreen
+import self.dwjonesberry.simpletodolist.ui.composables.main.MainLayout
 
 /**
  * A [Composable] that is a container for every other composable due to the [NavHost]. Includes the

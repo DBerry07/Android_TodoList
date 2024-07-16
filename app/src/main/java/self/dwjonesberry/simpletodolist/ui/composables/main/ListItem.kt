@@ -1,4 +1,4 @@
-package self.dwjonesberry.simpletodolist.ui.composables
+package self.dwjonesberry.simpletodolist.ui.composables.main
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -35,6 +35,7 @@ import self.dwjonesberry.simpletodolist.data.DummyTodo
 import self.dwjonesberry.simpletodolist.data.FirebaseRepository
 import self.dwjonesberry.simpletodolist.data.MyTask
 import self.dwjonesberry.simpletodolist.data.TaskViewModel
+import self.dwjonesberry.simpletodolist.ui.composables.popup.ListItemPopUp
 
 /**
  * The [Composable] used to display each entry in the [List] of [MyTask] retrieved from the database.
@@ -85,56 +86,6 @@ fun ListItem(
                 viewModel = viewModel,
                 onDismissRequest = { isDialogShowing = !isDialogShowing },
                 myTask = item,
-            )
-        }
-    }
-}
-
-@Composable
-fun ListItemText(item: MyTask, borderColour: Color) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        var str: String = item.id.toString()
-        if ((item.id) < 10) {
-            str = "0$str"
-        }
-        if ((item.id) < 100) {
-            str = "0$str"
-        }
-        str = "$str:"
-        Column(
-            modifier = Modifier
-                .background(borderColour)
-                .fillMaxHeight()
-                .padding(5.dp, 0.dp, 0.dp, 0.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                modifier = Modifier
-                    .width(70.dp)
-                    .padding(horizontal = 10.dp),
-                text = str,
-                color = Color.White,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.displaySmall,
-                fontFamily = FontFamily.Monospace,
-            )
-        }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier =
-            Modifier
-                .padding(10.dp, 0.dp, 10.dp, 0.dp)
-        )
-        {
-            Text(
-                text = item.title,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.displayMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
             )
         }
     }

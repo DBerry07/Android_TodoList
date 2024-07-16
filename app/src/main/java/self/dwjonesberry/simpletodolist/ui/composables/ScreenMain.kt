@@ -171,39 +171,19 @@ private fun SectionList(
     list: TaskList?,
     viewModel: TaskViewModel,
 ) {
-    val context = LocalContext.current
+//    val context = LocalContext.current
     var showSection: Boolean by remember { mutableStateOf(true) }
 
-    Row(modifier = modifier
-        .fillMaxWidth()
-        .clickable { showSection = !showSection }
-        .padding(10.dp)) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .width(50.dp)
-                .height(30.dp)
-                .padding(horizontal = 5.dp)
-        ) {
-            if (!showSection) {
-                Icon(
-                    Icons.Default.ArrowDropDown,
-                    "Show section",
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-        }
-        if (list != null) {
-            SectionHeading(list.heading)
-        } else {
-            SectionHeading(heading = "Unknown")
-        }
+    val toggleSection: () -> Unit = {
+        showSection = !showSection
     }
-    if (showSection) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            if (list != null) {
+
+    if (list != null) {
+        SectionHeading(heading = list.heading, toggleSection = toggleSection)
+        if (showSection) {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 for (index in 0..<list.taskList.size) {
                     ListItem(
                         item = list.taskList.get(index),
@@ -211,11 +191,9 @@ private fun SectionList(
                         viewModel = viewModel,
                     )
                 }
-            }
 
+            }
         }
-    } else {
-//        Spacer(modifier = Modifier.padding(vertical = 20.dp))
     }
 }
 
@@ -224,12 +202,34 @@ private fun SectionList(
  * @param heading A [String] used for naming the section.
  */
 @Composable
-fun SectionHeading(heading: String) {
-    Text(
-        text = heading.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.CANADA) else it.toString() },
-        fontWeight = FontWeight.Bold,
-        fontSize = 25.sp,
-    )
+fun SectionHeading(heading: String, toggleSection: () -> Unit) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .clickable { toggleSection.invoke() }
+        .padding(10.dp)) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .width(50.dp)
+                .height(30.dp)
+                .padding(horizontal = 5.dp)
+        ) {
+//            if (!showSection) {
+//                Icon(
+//                    Icons.Default.ArrowDropDown,
+//                    "Show section",
+//                    modifier = Modifier.fillMaxSize()
+//                )
+//            }
+        }
+        Text(
+            text = heading.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.CANADA) else it.toString() },
+            fontWeight = FontWeight.Bold,
+            fontSize = 25.sp,
+        )
+
+    }
+
 }
 
 @Preview

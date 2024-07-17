@@ -36,6 +36,7 @@ import self.dwjonesberry.simpletodolist.data.FirebaseRepository
 import self.dwjonesberry.simpletodolist.data.MyTask
 import self.dwjonesberry.simpletodolist.data.TaskViewModel
 import self.dwjonesberry.simpletodolist.ui.composables.popup.ListItemPopUp
+import self.dwjonesberry.simpletodolist.ui.theme.myColours
 
 /**
  * The [Composable] used to display each entry in the [List] of [MyTask] retrieved from the database.
@@ -52,15 +53,15 @@ fun ListItem(
     index: Int,
 
     ) {
-    var bgColour by remember { mutableStateOf(Color.White) }
     var isDialogShowing by remember { mutableStateOf(false) }
     var borderColour: Color by remember { mutableStateOf(Color.Black) }
-    bgColour = changeBackground(item.checked)
+//    bgColour = changeBackground(item.checked)
     borderColour = determineBorder(item)
     ElevatedCard(
         shape = MaterialTheme.shapes.medium,
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
         colors = CardDefaults.cardColors().copy(
-            containerColor = bgColour
+            containerColor = myColours.SurfaceContainerLowest
         ),
         modifier =
         Modifier
@@ -70,7 +71,6 @@ fun ListItem(
             .fillMaxWidth()
             .combinedClickable(onDoubleClick = {
                 item.checked = !(item.checked)
-                bgColour = changeBackground(item.checked)
                 Log.d("MyProject", "checked = ${item.checked}")
                 viewModel.update(item)
 //                    refresh.invoke()

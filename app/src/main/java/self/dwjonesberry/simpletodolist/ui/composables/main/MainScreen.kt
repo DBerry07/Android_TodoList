@@ -235,7 +235,7 @@ fun SectionHeading(heading: String, toggleSection: () -> Unit) {
             colors = CardDefaults.cardColors().copy(
                 containerColor = containerColour
             ),
-            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 15.dp)
+            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 10.dp)
         ) {
             Box(
                 contentAlignment = Alignment.Center,

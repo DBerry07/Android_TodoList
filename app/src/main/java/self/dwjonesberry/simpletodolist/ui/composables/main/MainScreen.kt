@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -257,6 +258,7 @@ fun SectionHeading(heading: String, toggleSection: () -> Unit) {
                     .padding(10.dp)
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center,
+                textDecoration = TextDecoration.Underline,
                 text = heading.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.CANADA) else it.toString() },
                 fontWeight = FontWeight.Bold,
                 fontSize = 25.sp,

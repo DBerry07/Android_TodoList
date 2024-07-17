@@ -42,6 +42,8 @@ private val MyColourScheme = lightColorScheme(
     secondary = myColours.Secondary,
     tertiary = myColours.Tertiary,
     error = myColours.Error,
+    surface = myColours.Surface,
+    surfaceDim = myColours.SurfaceDim,
 )
 
 @Composable

@@ -1,5 +1,7 @@
 package self.dwjonesberry.simpletodolist.ui.composables.main
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,8 +15,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -29,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,7 +51,9 @@ import self.dwjonesberry.simpletodolist.data.TaskListRepo
 import self.dwjonesberry.simpletodolist.data.TaskViewModel
 import self.dwjonesberry.simpletodolist.data.TaskViewModelFactory
 import self.dwjonesberry.simpletodolist.ui.theme.SimpleToDoListTheme
+import self.dwjonesberry.simpletodolist.ui.theme.myColours
 import java.util.Locale
+import kotlin.math.exp
 
 private val TAG: String = "MyProject:MainScreen"
 
@@ -74,6 +84,7 @@ fun MainLayout(
     }
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.surfaceDim,
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { viewModel.navigateToAddScreenWithArguments?.invoke(null) },
@@ -201,31 +212,56 @@ private fun SectionList(
  */
 @Composable
 fun SectionHeading(heading: String, toggleSection: () -> Unit) {
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .clickable { toggleSection.invoke() }
-        .padding(10.dp)) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .width(50.dp)
-                .height(30.dp)
-                .padding(horizontal = 5.dp)
-        ) {
-//            if (!showSection) {
-//                Icon(
-//                    Icons.Default.ArrowDropDown,
-//                    "Show section",
-//                    modifier = Modifier.fillMaxSize()
-//                )
-//            }
-        }
-        Text(
-            text = heading.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.CANADA) else it.toString() },
-            fontWeight = FontWeight.Bold,
-            fontSize = 25.sp,
-        )
 
+    var containerColour by remember { mutableStateOf(myColours.SurfaceContainerLowest) }
+    val toggleColour: () -> Unit = {
+        if (containerColour == myColours.SurfaceBright) {
+            containerColour = myColours.SurfaceContainerLowest
+        } else {
+            containerColour = myColours.SurfaceBright
+        }
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+    ) {
+        ElevatedCard(
+            modifier = Modifier.clickable {
+                toggleSection.invoke()
+                toggleColour.invoke()
+            },
+            colors = CardDefaults.cardColors().copy(
+                containerColor = containerColour
+            ),
+            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 15.dp)
+        ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .width(50.dp)
+//                    .height(30.dp)
+                    .padding(horizontal = 5.dp)
+            ) {
+                //            if (!showSection) {
+                //                Icon(
+                //                    Icons.Default.ArrowDropDown,
+                //                    "Show section",
+                //                    modifier = Modifier.fillMaxSize()
+                //                )
+                //            }
+            }
+            Text(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                text = heading.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.CANADA) else it.toString() },
+                fontWeight = FontWeight.Bold,
+                fontSize = 25.sp,
+            )
+        }
     }
 
 }

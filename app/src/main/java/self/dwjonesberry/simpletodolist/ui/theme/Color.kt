@@ -36,4 +36,8 @@ object myColours {
     val onSecondaryContainer = Color(0xff111f0f)
     val OnTertiaryContainer = Color(0xff002023)
     val OnErrorContainer = Color(0xff410002)
+    val Surface = Color(0xfff7fbf1)
+    val SurfaceDim = Color(0xffd8dbd2)
+    val SurfaceBright = Color(0xfff7fbf1)
+    val SurfaceContainerLowest = Color(0xffffffff)
 }
